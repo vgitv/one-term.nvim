@@ -1,4 +1,6 @@
 :Toggleterminal	toggle-terminal.txt	/*:Toggleterminal*
+toggle-terminal	toggle-terminal.txt	/*toggle-terminal*
 toggle-terminal-commands	toggle-terminal.txt	/*toggle-terminal-commands*
+toggle-terminal-configuration	toggle-terminal.txt	/*toggle-terminal-configuration*
 toggle-terminal-introduction	toggle-terminal.txt	/*toggle-terminal-introduction*
 toggle-terminal.txt	toggle-terminal.txt	/*toggle-terminal.txt*

@@ -1,15 +1,56 @@
 *toggle-terminal.txt*    Plugin to toggle a terminal window
 
-CONTENTS                                                     *toggle-terminal
+CONTENTS                                                     *toggle-terminal*
 Introduction ................ |toggle-terminal-introduction|
 Commands .................... |toggle-terminal-commands|
+Configuration ............... |toggle-terminal-configuration|
 
 
 INTRODUCTION                                    *toggle-terminal-introduction*
 
-Toggle-terminal is a plugin for nvim that can toggle a terminal window.
+Toggle-terminal is a plugin for nvim that can spone a terminal in a dedicated
+buffer, display the terminal buffer is a split window, and toggle this window.
+There can be only one terminal buffer that Toggle-terminal know about, called
+"main terminal" through this documentation. If the main terminal is exited
+(ie. the terminal processus ends), a new terminal instance will be created
+next time toggle-terminal is summoned.
+
+Features:
+
+* create a main terminal buffer and open it in a new split window below the
+  current one
+* toggle the main terminal
+* terminal buffer is unlisted (hidden  from `:ls` command)
+* terminal background color can be different than normal background color
+
 
 COMMANDS                           *:Toggleterminal*  *toggle-terminal-commands*
 
 Toggle-terminal does not define any default keybindings for nvim. The command
-|:Toggleterminal| toggles the main terminal window.
+|:Toggleterminal| does two things:
+
+1. The first time it is called (or if the main terminal is exited): create a
+   new buffer, open a terminal in this buffer and display the buffer in a
+   split window below the current one
+2. Every other times: toggle a split window displaying the main terminal
+
+
+CONFIGURATION                                  *toggle-terminal-configuration*
+
+Default configuration:
+>lua
+    require("toggle-terminal").setup {}
+<
+
+Advanced configuration:
+>lua
+    require("toggle-terminal").setup {
+        bg_color = '#000000',  -- main terminal background color
+        number = false,  -- no number in main terminal window
+        relativenumber = false,  -- no relative number in main terminal window
+        startinsert = false,  -- start insert mode at term opening
+        relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+    }
+<
+
+vim:tw=80:ts=2:et:ft=help:
