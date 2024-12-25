@@ -6,6 +6,7 @@ M.setup = function(opts)
         number = opts.number or false,
         relativenumber = opts.relativenumber or false,
         startinsert = opts.startinsert or false,
+        relative_height = opts.relative_height or 0.35,
     }
 
     -- The main terminal background could be darker than the editor background
@@ -26,7 +27,7 @@ local create_window_below = function(opts)
     opts = opts or {}
 
     -- Calculate window height
-    local height = opts.height or math.floor(vim.o.lines * 0.35)
+    local height = opts.height or math.floor(vim.o.lines * TOGGLE_TERMINAL_OPTS.relative_height)
 
     -- Get or create new buffer
     local buf = nil

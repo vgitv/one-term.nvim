@@ -46,6 +46,7 @@ Those are the defaults options, which can be changed.
         number = false,  -- no number in main terminal window
         relativenumber = false,  -- no relative number in main terminal window
         startinsert = false,  -- start insert mode at term opening
+        relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
     },
 }
 ```
