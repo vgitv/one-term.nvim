@@ -39,14 +39,14 @@ Those are the defaults options, which can be changed.
     'vgitv/toggle-terminal.nvim',
     cmd = 'Toggleterminal',  -- lazy load on command
     keys = {
-        { '<Leader>k', ':Toggleterminal<CR>', desc = 'Toggle main terminal window' },
+        { '<Leader>t', ':Toggleterminal<CR>', desc = 'Toggle main terminal window' },
     },  -- lazy load on keymap
     opts = {
         bg_color = '#000000',  -- main terminal background color
         number = false,  -- no number in main terminal window
         relativenumber = false,  -- no relative number in main terminal window
-        startinsert = false,  -- start insert mode at term opening
-        relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+        startinsert = false,  -- automatically start insert mode when terminal pops up
+        relative_height = 0.35,  -- relative height of the terminal window (percent)
     },
 }
 ```
