@@ -1,0 +1,15 @@
+*toggle-terminal.txt*    Plugin to toggle a terminal window
+
+CONTENTS                                                     *toggle-terminal
+Introduction ................ |toggle-terminal-introduction|
+Commands .................... |toggle-terminal-commands|
+
+
+INTRODUCTION                                    *toggle-terminal-introduction*
+
+Toggle-terminal is a plugin for nvim that can toggle a terminal window.
+
+COMMANDS                           *:Toggleterminal*  *toggle-terminal-commands*
+
+Toggle-terminal does not define any default keybindings for nvim. The command
+|:Toggleterminal| toggles the main terminal window.
