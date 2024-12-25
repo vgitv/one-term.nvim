@@ -1,16 +1,16 @@
 local M = {}
 
 M.setup = function(opts)
+    -- globals
     TOGGLE_TERMINAL_OPTS = {
-        bg_color = opts.bg_color or '#000000',
         number = opts.number or false,
         relativenumber = opts.relativenumber or false,
         startinsert = opts.startinsert or false,
     }
 
-    -- The main terminal background will be darker than the editor background
-    -- this background color is consistent with kanagawa colorscheme
-    vim.cmd.highlight('MainTerminalNormal guibg=' .. TOGGLE_TERMINAL_OPTS.bg_color)
+    -- The main terminal background could be darker than the editor background
+    local bg_color = opts.bg_color or '#000000'
+    vim.cmd.highlight('MainTerminalNormal guibg=' .. bg_color)
 end
 
 
