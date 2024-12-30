@@ -1,10 +1,15 @@
 local M = {}
 
+
+local toggle_terminal_opts
+
+
 M.setup = function(opts)
     -- globals
-    TOGGLE_TERMINAL_OPTS = {
+    toggle_terminal_opts = {
         number = opts.number or false,
         relativenumber = opts.relativenumber or false,
+        cursorline = opts.cursorline or false,
         startinsert = opts.startinsert or false,
         relative_height = opts.relative_height or 0.35,
     }
@@ -27,7 +32,7 @@ local create_window_below = function(opts)
     opts = opts or {}
 
     -- Calculate window height
-    local height = opts.height or math.floor(vim.o.lines * TOGGLE_TERMINAL_OPTS.relative_height)
+    local height = opts.height or math.floor(vim.o.lines * toggle_terminal_opts.relative_height)
 
     -- Get or create new buffer
     local buf = nil
@@ -55,13 +60,20 @@ local toggle_terminal = function()
     if not vim.api.nvim_win_is_valid(state.main_terminal.win) then
         state.main_terminal = create_window_below { buf = state.main_terminal.buf }
         if vim.bo[state.main_terminal.buf].buftype ~= 'terminal' then
+            -- Create terminal instance
             vim.cmd.terminal()
+
+            -- Force options
             vim.bo.buflisted = false
-            vim.opt_local.number = TOGGLE_TERMINAL_OPTS.number
-            vim.opt_local.relativenumber = TOGGLE_TERMINAL_OPTS.relativenumber
+            vim.opt_local.colorcolumn = ''
+
+            -- Options that can be changed
+            vim.opt_local.number = toggle_terminal_opts.number
+            vim.opt_local.relativenumber = toggle_terminal_opts.relativenumber
+            vim.opt_local.cursorline = toggle_terminal_opts.cursorline
             vim.opt_local.winhighlight = 'Normal:MainTerminalNormal'
         end
-        if TOGGLE_TERMINAL_OPTS.startinsert then
+        if toggle_terminal_opts.startinsert then
             vim.cmd.startinsert()
         end
     else
