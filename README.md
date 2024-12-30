@@ -45,6 +45,7 @@ Those are the defaults options, which can be changed.
         bg_color = '#000000',  -- main terminal background color
         number = false,  -- no number in main terminal window
         relativenumber = false,  -- no relative number in main terminal window
+        cursorline = true,  -- cursor line in main terminal window
         startinsert = false,  -- automatically start insert mode when terminal pops up
         relative_height = 0.35,  -- relative height of the terminal window (percent)
     },
@@ -53,5 +54,5 @@ Those are the defaults options, which can be changed.
 
 ## Special thanks
 
-* https://github.com/akinsho/toggleterm.nvim
 * https://github.com/tjdevries/advent-of-nvim
+* https://github.com/akinsho/toggleterm.nvim
