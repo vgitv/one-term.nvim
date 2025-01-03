@@ -35,8 +35,16 @@ Toggle-terminal does not define any default keybindings for nvim. The command
 
 This command take one of the following mode as argument:
 
-* |split| -> open the terminal buffer in a new split window below the current one
+* |split| -> open the terminal buffer in a new split window below the current
+  one
 * |replace| -> replace the buffer in the current window by the terminal buffer
+
+NB:
+
+* the cursor can be on any window to close the terminal window with
+  `:Toggleterminal split`
+* the cursor must be on the terminal window to hid the terminal buffer with
+  `:Toggleterminal replace`
 
 Exemple:
 >vim
@@ -58,12 +66,12 @@ Exemple:
     " you can see the terminal buffer this way
     :ls!
 <
-NB: if the terminal is opened using a given mode, it must be closed by the same
-command. You cant open the terminal with `:Toggleterminal split` and close it
-with `:Toggleterminal replace`. This is because the plugin has no way to know if
-you wish to close the window or not. You could have an already split window and
-open the terminal in replace mode in one of them, and there is no way to know
-how this window was opened.
+NB: if the terminal is opened using a given mode, it must be closed by the
+same command. You cant open the terminal with `:Toggleterminal split` and
+close it with `:Toggleterminal replace`. This is because the plugin will not
+suppose what you want to do. If you already have a split terminal, you could
+want to replace another window by the same terminal instance (and thus have
+two windows displaying the same terminal).
 
 
 CONFIGURATION                                  *toggle-terminal-configuration*
