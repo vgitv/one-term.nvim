@@ -105,6 +105,9 @@ local toggle_terminal_replace = function()
         vim.cmd.buffer(state.main_terminal.buf)
         vim.cmd.terminal()
         set_main_terminal_options()
+        if toggle_terminal_opts.startinsert then
+            vim.cmd.startinsert()
+        end
     end
 end
 
