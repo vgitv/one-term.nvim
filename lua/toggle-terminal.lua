@@ -96,6 +96,9 @@ local toggle_terminal_replace = function()
             vim.cmd.buffer('#')
         else
             vim.cmd.buffer(state.main_terminal.buf)
+            if toggle_terminal_opts.startinsert then
+                vim.cmd.startinsert()
+            end
         end
     else
         state.main_terminal.buf = vim.api.nvim_create_buf(false, true)
