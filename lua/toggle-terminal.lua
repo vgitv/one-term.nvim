@@ -2,16 +2,27 @@ local M = {}
 
 
 local toggle_terminal_opts
+local toggle_terminal_local_options
+
+local state = {
+    main_terminal = {
+        buf = -1,
+        win = -1,
+    }
+}
 
 
 M.setup = function(opts)
-    -- globals
     toggle_terminal_opts = {
-        number = opts.number or false,
-        relativenumber = opts.relativenumber or false,
-        cursorline = opts.cursorline or false,
         startinsert = opts.startinsert or false,
         relative_height = opts.relative_height or 0.35,
+    }
+
+    toggle_terminal_local_options = {
+        number = opts.local_options.number or false,
+        relativenumber = opts.local_options.relativenumber or false,
+        cursorline = opts.local_options.cursorline or false,
+        colorcolumn = opts.local_options.colorcolumn or '',
     }
 
     -- The main terminal background could be darker than the editor background
@@ -20,12 +31,16 @@ M.setup = function(opts)
 end
 
 
-local state = {
-    main_terminal = {
-        buf = -1,
-        win = -1,
-    }
-}
+local set_main_terminal_options = function()
+    -- Force options
+    vim.bo.buflisted = false
+    vim.opt_local.winhighlight = 'Normal:MainTerminalNormal'
+
+    -- Options that can be changed
+    for opt_name, opt_value in pairs(toggle_terminal_local_options) do
+        vim.opt_local[opt_name] = opt_value
+    end
+end
 
 
 local create_window_below = function(opts)
@@ -56,22 +71,14 @@ local create_window_below = function(opts)
 end
 
 
-local toggle_terminal = function()
+-- split current window
+local toggle_terminal_split = function()
     if not vim.api.nvim_win_is_valid(state.main_terminal.win) then
         state.main_terminal = create_window_below { buf = state.main_terminal.buf }
         if vim.bo[state.main_terminal.buf].buftype ~= 'terminal' then
             -- Create terminal instance
             vim.cmd.terminal()
-
-            -- Force options
-            vim.bo.buflisted = false
-            vim.opt_local.colorcolumn = ''
-
-            -- Options that can be changed
-            vim.opt_local.number = toggle_terminal_opts.number
-            vim.opt_local.relativenumber = toggle_terminal_opts.relativenumber
-            vim.opt_local.cursorline = toggle_terminal_opts.cursorline
-            vim.opt_local.winhighlight = 'Normal:MainTerminalNormal'
+            set_main_terminal_options()
         end
         if toggle_terminal_opts.startinsert then
             vim.cmd.startinsert()
@@ -82,7 +89,40 @@ local toggle_terminal = function()
 end
 
 
-vim.api.nvim_create_user_command('Toggleterminal', toggle_terminal, {})
+-- replace current window
+local toggle_terminal_replace = function()
+    if vim.api.nvim_buf_is_valid(state.main_terminal.buf) then
+        if vim.api.nvim_get_current_buf() == state.main_terminal.buf then
+            vim.cmd.buffer('#')
+        else
+            vim.cmd.buffer(state.main_terminal.buf)
+        end
+    else
+        state.main_terminal.buf = vim.api.nvim_create_buf(false, true)
+        vim.cmd.buffer(state.main_terminal.buf)
+        vim.cmd.terminal()
+        set_main_terminal_options()
+    end
+end
+
+
+local toggle_terminal_cmd = {
+    split = toggle_terminal_split,
+    replace = toggle_terminal_replace,
+}
+
+vim.api.nvim_create_user_command(
+    'Toggleterminal',
+    function(opts)
+        toggle_terminal_cmd[opts.fargs[1]]()
+    end,
+    {
+        nargs = 1,
+        complete = function(ArgLead, CmdLine, CursorPos)
+            return { 'split', 'replace' }
+        end
+    }
+)
 
 
 return M

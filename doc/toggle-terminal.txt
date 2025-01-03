@@ -30,9 +30,40 @@ Toggle-terminal does not define any default keybindings for nvim. The command
 |:Toggleterminal| does two things:
 
 1. The first time it is called (or if the main terminal is exited): create a
-   new buffer, open a terminal in this buffer and display the buffer in a
-   split window below the current one
-2. Every other times: toggle a split window displaying the main terminal
+   new buffer, open a terminal in this buffer and display it
+2. Every other times: display / hide the terminal buffer
+
+This command take one of the following mode as argument:
+
+* |split| -> open the terminal buffer in a new split window below the current one
+* |replace| -> replace the buffer in the current window by the terminal buffer
+
+Exemple:
+>vim
+    " create a split window and open a new terminal
+    :Toggleterminal split
+
+    " close the window (the terminal will still run in the background)
+    :Toggleterminal split
+
+    " open the terminal again, this time replacing the whole window
+    :Toggleterminal replace
+
+    " go back to the previous buffer (same as :b#)
+    :Toggleterminal replace
+
+    " terminal buffer is unlisted
+    :ls
+
+    " you can see the terminal buffer this way
+    :ls!
+<
+NB: if the terminal is opened using a given mode, it must be closed by the same
+command. You cant open the terminal with `:Toggleterminal split` and close it
+with `:Toggleterminal replace`. This is because the plugin has no way to know if
+you wish to close the window or not. You could have an already split window and
+open the terminal in replace mode in one of them, and there is no way to know
+how this window was opened.
 
 
 CONFIGURATION                                  *toggle-terminal-configuration*
@@ -44,13 +75,17 @@ Default configuration:
 
 Advanced configuration:
 >lua
-    require("toggle-terminal").setup {
+    require('toggle-terminal').setup {
         bg_color = '#000000',  -- main terminal background color
-        number = false,  -- no number in main terminal window
-        relativenumber = false,  -- no relative number in main terminal window
         startinsert = false,  -- start insert mode at term opening
         relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+        local_options = {
+            number = false,  -- no number in main terminal window
+            relativenumber = false,  -- no relative number in main terminal window
+            cursorline = false,  -- cursor line in main terminal window
+            colorcolumn = '',  -- color column
+        }
     }
 <
 
-vim:tw=80:ts=2:et:ft=help:
+vim:tw=80:ts=2:et:ft=help:cc=+1:

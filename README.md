@@ -8,7 +8,9 @@ Simple terminal toggle plugin:
 
 ## Features
 
-* create a main terminal buffer and open it in a new window below the current one
+* create a main terminal buffer and open it:
+    + in a new window below the current one (split mode)
+    + in place of the current window (replace mode)
 * toggle the main terminal
 * terminal buffer is unlisted (hidden  from `:ls` command)
 * terminal background color can be different than normal background color
@@ -39,20 +41,46 @@ Those are the defaults options, which can be changed.
     'vgitv/toggle-terminal.nvim',
     cmd = 'Toggleterminal',  -- lazy load on command
     keys = {
-        { '<Leader>t', ':Toggleterminal<CR>', desc = 'Toggle main terminal window' },
+        { '<Leader>ts', ':Toggleterminal split<CR>', desc = 'Toggle main terminal (split current window)' },
+        { '<Leader>tr', ':Toggleterminal replace<CR>', desc = 'Toggle main terminal (replace current window)' },
     },  -- lazy load on keymap
     opts = {
         bg_color = '#000000',  -- main terminal background color
-        number = false,  -- no number in main terminal window
-        relativenumber = false,  -- no relative number in main terminal window
-        cursorline = true,  -- cursor line in main terminal window
-        startinsert = false,  -- automatically start insert mode when terminal pops up
-        relative_height = 0.35,  -- relative height of the terminal window (percent)
+        startinsert = false,  -- start insert mode at term opening
+        relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+        local_options = {
+            number = false,  -- no number in main terminal window
+            relativenumber = false,  -- no relative number in main terminal window
+            cursorline = false,  -- cursor line in main terminal window
+            colorcolumn = '',  -- color column
+        }
     },
 }
 ```
 
-## Special thanks
+## Any other package manager
+
+Make sure to add the plugin in your runtimepath, then call the setup function:
+
+```lua
+-- simple usage
+require('toggle-terminal').setup {}
+
+-- advanced usage
+require('toggle-terminal').setup {
+    bg_color = '#000000',  -- main terminal background color
+    startinsert = false,  -- start insert mode at term opening
+    relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+    local_options = {
+        number = false,  -- no number in main terminal window
+        relativenumber = false,  -- no relative number in main terminal window
+        cursorline = false,  -- cursor line in main terminal window
+        colorcolumn = '',  -- color column
+    }
+}
+```
+
+## Inspired from
 
 * https://github.com/tjdevries/advent-of-nvim
 * https://github.com/akinsho/toggleterm.nvim
