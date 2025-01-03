@@ -9,7 +9,9 @@ Simple terminal toggle plugin:
 ## Features
 
 * create a main terminal buffer and open it in a new window below the current one
+* set relative height of the terminal window (compare to the current window)
 * toggle the main terminal
+* toggle the height of the terminal window
 * terminal buffer is unlisted (hidden  from `:ls` command)
 * terminal background color can be different than normal background color
 
@@ -19,6 +21,44 @@ Simple terminal toggle plugin:
 am working on. For the remaining 1% I dont mind creating a terminal buffer
 manually. Therefore most plugins out there are much more complex than is
 necessary for my workflow.
+
+## Usage exemples
+
+### Toggleterminal command
+
+```vim
+" create a split window and open a new terminal
+:Toggleterminal
+
+" close the window (the terminal will still run in the background)
+:Toggleterminal
+
+" open the terminal again, this time occupying 80% of the current window
+:Toggleterminal 0.8
+
+" close the terminal window again
+:Toggleterminal
+
+" terminal buffer is unlisted
+:ls
+
+" you can see the terminal buffer this way
+:ls!
+```
+
+### Toggleterminalheight command
+
+```vim
+" open a terminal window occupying 30% of the current height
+:Toggleterminal 0.3
+
+" 30% is not enough to see well... Let's increase the terminal height to
+" the maximum
+:Toggleterminalheight
+
+" back to 30%
+:Toggleterminalheight
+```
 
 ## Minimal quickstart with lazy.nvim
 

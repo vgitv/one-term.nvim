@@ -8,6 +8,7 @@ local state = {
     main_terminal = {
         buf = -1,
         win = -1,
+        height = -1,
     }
 }
 
@@ -67,27 +68,44 @@ local create_window_below = function(opts)
     -- Open window
     local win = vim.api.nvim_open_win(buf, true, win_config)
 
-    return { buf = buf, win = win }
+    return { buf = buf, win = win, height = height }
 end
 
 
 -- split current window
 local toggle_terminal = function(relative_height)
     -- FIXME use the default option instead
-    relative_height = relative_height or 0.35
+    -- print("###", toggle_terminal_opts.relative_height)
+    relative_height = relative_height or toggle_terminal_opts.relative_height
     local height = math.floor(vim.o.lines * relative_height)
     if not vim.api.nvim_win_is_valid(state.main_terminal.win) then
         state.main_terminal = create_window_below { height = height, buf = state.main_terminal.buf }
         if vim.bo[state.main_terminal.buf].buftype ~= 'terminal' then
-            -- Create terminal instance
-            vim.cmd.terminal()
+            -- The options should be set first because the presence of 'number' may change the way
+            -- the prompt is display (becaus it changes the terminal width)
             set_main_terminal_options()
+            -- Create terminal instance after setting local options
+            vim.cmd.terminal()
         end
         if toggle_terminal_opts.startinsert then
             vim.cmd.startinsert()
         end
     else
         vim.api.nvim_win_hide(state.main_terminal.win)
+    end
+end
+
+local full_height = false
+
+local toggle_terminal_height = function()
+    if vim.api.nvim_win_is_valid(state.main_terminal.win) then
+        if full_height then
+            vim.api.nvim_win_set_height(state.main_terminal.win, state.main_terminal.height)
+            full_height = false
+        else
+            vim.api.nvim_win_set_height(state.main_terminal.win, vim.o.lines)
+            full_height = true
+        end
     end
 end
 
@@ -99,6 +117,8 @@ vim.api.nvim_create_user_command(
     end,
     { nargs = '?' }
 )
+
+vim.api.nvim_create_user_command('Toggleterminalheight', toggle_terminal_height, {})
 
 
 return M

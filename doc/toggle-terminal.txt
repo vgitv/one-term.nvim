@@ -37,10 +37,8 @@ Toggle-terminal does not define any default keybindings for nvim. The command
 This command take optionally one argument: the relative height of the terminal
 window.
 
-NB:
-
-* the cursor can be on any window to close the terminal window with
-  `:Toggleterminal`
+NB: the cursor can be on any window to close the terminal window with
+`:Toggleterminal`
 
 Exemple:
 >vim
@@ -50,8 +48,8 @@ Exemple:
     " close the window (the terminal will still run in the background)
     :Toggleterminal
 
-    " open the terminal again, this time occupying the whole window
-    :Toggleterminal 1
+    " open the terminal again, this time occupying 80% of the current window
+    :Toggleterminal 0.8
 
     " close the terminal window again
     :Toggleterminal
@@ -61,6 +59,25 @@ Exemple:
 
     " you can see the terminal buffer this way
     :ls!
+<
+
+Another user commande |:Toggleterminalheight| allow the user to toggle the
+terminal height when it's window is displayed. It will resize the terminal
+window in such a way that it will occupy the maximum height (leaving only one
+line for the top window).
+
+Exemple:
+
+>vim
+    " open a terminal window occupying 30% of the current height
+    :Toggleterminal 0.3
+
+    " 30% is not enough to see well... Let's increase the terminal height to
+    " the maximum
+    :Toggleterminalheight
+
+    " back to 30%
+    :Toggleterminalheight
 <
 
 
