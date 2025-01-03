@@ -30,35 +30,31 @@ Toggle-terminal does not define any default keybindings for nvim. The command
 |:Toggleterminal| does two things:
 
 1. The first time it is called (or if the main terminal is exited): create a
-   new buffer, open a terminal in this buffer and display it
-2. Every other times: display / hide the terminal buffer
+   new buffer, open a terminal in this buffer and display the buffer in a
+   split window below the current one
+2. Every other times: toggle a split window displaying the main terminal
 
-This command take one of the following mode as argument:
-
-* |split| -> open the terminal buffer in a new split window below the current
-  one
-* |replace| -> replace the buffer in the current window by the terminal buffer
+This command take optionally one argument: the relative height of the terminal
+window.
 
 NB:
 
 * the cursor can be on any window to close the terminal window with
-  `:Toggleterminal split`
-* the cursor must be on the terminal window to hid the terminal buffer with
-  `:Toggleterminal replace`
+  `:Toggleterminal`
 
 Exemple:
 >vim
     " create a split window and open a new terminal
-    :Toggleterminal split
+    :Toggleterminal
 
     " close the window (the terminal will still run in the background)
-    :Toggleterminal split
+    :Toggleterminal
 
-    " open the terminal again, this time replacing the whole window
-    :Toggleterminal replace
+    " open the terminal again, this time occupying the whole window
+    :Toggleterminal 1
 
-    " go back to the previous buffer (same as :b#)
-    :Toggleterminal replace
+    " close the terminal window again
+    :Toggleterminal
 
     " terminal buffer is unlisted
     :ls
@@ -66,12 +62,6 @@ Exemple:
     " you can see the terminal buffer this way
     :ls!
 <
-NB: if the terminal is opened using a given mode, it must be closed by the
-same command. You cant open the terminal with `:Toggleterminal split` and
-close it with `:Toggleterminal replace`. This is because the plugin will not
-suppose what you want to do. If you already have a split terminal, you could
-want to replace another window by the same terminal instance (and thus have
-two windows displaying the same terminal).
 
 
 CONFIGURATION                                  *toggle-terminal-configuration*

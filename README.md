@@ -8,9 +8,7 @@ Simple terminal toggle plugin:
 
 ## Features
 
-* create a main terminal buffer and open it:
-    + in a new window below the current one (split mode)
-    + in place of the current window (replace mode)
+* create a main terminal buffer and open it in a new window below the current one
 * toggle the main terminal
 * terminal buffer is unlisted (hidden  from `:ls` command)
 * terminal background color can be different than normal background color
@@ -41,8 +39,8 @@ Those are the defaults options, which can be changed.
     'vgitv/toggle-terminal.nvim',
     cmd = 'Toggleterminal',  -- lazy load on command
     keys = {
-        { '<Leader>ts', ':Toggleterminal split<CR>', desc = 'Toggle main terminal (split current window)' },
-        { '<Leader>tr', ':Toggleterminal replace<CR>', desc = 'Toggle main terminal (replace current window)' },
+        { '<Leader>t', ':Toggleterminal<CR>', desc = 'Toggle main terminal (split current window)' },
+        { '<Leader>f', ':Toggleterminal 1<CR>', desc = 'Toggle main terminal (full height)' },
     },  -- lazy load on keymap
     opts = {
         bg_color = '#000000',  -- main terminal background color

@@ -72,9 +72,12 @@ end
 
 
 -- split current window
-local toggle_terminal_split = function()
+local toggle_terminal = function(relative_height)
+    -- FIXME use the default option instead
+    relative_height = relative_height or 0.35
+    local height = math.floor(vim.o.lines * relative_height)
     if not vim.api.nvim_win_is_valid(state.main_terminal.win) then
-        state.main_terminal = create_window_below { buf = state.main_terminal.buf }
+        state.main_terminal = create_window_below { height = height, buf = state.main_terminal.buf }
         if vim.bo[state.main_terminal.buf].buftype ~= 'terminal' then
             -- Create terminal instance
             vim.cmd.terminal()
@@ -89,45 +92,12 @@ local toggle_terminal_split = function()
 end
 
 
--- replace current window
-local toggle_terminal_replace = function()
-    if vim.api.nvim_buf_is_valid(state.main_terminal.buf) then
-        if vim.api.nvim_get_current_buf() == state.main_terminal.buf then
-            vim.cmd.buffer('#')
-        else
-            vim.cmd.buffer(state.main_terminal.buf)
-            if toggle_terminal_opts.startinsert then
-                vim.cmd.startinsert()
-            end
-        end
-    else
-        state.main_terminal.buf = vim.api.nvim_create_buf(false, true)
-        vim.cmd.buffer(state.main_terminal.buf)
-        vim.cmd.terminal()
-        set_main_terminal_options()
-        if toggle_terminal_opts.startinsert then
-            vim.cmd.startinsert()
-        end
-    end
-end
-
-
-local toggle_terminal_cmd = {
-    split = toggle_terminal_split,
-    replace = toggle_terminal_replace,
-}
-
 vim.api.nvim_create_user_command(
     'Toggleterminal',
     function(opts)
-        toggle_terminal_cmd[opts.fargs[1]]()
+        toggle_terminal(opts.fargs[1] or nil)
     end,
-    {
-        nargs = 1,
-        complete = function(ArgLead, CmdLine, CursorPos)
-            return { 'split', 'replace' }
-        end
-    }
+    { nargs = '?' }
 )
 
 
