@@ -80,7 +80,8 @@ Those are the defaults options, which can be changed.
     cmd = 'Toggleterminal',  -- lazy load on command
     keys = {
         { '<Leader>t', ':Toggleterminal<CR>', desc = 'Toggle main terminal (split current window)' },
-        { '<Leader>f', ':Toggleterminal 1<CR>', desc = 'Toggle main terminal (full height)' },
+        { '<Leader>f', ':Toggleterminal 0.8<CR>', desc = 'Toggle main terminal (full height)' },
+        { '<Leader>u', ':Toggleterminal 0.8<CR>', desc = 'Toggle main terminal (full height)' },
     },  -- lazy load on keymap
     opts = {
         bg_color = '#000000',  -- main terminal background color

@@ -1,4 +1,5 @@
 local M = {}
+local builtin = {}
 
 
 local toggle_terminal_opts
@@ -73,7 +74,7 @@ end
 
 
 -- split current window
-local toggle_terminal = function(relative_height)
+builtin.toggle_window = function(relative_height)
     -- FIXME use the default option instead
     -- print("###", toggle_terminal_opts.relative_height)
     relative_height = relative_height or toggle_terminal_opts.relative_height
@@ -97,7 +98,7 @@ end
 
 local full_height = false
 
-local toggle_terminal_height = function()
+builtin.toggle_fullheight = function()
     if vim.api.nvim_win_is_valid(state.main_terminal.win) then
         if full_height then
             vim.api.nvim_win_set_height(state.main_terminal.win, state.main_terminal.height)
@@ -110,15 +111,18 @@ local toggle_terminal_height = function()
 end
 
 
-vim.api.nvim_create_user_command(
-    'Toggleterminal',
-    function(opts)
-        toggle_terminal(opts.fargs[1] or nil)
-    end,
-    { nargs = '?' }
-)
+local load_command = function(cmd, ...)
+    builtin[cmd](...)
+end
 
-vim.api.nvim_create_user_command('Toggleterminalheight', toggle_terminal_height, {})
+
+vim.api.nvim_create_user_command(
+    'Terminal',
+    function(opts)
+        load_command(unpack(opts.fargs))
+    end,
+    { nargs = '*' }
+)
 
 
 return M
