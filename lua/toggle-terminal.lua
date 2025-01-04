@@ -121,7 +121,18 @@ vim.api.nvim_create_user_command(
     function(opts)
         load_command(unpack(opts.fargs))
     end,
-    { nargs = '*' }
+    {
+        nargs = '*',
+        complete = function(_, line, _)
+            -- FIXME complete only for cmd arg
+            local l = vim.split(line, "%s+")
+            local n = #l - 1
+            if n == 1 then
+                -- command completion
+                return { 'toggle_window', 'toggle_fullheight' }
+            end
+        end
+    }
 )
 
 

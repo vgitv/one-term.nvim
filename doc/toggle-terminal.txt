@@ -43,16 +43,16 @@ NB: the cursor can be on any window to close the terminal window with
 Exemple:
 >vim
     " create a split window and open a new terminal
-    :Toggleterminal
+    :Terminal toggle_window
 
     " close the window (the terminal will still run in the background)
-    :Toggleterminal
+    :Terminal toggle_window
 
     " open the terminal again, this time occupying 80% of the current window
-    :Toggleterminal 0.8
+    :Terminal toggle_window 0.8
 
     " close the terminal window again
-    :Toggleterminal
+    :Terminal toggle_window
 
     " terminal buffer is unlisted
     :ls
@@ -61,23 +61,23 @@ Exemple:
     :ls!
 <
 
-Another user commande |:Toggleterminalheight| allow the user to toggle the
-terminal height when it's window is displayed. It will resize the terminal
-window in such a way that it will occupy the maximum height (leaving only one
-line for the top window).
+Another user subcommand |toggle_fullheight| allow the user to toggle the terminal
+height when it's window is displayed. It will resize the terminal window in
+such a way that it will occupy the maximum height (leaving only one line for
+the top window).
 
 Exemple:
 
 >vim
     " open a terminal window occupying 30% of the current height
-    :Toggleterminal 0.3
+    :Terminal toggle_window 0.3
 
     " 30% is not enough to see well... Let's increase the terminal height to
     " the maximum
-    :Toggleterminalheight
+    :Terminal toggle_fullheight
 
     " back to 30%
-    :Toggleterminalheight
+    :Terminal toggle_fullheight
 <
 
 

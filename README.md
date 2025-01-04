@@ -22,22 +22,22 @@ am working on. For the remaining 1% I dont mind creating a terminal buffer
 manually. Therefore most plugins out there are much more complex than is
 necessary for my workflow.
 
-## Usage exemples
+## :Terminal command usage exemples
 
-### Toggleterminal command
+### toggle_window subcommand
 
 ```vim
 " create a split window and open a new terminal
-:Toggleterminal
+:Terminal toggle_window
 
 " close the window (the terminal will still run in the background)
-:Toggleterminal
+:Terminal toggle_window
 
 " open the terminal again, this time occupying 80% of the current window
-:Toggleterminal 0.8
+:Terminal toggle_window 0.8
 
 " close the terminal window again
-:Toggleterminal
+:Terminal toggle_window
 
 " terminal buffer is unlisted
 :ls
@@ -46,18 +46,18 @@ necessary for my workflow.
 :ls!
 ```
 
-### Toggleterminalheight command
+### toggle_fullheight subcommand
 
 ```vim
 " open a terminal window occupying 30% of the current height
-:Toggleterminal 0.3
+:Terminal toggle_window 0.3
 
 " 30% is not enough to see well... Let's increase the terminal height to
 " the maximum
-:Toggleterminalheight
+:Terminal toggle_fullheight
 
 " back to 30%
-:Toggleterminalheight
+:Terminal toggle_fullheight
 ```
 
 ## Minimal quickstart with lazy.nvim
@@ -79,9 +79,9 @@ Those are the defaults options, which can be changed.
     'vgitv/toggle-terminal.nvim',
     cmd = 'Toggleterminal',  -- lazy load on command
     keys = {
-        { '<Leader>t', ':Toggleterminal<CR>', desc = 'Toggle main terminal (split current window)' },
-        { '<Leader>f', ':Toggleterminal 0.8<CR>', desc = 'Toggle main terminal (full height)' },
-        { '<Leader>u', ':Toggleterminal 0.8<CR>', desc = 'Toggle main terminal (full height)' },
+        { '<Leader>ts', ':Terminal toggle_window<CR>', desc = 'Toggle main terminal (small)' },
+        { '<Leader>tb', ':Terminal toggle_window 0.8<CR>', desc = 'Toggle main terminal (big)' },
+        { '<Leader><space>', ':Terminal toggle_fullheight<CR>', desc = 'Toggle main terminal full height' },
     },  -- lazy load on keymap
     opts = {
         bg_color = '#000000',  -- main terminal background color
