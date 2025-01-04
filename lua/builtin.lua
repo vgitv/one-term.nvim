@@ -5,7 +5,7 @@ local M = {}
 
 
 local utils = require('utils')
-local options
+local options = {}
 local state = {
     buf = -1,
     win = -1,

@@ -17,6 +17,12 @@ local options = {
     }
 }
 
+
+local load_command = function(cmd, ...)
+    builtin[cmd](...)
+end
+
+
 M.setup = function(opts)
     opts = opts or {}
 
@@ -33,31 +39,25 @@ M.setup = function(opts)
     vim.cmd.highlight('MainTerminalNormal guibg=' .. bg_color)
 
     builtin.setup_options(options)
-end
 
-
-local load_command = function(cmd, ...)
-    builtin[cmd](...)
-end
-
-
-vim.api.nvim_create_user_command(
-    'Terminal',
-    function(opts)
-        load_command(unpack(opts.fargs))
-    end,
-    {
-        nargs = '*',
-        complete = function(_, line, _)
-            local l = vim.split(line, "%s+")
-            local n = #l - 1
-            if n == 1 then
-                -- command completion
-                return { 'toggle_window', 'toggle_fullheight' }
+    vim.api.nvim_create_user_command(
+        'Terminal',
+        function(o)
+            load_command(unpack(o.fargs))
+        end,
+        {
+            nargs = '*',
+            complete = function(_, line, _)
+                local l = vim.split(line, "%s+")
+                local n = #l - 1
+                if n == 1 then
+                    -- command completion
+                    return { 'toggle_window', 'toggle_fullheight' }
+                end
             end
-        end
-    }
-)
+        }
+    )
+end
 
 
 return M
