@@ -1,3 +1,5 @@
+-- Main plugin script
+
 local M = {}
 local builtin = require('builtin')
 

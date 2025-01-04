@@ -10,8 +10,8 @@ local state = {
     buf = -1,
     win = -1,
     height = -1,
-    full_height = false,
 }
+local full_height = false
 
 
 M.setup_options = function(opts)
@@ -24,7 +24,6 @@ M.toggle_window = function(relative_height)
     relative_height = relative_height or options.relative_height
     local height = math.floor(vim.o.lines * relative_height)
     if not vim.api.nvim_win_is_valid(state.win) then
-        -- FIXME this function does not return a full_height key
         state = utils.create_window_below { height = height, buf = state.buf }
         if vim.bo[state.buf].buftype ~= 'terminal' then
             -- The options should be set first because the presence of 'number' may change the way
@@ -46,12 +45,12 @@ end
 
 M.toggle_fullheight = function()
     if vim.api.nvim_win_is_valid(state.win) then
-        if state.full_height then
+        if full_height then
             vim.api.nvim_win_set_height(state.win, state.height)
-            state.full_height = false
+            full_height = false
         else
             vim.api.nvim_win_set_height(state.win, vim.o.lines)
-            state.full_height = true
+            full_height = true
         end
     end
 end
