@@ -4,10 +4,6 @@ local M = {}
 local builtin = require('builtin')
 
 
--- default plugin options
-local options
-
-
 local load_command = function(cmd, ...)
     builtin.subcommands[cmd](...)
 end
@@ -16,7 +12,8 @@ end
 M.setup = function(opts)
     opts = opts or {}
 
-    options = {
+    -- Plutin options
+    local options = {
         bg_color = opts.bg_color or '#000000',
         startinsert = opts.startinsert or false,
         relative_height = opts.relative_height or 0.35,
@@ -28,12 +25,18 @@ M.setup = function(opts)
         }
     }
 
-    -- The main terminal background could be darker than the editor background
-    local bg_color = opts.bg_color or '#000000'
-    vim.cmd.highlight('MainTerminalNormal guibg=' .. bg_color)
-
     builtin.setup_options(options)
 
+    -- The main terminal background could be darker than the editor background
+    vim.cmd.highlight('MainTerminalNormal guibg=' .. options.bg_color)
+
+    -- Build subcommand completion list
+    local choices = {}
+    for subcommand, _ in pairs(builtin.subcommands) do
+        table.insert(choices, subcommand)
+    end
+
+    -- User command
     vim.api.nvim_create_user_command(
         'Terminal',
         function(o)
@@ -43,13 +46,7 @@ M.setup = function(opts)
             nargs = '*',
             complete = function(_, line, _)
                 local l = vim.split(line, "%s+")
-                local n = #l - 1
-                if n == 1 then
-                    local choices = {}
-                    for subcommand, _ in pairs(builtin.subcommands) do
-                        table.insert(choices, subcommand)
-                    end
-                    -- command completion
+                if #l == 2 then
                     return choices
                 end
             end
