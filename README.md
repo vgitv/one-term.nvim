@@ -22,9 +22,12 @@ am working on. For the remaining 1% I dont mind creating a terminal buffer
 manually. Therefore most plugins out there are much more complex than is
 necessary for my workflow.
 
-## :Terminal command usage exemples
+## Terminal command usage exemples
 
-### toggle_window subcommand
+Consider reading `:help toggle-terminal` for further informations. The
+following sections will give a simple overview.
+
+### Toggle window subcommand
 
 ```vim
 " create a split window and open a new terminal
@@ -46,7 +49,7 @@ necessary for my workflow.
 :ls!
 ```
 
-### toggle_fullheight subcommand
+### Toggle fullheight subcommand
 
 ```vim
 " open a terminal window occupying 30% of the current height
