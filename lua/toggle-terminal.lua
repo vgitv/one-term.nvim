@@ -5,34 +5,28 @@ local builtin = require('builtin')
 
 
 -- default plugin options
-local options = {
-    bg_color = '#000000',  -- main terminal background color
-    startinsert = false,  -- start insert mode at term opening
-    relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
-    local_options = {
-        number = false,  -- no number in main terminal window
-        relativenumber = false,  -- no relative number in main terminal window
-        cursorline = false,  -- cursor line in main terminal window
-        colorcolumn = '',  -- color column
-    }
-}
+local options
 
 
 local load_command = function(cmd, ...)
-    builtin[cmd](...)
+    builtin.subcommands[cmd](...)
 end
 
 
 M.setup = function(opts)
     opts = opts or {}
 
-    options.bg_color = opts.bg_color or options.bg_color
-    options.startinsert = opts.startinsert or options.startinsert
-    options.relative_height = opts.relative_height or options.relative_height
-    options.local_options.number = opts.local_options.number or options.local_options.number
-    options.local_options.relativenumber = opts.local_options.relativenumber or options.local_options.relativenumber
-    options.local_options.cursorline = opts.local_options.cursorline or options.local_options.cursorline
-    options.local_options.colorcolumn = opts.local_options.colorcolumn or options.local_options.colorcolumn
+    options = {
+        bg_color = opts.bg_color or '#000000',
+        startinsert = opts.startinsert or false,
+        relative_height = opts.relative_height or 0.35,
+        local_options = {
+            number = opts.local_options.number or false,
+            relativenumber = opts.local_options.relativenumber or false,
+            cursorline = opts.local_options.cursorline or false,
+            colorcolumn = opts.local_options.colorcolumn or '',
+        }
+    }
 
     -- The main terminal background could be darker than the editor background
     local bg_color = opts.bg_color or '#000000'
@@ -51,8 +45,12 @@ M.setup = function(opts)
                 local l = vim.split(line, "%s+")
                 local n = #l - 1
                 if n == 1 then
+                    local choices = {}
+                    for subcommand, _ in pairs(builtin.subcommands) do
+                        table.insert(choices, subcommand)
+                    end
                     -- command completion
-                    return { 'toggle_window', 'toggle_fullheight' }
+                    return choices
                 end
             end
         }

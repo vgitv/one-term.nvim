@@ -2,6 +2,7 @@
 -- :Terminal <builtin-subcommand>
 
 local M = {}
+M.subcommands = {}
 
 
 local utils = require('utils')
@@ -20,7 +21,7 @@ end
 
 
 -- split current window
-M.toggle_window = function(relative_height)
+M.subcommands.toggle_window = function(relative_height)
     relative_height = relative_height or options.relative_height
     local height = math.floor(vim.o.lines * relative_height)
     if not vim.api.nvim_win_is_valid(state.win) then
@@ -43,7 +44,7 @@ M.toggle_window = function(relative_height)
 end
 
 
-M.toggle_fullheight = function()
+M.subcommands.toggle_fullheight = function()
     if vim.api.nvim_win_is_valid(state.win) then
         if full_height then
             vim.api.nvim_win_set_height(state.win, state.height)
