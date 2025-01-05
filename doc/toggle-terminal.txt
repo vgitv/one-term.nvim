@@ -42,29 +42,33 @@ NB: the cursor can be on any window to close the terminal window with
 
 Exemple:
 >vim
-    " create a split window and open a new terminal
+    " Create a split window and open a new terminal.
+    " When no argument is given to the toggle_window subcommand, it will use
+    " the default `relative_height` that can be set through the setup function
+    " (See CONFIGURATION below).
     :Terminal toggle_window
 
-    " close the window (the terminal will still run in the background)
+    " Close the window (the terminal will still run in the background)
     :Terminal toggle_window
 
-    " open the terminal again, this time occupying 80% of the current window
+    " Open the terminal again, this time occupying 80% of the current window
     :Terminal toggle_window 0.8
 
-    " close the terminal window again
+    " Close the terminal window again
     :Terminal toggle_window
 
-    " terminal buffer is unlisted
+    " Terminal buffer is unlisted
     :ls
 
-    " you can see the terminal buffer this way
+    " You can see the terminal buffer this way
     :ls!
 <
 
-Another user subcommand |toggle_fullheight| allow the user to toggle the terminal
-height when it's window is displayed. It will resize the terminal window in
-such a way that it will occupy the maximum height (leaving only one line for
-the top window).
+Another user subcommand |toggle_fullheight| allow the user to toggle the
+terminal height when it's window is displayed. It will resize the terminal
+window in such a way that it will occupy the maximum height (leaving only one
+line for the top window). Note that the height is relative to the whole neovim
+height (vim.o.lines) and not the height of the current window.
 
 Exemple:
 
@@ -93,7 +97,7 @@ Advanced configuration:
     require('toggle-terminal').setup {
         bg_color = '#000000',  -- main terminal background color
         startinsert = false,  -- start insert mode at term opening
-        relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+        relative_height = 0.35,  -- relative height of the terminal window
         local_options = {
             number = false,  -- no number in main terminal window
             relativenumber = false,  -- no relative number in main terminal window
