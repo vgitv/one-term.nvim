@@ -63,7 +63,9 @@ following sections will give a simple overview.
 :Terminal toggle_fullheight
 ```
 
-## Minimal quickstart with lazy.nvim
+## Installation
+
+### Minimal quickstart with lazy.nvim
 
 ```lua
 {
@@ -73,7 +75,7 @@ following sections will give a simple overview.
 
 Toggle the main terminal with `:Toggleterminal` command.
 
-## Longer example with lazy.nvim
+### Longer example with lazy.nvim
 
 Those are the defaults options, which can be changed.
 
@@ -100,7 +102,7 @@ Those are the defaults options, which can be changed.
 }
 ```
 
-## Any other package manager
+### Any other package manager
 
 Make sure to add the plugin in your runtimepath, then call the setup function:
 
