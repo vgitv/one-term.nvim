@@ -35,6 +35,7 @@ M.setup = function(opts)
     for subcommand, _ in pairs(builtin.subcommands) do
         table.insert(choices, subcommand)
     end
+    table.sort(choices)
 
     -- User command
     vim.api.nvim_create_user_command(
