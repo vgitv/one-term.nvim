@@ -65,7 +65,7 @@ following sections will give a simple overview.
 
 ## Installation
 
-### Minimal quickstart with lazy.nvim
+### Minimal example with lazy.nvim
 
 ```lua
 {
@@ -73,7 +73,8 @@ following sections will give a simple overview.
 }
 ```
 
-Toggle the main terminal with `:Toggleterminal` command.
+* Toggle the main terminal with `:Terminal toggle_window`
+* Read `:help toggle-terminal`
 
 ### Longer example with lazy.nvim
 
@@ -82,7 +83,7 @@ Those are the defaults options, which can be changed.
 ```lua
 {
     'vgitv/toggle-terminal.nvim',
-    cmd = 'Toggleterminal',  -- lazy load on command
+    cmd = 'Terminal',  -- lazy load on command
     keys = {
         { '<Leader>ts', ':Terminal toggle_window<CR>', desc = 'Toggle main terminal (small)' },
         { '<Leader>tb', ':Terminal toggle_window 0.8<CR>', desc = 'Toggle main terminal (big)' },
@@ -102,14 +103,17 @@ Those are the defaults options, which can be changed.
 }
 ```
 
-### Any other package manager
+### Neovim native package management
 
-Make sure to add the plugin in your runtimepath, then call the setup function:
+Make sure to add the plugin directory to your runtimepath, then call the setup
+function:
 
 ```lua
 -- simple usage
 require('toggle-terminal').setup {}
+```
 
+```lua
 -- advanced usage
 require('toggle-terminal').setup {
     bg_color = '#000000',  -- main terminal background color
