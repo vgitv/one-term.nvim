@@ -57,4 +57,18 @@ M.subcommands.toggle_fullheight = function()
 end
 
 
+M.subcommands.send_current_line = function()
+    if vim.api.nvim_buf_is_valid(state.buf) then
+        local current_line = vim.api.nvim_get_current_line()
+        local exec_line = current_line:gsub('^%s*', '')
+        local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
+        local current_win = vim.api.nvim_get_current_win()
+        vim.api.nvim_chan_send(term_chan, exec_line .. "\n")
+        vim.api.nvim_set_current_win(state.win)
+        vim.cmd("normal! G")
+        vim.api.nvim_set_current_win(current_win)
+    end
+end
+
+
 return M
