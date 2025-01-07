@@ -53,6 +53,8 @@ M.subcommands.toggle_fullheight = function()
             vim.api.nvim_win_set_height(state.win, vim.o.lines)
             full_height = true
         end
+    else
+        print('Open a terminal first')
     end
 end
 
@@ -60,7 +62,11 @@ end
 M.subcommands.send_current_line = function()
     if vim.api.nvim_buf_is_valid(state.buf) then
         local current_line = vim.api.nvim_get_current_line()
-        local exec_line = current_line:gsub('^%s*', '')
+        -- trim line
+        local exec_line = current_line:gsub('^%s+', ''):gsub('%s+$', '')
+        if exec_line == '' then
+            return
+        end
         local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
         vim.api.nvim_chan_send(term_chan, exec_line .. "\n")
         if vim.api.nvim_win_is_valid(state.win) then
@@ -69,6 +75,8 @@ M.subcommands.send_current_line = function()
             vim.cmd("normal! G")
             vim.api.nvim_set_current_win(current_win)
         end
+    else
+        print('Open a terminal first')
     end
 end
 
