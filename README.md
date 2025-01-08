@@ -8,12 +8,17 @@ Simple terminal toggle plugin:
 
 ## Features
 
-* create a main terminal buffer and open it in a new window below the current one
-* set relative height of the terminal window (compare to the current window)
-* toggle the main terminal
-* toggle the height of the terminal window
-* terminal buffer is unlisted (hidden  from `:ls` command)
-* terminal background color can be different than normal background color
+- [X] Create a main terminal buffer and open it in a new split window
+- [X] Toggle the terminal window
+- [X] Easily resize the terminal window
+- [X] Customizable background terminal color
+- [X] Terminal buffer is unlisted (hidden  from `:ls` command)
+- [o] Send lines to the terminal buffer:
+    - [X] current line
+    - [ ] visual lines
+- [o] Jump to file X line Y using stacktrace:
+    - [X] experimental (see tested languages below)
+    - [ ] full support
 
 ## Why another toggle-terminal plugin?
 
@@ -127,6 +132,14 @@ require('toggle-terminal').setup {
     }
 }
 ```
+
+## Jump to file X line Y using stacktrace
+
+Tested languages:
+
+* lua
+* python
+* bash
 
 ## Inspired from
 

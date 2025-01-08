@@ -6,13 +6,26 @@ M.subcommands = {}
 
 
 local utils = require('utils')
+
+-- plugin options
 local options = {}
+
+-- terminal state
 local state = {
     buf = -1,
     win = -1,
     height = -1,
 }
+
+-- is the terminal full height?
 local full_height = false
+
+-- regex patterns to go to file x line y using stacktrace
+local stacktrace_patterns = {
+    '([^ ]*):([0-9]):', -- lua
+    '^ *File "(.*)", line ([0-9]+)',  -- python
+    '^(.*): line ([0-9]+)',  -- bash
+}
 
 
 M.setup_options = function(opts)
@@ -77,6 +90,31 @@ M.subcommands.send_current_line = function()
         end
     else
         print('Open a terminal first')
+    end
+end
+
+
+M.subcommands.goto = function()
+    if vim.api.nvim_get_current_win() == state.win then
+        local current_line = vim.api.nvim_get_current_line()
+        local filepath = nil
+        local linenumber = nil
+        for _, pattern in pairs(stacktrace_patterns) do
+            filepath, linenumber = string.match(current_line, pattern)
+            if filepath and linenumber then
+                break
+            end
+        end
+        if (not filepath) or (not linenumber) then
+            print('Unable to find file path and line number from pattern list')
+            return
+        end
+        vim.cmd.wincmd('k')
+        vim.cmd('edit ' .. filepath)
+        vim.cmd('normal! ' .. linenumber .. 'G_')
+        print(filepath, linenumber)
+    else
+        print('You must be in the terminal window to run this command')
     end
 end
 
