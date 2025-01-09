@@ -44,6 +44,8 @@ M.setup = function(opts)
             load_command(unpack(o.fargs))
         end,
         {
+            desc = 'Terminal main command (see :help toggle-terminal)',
+            range = true,
             nargs = '*',
             complete = function(_, line, _)
                 local l = vim.split(line, "%s+")

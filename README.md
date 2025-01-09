@@ -13,12 +13,8 @@ Simple terminal toggle plugin:
 - [X] Easily resize the terminal window
 - [X] Customizable background terminal color
 - [X] Terminal buffer is unlisted (hidden  from `:ls` command)
-- [o] Send lines to the terminal buffer:
-    - [X] current line
-    - [ ] visual lines
-- [o] Jump to file X line Y using stacktrace:
-    - [X] experimental (see tested languages below)
-    - [ ] full support
+- [X] Send lines to the terminal buffer
+- [X] Experimental: jump to file X line Y using stacktrace
 
 ## Why another toggle-terminal plugin?
 
@@ -27,12 +23,12 @@ am working on. For the remaining 1% I dont mind creating a terminal buffer
 manually. Therefore most plugins out there are much more complex than is
 necessary for my workflow.
 
-## Terminal command usage exemples
+## Terminal subcommands
 
 Consider reading `:help toggle-terminal` for further informations. The
 following sections will give a simple overview.
 
-### Toggle window subcommand
+### Toggle-window
 
 ```vim
 " create a split window and open a new terminal
@@ -54,7 +50,7 @@ following sections will give a simple overview.
 :ls!
 ```
 
-### Toggle fullheight subcommand
+### Toggle-fullheight
 
 ```vim
 " open a terminal window occupying 30% of the current height
@@ -68,18 +64,41 @@ following sections will give a simple overview.
 :Terminal toggle_fullheight
 ```
 
+### Jump
+
+```vim
+" When on a stacktrace, jump to the error source
+:Terminal jump
+```
+
+### Send-current-line
+
+```vim
+" Send current line to the terminal buffer
+:Terminal send_current_line
+```
+
+### Send-visual-lines
+
+```vim
+" Send currently selected lines to the terminal buffer
+:Terminal send_visual_lines
+```
+
 ## Installation
+
+**NB:** toggle-terminal will not define any key mapping for you, it only
+provides a user command. It's up to you to define you own mappings. Examples
+are given below.
 
 ### Minimal example with lazy.nvim
 
 ```lua
 {
-    'vgitv/toggle-terminal.nvim'
+    'vgitv/toggle-terminal.nvim',
+    opts = {},
 }
 ```
-
-* Toggle the main terminal with `:Terminal toggle_window`
-* Read `:help toggle-terminal`
 
 ### Longer example with lazy.nvim
 
@@ -90,9 +109,10 @@ Those are the defaults options, which can be changed.
     'vgitv/toggle-terminal.nvim',
     cmd = 'Terminal',  -- lazy load on command
     keys = {
-        { '<Leader>ts', ':Terminal toggle_window<CR>', desc = 'Toggle main terminal (small)' },
-        { '<Leader>tb', ':Terminal toggle_window 0.8<CR>', desc = 'Toggle main terminal (big)' },
-        { '<Leader><space>', ':Terminal toggle_fullheight<CR>', desc = 'Toggle main terminal full height' },
+        { '<Leader>t', ':Terminal toggle_window<CR>', desc = 'Toggle main terminal (small)', silent = true },
+        { '<Leader>T', ':Terminal toggle_window 0.8<CR>', desc = 'Toggle main terminal (big)', silent = true },
+        { '<Leader><space>', ':Terminal toggle_fullheight<CR>', desc = 'Toggle main terminal full height', silent = true },
+        { '<Leader>j', ':Terminal jump<CR>', desc = 'Jump to error line using stacktrace', silent = true },
     },  -- lazy load on keymap
     opts = {
         bg_color = '#000000',  -- main terminal background color
@@ -103,7 +123,7 @@ Those are the defaults options, which can be changed.
             relativenumber = false,  -- no relative number in main terminal window
             cursorline = false,  -- cursor line in main terminal window
             colorcolumn = '',  -- color column
-        }
+        },
     },
 }
 ```

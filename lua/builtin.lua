@@ -94,7 +94,32 @@ M.subcommands.send_current_line = function()
 end
 
 
-M.subcommands.goto = function()
+M.subcommands.send_visual_lines = function()
+    if vim.api.nvim_buf_is_valid(state.buf) then
+        local start_line = vim.fn.getpos("'<")[2]
+        local end_line = vim.fn.getpos("'>")[2]
+        print(start_line, end_line)
+        local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+        local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
+        for _, line in ipairs(lines) do
+            local exec_line = line:gsub('^%s+', ''):gsub('%s+$', '')
+            -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
+            -- / loop etc. (like python). And it should be a blank line after each end of function / loop etc.
+            vim.api.nvim_chan_send(term_chan, exec_line .. "\n")
+        end
+        if vim.api.nvim_win_is_valid(state.win) then
+            local current_win = vim.api.nvim_get_current_win()
+            vim.api.nvim_set_current_win(state.win)
+            vim.cmd("normal! G")
+            vim.api.nvim_set_current_win(current_win)
+        end
+    else
+        print('Open a terminal first')
+    end
+end
+
+
+M.subcommands.jump = function()
     if vim.api.nvim_get_current_win() == state.win then
         local current_line = vim.api.nvim_get_current_line()
         local filepath = nil
