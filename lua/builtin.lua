@@ -67,7 +67,7 @@ M.subcommands.toggle_fullheight = function()
             full_height = true
         end
     else
-        print('Open a terminal first')
+        print('The terminal window must be open to run this command')
     end
 end
 
@@ -139,7 +139,7 @@ M.subcommands.jump = function()
         vim.cmd('normal! ' .. linenumber .. 'G_')
         print(filepath, linenumber)
     else
-        print('You must be in the terminal window to run this command')
+        print('You must be inside the terminal window to run this command')
     end
 end
 
@@ -149,6 +149,8 @@ M.subcommands.clear = function()
         local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
         -- Send Ctrl-l signal to the terminal
         vim.api.nvim_chan_send(term_chan, '\x0c')
+    else
+        print('The terminal window must be open to run this command')
     end
 end
 
@@ -158,6 +160,8 @@ M.subcommands.kill = function()
         local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
         -- Send Ctrl-c signal to the terminal
         vim.api.nvim_chan_send(term_chan, '\x03')
+    else
+        print('The terminal window must be open to run this command')
     end
 end
 
