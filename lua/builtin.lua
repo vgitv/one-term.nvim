@@ -20,13 +20,6 @@ local state = {
 -- is the terminal full height?
 local full_height = false
 
--- regex patterns to go to file x line y using stacktrace
-local stacktrace_patterns = {
-    '([^ ]*):([0-9]):', -- lua
-    '^ *File "(.*)", line ([0-9]+)',  -- python
-    '^(.*): line ([0-9]+)',  -- bash
-}
-
 
 M.setup_options = function(opts)
     options = opts or {}
@@ -124,7 +117,7 @@ M.subcommands.jump = function()
         local current_line = vim.api.nvim_get_current_line()
         local filepath = nil
         local linenumber = nil
-        for _, pattern in pairs(stacktrace_patterns) do
+        for _, pattern in pairs(options.stacktrace_patterns) do
             filepath, linenumber = string.match(current_line, pattern)
             if filepath and linenumber then
                 break

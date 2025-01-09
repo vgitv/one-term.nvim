@@ -23,7 +23,13 @@ M.setup = function(opts)
             cursorline = opts.local_options.cursorline or false,
             colorcolumn = opts.local_options.colorcolumn or '',
             scrolloff = opts.local_options.scrolloff or 0,
-        }
+        },
+        -- regex patterns to go to file x line y using stacktrace
+        stacktrace_patterns = opts.stacktrace_patterns or {
+            '([^ ]*):([0-9]):', -- lua
+            '^ *File "(.*)", line ([0-9]+)',  -- python
+            '^(.*): line ([0-9]+)',  -- bash
+        },
     }
 
     builtin.setup_options(options)
