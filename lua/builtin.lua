@@ -130,7 +130,6 @@ M.subcommands.jump = function()
         vim.cmd.wincmd('k')
         vim.cmd('edit ' .. filepath)
         vim.cmd('normal! ' .. linenumber .. 'G_')
-        print(filepath, linenumber)
     else
         print('You must be inside the terminal window to run this command')
     end
