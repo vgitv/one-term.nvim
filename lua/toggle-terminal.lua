@@ -22,6 +22,7 @@ M.setup = function(opts)
             relativenumber = opts.local_options.relativenumber or false,
             cursorline = opts.local_options.cursorline or false,
             colorcolumn = opts.local_options.colorcolumn or '',
+            scrolloff = opts.local_options.scrolloff or 0,
         }
     }
 

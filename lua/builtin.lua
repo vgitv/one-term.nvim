@@ -147,7 +147,8 @@ end
 M.subcommands.clear = function()
     if vim.api.nvim_win_is_valid(state.win) then
         local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
-        vim.api.nvim_chan_send(term_chan, 'clear\n')
+        -- Send Ctrl-c signal to the terminal
+        vim.api.nvim_chan_send(term_chan, '\x0c')
     end
 end
 
