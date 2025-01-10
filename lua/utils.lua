@@ -15,7 +15,7 @@ end
 
 ---Create a split window below the current one
 ---@param opts table
-M.create_window_below = function(opts)
+local create_window_below = function(opts)
     opts = opts or {}
     -- for key, value in pairs(opts) do
     --     print(key, value)
@@ -55,7 +55,7 @@ end
 ---@param local_options table
 M.create_or_open_terminal = function(relative_height, enter, buf, chan, local_options)
     local height = math.floor(vim.o.lines * relative_height)
-    local state = M.create_window_below { height = height, buf = buf, enter = enter }
+    local state = create_window_below { height = height, buf = buf, enter = enter }
 
     if vim.bo[state.buf].buftype ~= 'terminal' then
         -- The options should be set first because the presence of 'number' may change the way
