@@ -3,15 +3,21 @@
 local M = {}
 
 
-M.set_local_options = function(opts)
+-- Set window local options given a window id
+M.set_local_options = function(win, opts)
     for opt_name, opt_value in pairs(opts) do
-        vim.opt_local[opt_name] = opt_value
+        vim.api.nvim_set_option_value(opt_name, opt_value, {win = win})
     end
 end
 
 
+-- Create a split window below the current one
 M.create_window_below = function(opts)
     opts = opts or {}
+    -- for key, value in pairs(opts) do
+    --     print(key, value)
+    -- end
+    opts.enter = opts.enter
 
     -- Calculate window height
     local height = opts.height or math.floor(vim.o.lines * 0.5)
@@ -32,9 +38,47 @@ M.create_window_below = function(opts)
     }
 
     -- Open window
-    local win = vim.api.nvim_open_win(buf, true, win_config)
+    local win = vim.api.nvim_open_win(buf, opts.enter, win_config)
 
     return { buf = buf, win = win, height = height }
+end
+
+
+-- Create a new terminal instance or open the buffer in a new window if it already exists
+M.create_or_open_terminal = function(relative_height, enter, state, local_options)
+    local height = math.floor(vim.o.lines * relative_height)
+    state = M.create_window_below { height = height, buf = state.buf, enter = enter }
+
+    if vim.bo[state.buf].buftype ~= 'terminal' then
+        -- The options should be set first because the presence of 'number' may change the way
+        -- the prompt is display (becaus it changes the terminal width)
+        M.set_local_options(state.win, local_options)
+        vim.api.nvim_set_option_value('buflisted', false, {buf = state.buf})
+        vim.api.nvim_set_option_value('winhighlight', 'Normal:MainTerminalNormal', {win = state.win})
+        -- Create terminal instance after setting local options
+        vim.api.nvim_buf_call(state.buf, vim.cmd.terminal)
+    end
+
+    return state
+end
+
+
+-- When it's needed to have a terminal window opened but without entering the terminal window
+M.ensure_open_terminal = function(relative_height, state, local_options)
+    if not vim.api.nvim_win_is_valid(state.win) then
+        state = M.create_or_open_terminal(relative_height, false, state, local_options)
+    end
+
+    return state
+end
+
+
+-- Scroll to the bottom of the buffer
+M.scroll_down = function(opts)
+    local current_win = vim.api.nvim_get_current_win()
+    vim.api.nvim_set_current_win(opts.win)
+    vim.cmd("normal! G")
+    vim.api.nvim_set_current_win(current_win)
 end
 
 
