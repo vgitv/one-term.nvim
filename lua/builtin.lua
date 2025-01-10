@@ -15,6 +15,7 @@ local state = {
     buf = -1,
     win = -1,
     height = -1,
+    chan = nil,
 }
 
 -- is the terminal full height?
@@ -31,7 +32,7 @@ end
 M.subcommands.toggle_window = function(relative_height)
     relative_height = relative_height or options.relative_height
     if not vim.api.nvim_win_is_valid(state.win) then
-        state = utils.create_or_open_terminal(relative_height, true, state.buf, options.local_options)
+        state = utils.create_or_open_terminal(relative_height, true, state.buf, state.chan, options.local_options)
         if options.startinsert then
             vim.cmd.startinsert()
         end
@@ -66,8 +67,7 @@ M.subcommands.send_current_line = function()
     if exec_line == '' then
         return
     end
-    local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
-    vim.api.nvim_chan_send(term_chan, exec_line .. '\x0d')
+    vim.api.nvim_chan_send(state.chan, exec_line .. '\x0d')
 
     utils.scroll_down(state.win)
 end
@@ -80,12 +80,11 @@ M.subcommands.send_visual_lines = function()
     local end_line = vim.fn.getpos("'>")[2]
     print(start_line, end_line)
     local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-    local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
     for _, line in ipairs(lines) do
         local exec_line = line:gsub('^%s+', ''):gsub('%s+$', '')
         -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
         -- / loop etc. (like python). And it should be a blank line after each end of function / loop etc.
-        vim.api.nvim_chan_send(term_chan, exec_line .. '\x0d')
+        vim.api.nvim_chan_send(state.chan, exec_line .. '\x0d')
     end
 
     utils.scroll_down(state.win)
@@ -128,9 +127,8 @@ M.subcommands.run_previous = function()
 
     state = utils.ensure_open_terminal(options.relative_height, state, options.local_options)
 
-    local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
     -- Send Ctrl-p signal to the terminal followed by carriage return
-    vim.api.nvim_chan_send(term_chan, '\x10\x0d')
+    vim.api.nvim_chan_send(state.chan, '\x10\x0d')
 
     utils.scroll_down(state.win)
 end
@@ -139,9 +137,8 @@ end
 -- Clear terminal
 M.subcommands.clear = function()
     if vim.api.nvim_win_is_valid(state.win) then
-        local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
         -- Send Ctrl-l signal to the terminal
-        vim.api.nvim_chan_send(term_chan, '\x0c')
+        vim.api.nvim_chan_send(state.chan, '\x0c')
     else
         print('The terminal window must be open to run this command')
     end
@@ -150,9 +147,8 @@ end
 -- Kill currently running command
 M.subcommands.kill = function()
     if vim.api.nvim_win_is_valid(state.win) then
-        local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
         -- Send Ctrl-c signal to the terminal
-        vim.api.nvim_chan_send(term_chan, '\x03')
+        vim.api.nvim_chan_send(state.chan, '\x03')
     else
         print('The terminal window must be open to run this command')
     end
@@ -162,9 +158,8 @@ end
 -- Exit terminal
 M.subcommands.exit = function()
     if vim.api.nvim_win_is_valid(state.win) then
-        local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
         -- Send Ctrl-d signal to the terminal
-        vim.api.nvim_chan_send(term_chan, '\x04')
+        vim.api.nvim_chan_send(state.chan, '\x04')
     else
         print('The terminal window must be open to run this command')
     end
