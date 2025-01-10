@@ -10,11 +10,14 @@ Simple terminal toggle plugin:
 
 - [X] Create a main terminal buffer and open it in a new split window
 - [X] Toggle the terminal window
+- [X] Rerun the last command without leaving your buffer
 - [X] Easily resize the terminal window
 - [X] Customizable background terminal color
 - [X] Terminal buffer is unlisted (hidden  from `:ls` command)
 - [X] Send lines to the terminal buffer
-- [X] Experimental: jump to file X line Y using stacktrace
+- [X] Jump to file X line Y using stacktrace
+
+For a list of all sub-commands see below.
 
 ## Why another toggle-terminal plugin?
 
@@ -28,7 +31,26 @@ necessary for my workflow.
 Consider reading `:help toggle-terminal` for further informations. The
 following sections will give a simple overview.
 
-### Toggle-window
+| Subcommand | Description |
+|------|------|
+| `clear` | Clear the terminal window |
+| `exit` | Exit the terminal process |
+| `jump` | Jump from the stacktrace to the problematic code |
+| `kill` | Kill currently running command |
+| `run_previous` | Run previous command (without leaving your buffer) |
+| `send_current_line` | Send current line to the terminal |
+| `send_visual_lines` | Send visual lines to the terminal |
+| `toggle_fullheight` | Toggle terminal full height |
+| `toggle_window` | Toggle terminal window |
+
+## Learn by examples
+
+Obviously you should define key mappings for all or part of the following
+commands. Remember that this plugin allows only one main terminal buffer, so
+you dont have to worry about which terminal you will interact with. This makes
+the commands much simple. Keep in mind that if you absolutely need a second
+terminal buffer, you can still create it manually, the plugin will not mix them
+up.
 
 ```vim
 " create a split window and open a new terminal
@@ -48,11 +70,7 @@ following sections will give a simple overview.
 
 " you can see the terminal buffer this way
 :ls!
-```
 
-### Toggle-fullheight
-
-```vim
 " open a terminal window occupying 30% of the current height
 :Terminal toggle_window 0.3
 
@@ -62,27 +80,27 @@ following sections will give a simple overview.
 
 " back to 30%
 :Terminal toggle_fullheight
-```
 
-### Jump
-
-```vim
-" When on a stacktrace, jump to the error source
+" When on a stacktrace, jump to the corresponding problematic code
 :Terminal jump
-```
 
-### Send-current-line
-
-```vim
 " Send current line to the terminal buffer
 :Terminal send_current_line
-```
 
-### Send-visual-lines
-
-```vim
 " Send currently selected lines to the terminal buffer
 :Terminal send_visual_lines
+
+" Run previously executed command without leaving your current buffer
+:Terminal run_previous
+
+" This command takes too much time... kill it without leaving your current buffer
+:Terminal kill
+
+" Clear terminal window without leaving your current buffer
+:Terminal clear
+
+" You dont need your terminal anymore, you can exit it without leaving your buffer
+:Terminal exit
 ```
 
 ## Installation
@@ -160,6 +178,12 @@ Tested languages:
 * lua
 * python
 * bash
+
+## How to contribute
+
+Help and suggestions are welcome!
+
+TODO
 
 ## Inspired from
 
