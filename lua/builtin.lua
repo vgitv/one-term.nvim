@@ -157,11 +157,12 @@ end
 
 -- Exit terminal
 M.subcommands.exit = function()
-    if vim.api.nvim_win_is_valid(state.win) then
+    if vim.api.nvim_buf_is_valid(state.buf) then
         -- Send Ctrl-d signal to the terminal
         vim.api.nvim_chan_send(state.chan, '\x04')
+        print('Terminal successfully exited')
     else
-        print('The terminal window must be open to run this command')
+        print('No terminal to exit')
     end
 end
 

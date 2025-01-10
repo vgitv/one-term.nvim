@@ -51,7 +51,7 @@ end
 ---@param relative_height number
 ---@param enter boolean
 ---@param buf integer
----@param chan number
+---@param chan number|nil
 ---@param local_options table
 M.create_or_open_terminal = function(relative_height, enter, buf, chan, local_options)
     local height = math.floor(vim.o.lines * relative_height)
