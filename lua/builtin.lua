@@ -26,11 +26,12 @@ M.setup_options = function(opts)
 end
 
 
--- Split current window
+---Split current window
+---@param relative_height number
 M.subcommands.toggle_window = function(relative_height)
     relative_height = relative_height or options.relative_height
     if not vim.api.nvim_win_is_valid(state.win) then
-        state = utils.create_or_open_terminal(relative_height, true, state, options.local_options)
+        state = utils.create_or_open_terminal(relative_height, true, state.buf, options.local_options)
         if options.startinsert then
             vim.cmd.startinsert()
         end
@@ -68,7 +69,7 @@ M.subcommands.send_current_line = function()
     local term_chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
     vim.api.nvim_chan_send(term_chan, exec_line .. '\x0d')
 
-    utils.scroll_down({ win = state.win })
+    utils.scroll_down(state.win)
 end
 
 
@@ -87,7 +88,7 @@ M.subcommands.send_visual_lines = function()
         vim.api.nvim_chan_send(term_chan, exec_line .. '\x0d')
     end
 
-    utils.scroll_down({ win = state.win })
+    utils.scroll_down(state.win)
 end
 
 
@@ -119,6 +120,8 @@ end
 -- Run previous command without leaving buffer
 M.subcommands.run_previous = function()
     if not vim.api.nvim_buf_is_valid(state.buf) then
+        -- If the main terminal doesnt exist, the previous command has good chances to be a nvim command!
+        -- This will prevent from accidentally opening a new neovim instance inside the terminal buffer.
         print('You need to create a terminal buffer first')
         return
     end
@@ -129,7 +132,7 @@ M.subcommands.run_previous = function()
     -- Send Ctrl-p signal to the terminal followed by carriage return
     vim.api.nvim_chan_send(term_chan, '\x10\x0d')
 
-    utils.scroll_down({ win = state.win })
+    utils.scroll_down(state.win)
 end
 
 
