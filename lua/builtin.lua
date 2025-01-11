@@ -12,9 +12,9 @@ local options = {}
 
 -- terminal state
 local state = {
-    buf = -1,
-    win = -1,
-    height = -1,
+    buf = -1,  -- needs to be invalid at first hence -1
+    win = -1,  -- needs to be invalid at first hence -1
+    height = nil,
     chan = nil,
 }
 
@@ -32,7 +32,7 @@ end
 M.subcommands.toggle_window = function(relative_height)
     relative_height = relative_height or options.relative_height
     if not vim.api.nvim_win_is_valid(state.win) then
-        state = utils.create_or_open_terminal(relative_height, true, state.buf, state.chan, options.local_options)
+        state = utils.create_or_open_terminal(relative_height, true, state.buf, options.local_options)
         if options.startinsert then
             vim.cmd.startinsert()
         end
@@ -107,7 +107,8 @@ M.subcommands.jump = function()
             print('Unable to find file path and line number from pattern list')
             return
         end
-        vim.cmd.wincmd('k')
+        -- Go to previously accessed window
+        vim.cmd.wincmd('p')
         vim.cmd('edit ' .. filepath)
         vim.cmd('normal! ' .. linenumber .. 'G_')
     else

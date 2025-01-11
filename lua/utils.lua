@@ -51,9 +51,8 @@ end
 ---@param relative_height number
 ---@param enter boolean
 ---@param buf integer
----@param chan number|nil
 ---@param local_options table
-M.create_or_open_terminal = function(relative_height, enter, buf, chan, local_options)
+M.create_or_open_terminal = function(relative_height, enter, buf, local_options)
     local height = math.floor(vim.o.lines * relative_height)
     local state = create_window_below { height = height, buf = buf, enter = enter }
 
@@ -65,9 +64,8 @@ M.create_or_open_terminal = function(relative_height, enter, buf, chan, local_op
         vim.api.nvim_set_option_value('winhighlight', 'Normal:MainTerminalNormal', {win = state.win})
         -- Create terminal instance after setting local options
         vim.api.nvim_buf_call(state.buf, vim.cmd.terminal)
-        chan = vim.api.nvim_buf_get_var(state.buf, 'terminal_job_id')
+        state.chan = vim.bo[state.buf].channel
     end
-    state.chan = chan
 
     return state
 end
@@ -79,7 +77,7 @@ end
 ---@param local_options table
 M.ensure_open_terminal = function(relative_height, state, local_options)
     if not vim.api.nvim_win_is_valid(state.win) then
-        state = M.create_or_open_terminal(relative_height, false, state.buf, state.chan, local_options)
+        state = M.create_or_open_terminal(relative_height, false, state.buf, local_options)
     end
 
     return state
