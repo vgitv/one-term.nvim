@@ -1,12 +1,23 @@
-*toggle-terminal.txt*    Plugin to toggle a terminal window
+*toggle-terminal*                             Plugin to toggle a terminal window
 
-CONTENTS                                                     *toggle-terminal*
-Introduction ................ |toggle-terminal-introduction|
-Commands .................... |toggle-terminal-commands|
-Configuration ............... |toggle-terminal-configuration|
+CONTENTS                                              *toggle-terminal-contents*
+
+Introduction .................. |toggle-terminal-introduction|
+Commands ...................... |toggle-terminal-cmd|
+  clear ....................... |toggle-terminal-cmd-clear|
+  exit ........................ |toggle-terminal-cmd-exit|
+  jump ........................ |toggle-terminal-cmd-jump|
+  kill ........................ |toggle-terminal-cmd-kill|
+  run_previous ................ |toggle-terminal-cmd-run_previous|
+  send_current_line ........... |toggle-terminal-cmd-send_current_line|
+  send_visual_lines ........... |toggle-terminal-cmd-send_visual_lines|
+  toggle_fullheight ........... |toggle-terminal-cmd-toggle_fullheight|
+  toggle_window ............... |toggle-terminal-cmd-toggle_window|
+Examples ...................... |toggle-terminal-cmd-examples
+Configuration ................. |toggle-terminal-configuration|
 
 
-INTRODUCTION                                    *toggle-terminal-introduction*
+INTRODUCTION                                      *toggle-terminal-introduction*
 
 Toggle-terminal is a plugin for nvim that can spone a terminal in a dedicated
 buffer, display the terminal buffer is a split window, and toggle this window.
@@ -15,19 +26,68 @@ There can be only one terminal buffer that Toggle-terminal know about, called
 (ie. the terminal processus ends), a new terminal instance will be created
 next time toggle-terminal is summoned.
 
-Features:
 
-* create a main terminal buffer and open it in a new split window below the
-  current one
-* toggle the main terminal
-* terminal buffer is unlisted (hidden  from `:ls` command)
-* terminal background color can be different than normal background color
+COMMANDS                                        *:Terminal*  *toggle-terminal-cmd*
+
+Toggle-terminal provide only one user command |:Terminal| and does not define
+any default keybindings for nvim. The |:Terminal| command takes at least one
+argument which is the subcommand name. The subcommand may (or may not) have
+arguments.
+
+`:Terminal <subcommand> [args...]`
+
+The subcommands are listed below.
 
 
-COMMANDS                           *:Toggleterminal*  *toggle-terminal-commands*
+SUBCOMMAND CLEAR                                     *toggle-terminal-cmd-clear*
 
-Toggle-terminal does not define any default keybindings for nvim. The command
-|:Toggleterminal| does two things:
+Clear the terminal window, without entering the terminal buffer.
+
+
+SUBCOMMAND EXIT                                       *toggle-terminal-cmd-exit*
+
+Exit the terminal processus, without entering the terminal buffer.
+
+
+SUBCOMMAND JUMP                                       *toggle-terminal-cmd-jump*
+
+Jump from the stacktrace to the corresponding problematic code.
+
+
+SUBCOMMAND KILL                                       *toggle-terminal-cmd-kill*
+
+Kill the currently running comment, without entering the terminal buffer.
+
+
+SUBCOMMAND RUN_PREVIOUS                       *toggle-terminal-cmd-run_previous*
+
+Run privous command, without entering the terminal buffer.
+
+
+SUBCOMMAND SEND_CURRENT_LINE             *toggle-terminal-cmd-send_current_line*
+
+Send current line to the terminal buffer. Create the terminal buffer if it
+does not exist yet.
+
+
+SUBCOMMAND SEND_VISUAL_LINES             *toggle-terminal-cmd-send_visual_lines*
+
+Send selected lines to the terminal buffer. Create the terminal buffer if it
+does not exist yet.
+
+
+SUBCOMMAND TOGGLE_FULLHEIGHT             *toggle-terminal-cmd-toggle_fullheight*
+
+Allow the user to toggle the terminal height when it's window is displayed. It
+will resize the terminal window in such a way that it will occupy the maximum
+height (leaving only one line for the top window). Note that the height is
+relative to the whole neovim height (vim.o.lines) and not the height of the
+current window.
+
+
+SUBCOMMAND TOGGLE_WINDOW                     *toggle-terminal-cmd-toggle_window*
+
+The subcommand `toggle_window` does two things:
 
 1. The first time it is called (or if the main terminal is exited): create a
    new buffer, open a terminal in this buffer and display the buffer in a
@@ -38,9 +98,12 @@ This command take optionally one argument: the relative height of the terminal
 window.
 
 NB: the cursor can be on any window to close the terminal window with
-`:Toggleterminal`
+`:Terminal`
 
-Exemple:
+
+EXAMPLES                                          *toggle-terminal-cmd-examples*
+
+Here are some usage examples.
 >vim
     " Create a split window and open a new terminal.
     " When no argument is given to the toggle_window subcommand, it will use
@@ -62,17 +125,7 @@ Exemple:
 
     " You can see the terminal buffer this way
     :ls!
-<
 
-Another user subcommand |toggle_fullheight| allow the user to toggle the
-terminal height when it's window is displayed. It will resize the terminal
-window in such a way that it will occupy the maximum height (leaving only one
-line for the top window). Note that the height is relative to the whole neovim
-height (vim.o.lines) and not the height of the current window.
-
-Exemple:
-
->vim
     " open a terminal window occupying 30% of the current height
     :Terminal toggle_window 0.3
 
@@ -82,10 +135,30 @@ Exemple:
 
     " back to 30%
     :Terminal toggle_fullheight
+
+    " When on a stacktrace, jump to the corresponding problematic code
+    :Terminal jump
+
+    " Send current line to the terminal buffer
+    :Terminal send_current_line
+
+    " Send currently selected lines to the terminal buffer
+    :Terminal send_visual_lines
+
+    " Run previously executed command without leaving your current buffer
+    :Terminal run_previous
+
+    " This command takes too much time... kill it without leaving your current buffer
+    :Terminal kill
+
+    " Clear terminal window without leaving your current buffer
+    :Terminal clear
+
+    " You dont need your terminal anymore, you can exit it without leaving your buffer
+    :Terminal exit
 <
 
-
-CONFIGURATION                                  *toggle-terminal-configuration*
+CONFIGURATION                                    *toggle-terminal-configuration*
 
 Default configuration:
 >lua
@@ -103,7 +176,12 @@ Advanced configuration:
             relativenumber = false,  -- no relative number in main terminal window
             cursorline = false,  -- cursor line in main terminal window
             colorcolumn = '',  -- color column
-        }
+        },
+        stacktrace_patterns = {
+            '([^ ]*):([0-9]):', -- lua
+            '^ *File "(.*)", line ([0-9]+)',  -- python
+            '^(.*): line ([0-9]+)',  -- bash
+        },
     }
 <
 

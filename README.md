@@ -142,6 +142,11 @@ Those are the defaults options, which can be changed.
             cursorline = false,  -- cursor line in main terminal window
             colorcolumn = '',  -- color column
         },
+        stacktrace_patterns = {
+            '([^ ]*):([0-9]):', -- lua
+            '^ *File "(.*)", line ([0-9]+)',  -- python
+            '^(.*): line ([0-9]+)',  -- bash
+        },
     },
 }
 ```
@@ -167,7 +172,12 @@ require('toggle-terminal').setup {
         relativenumber = false,  -- no relative number in main terminal window
         cursorline = false,  -- cursor line in main terminal window
         colorcolumn = '',  -- color column
-    }
+    },
+    stacktrace_patterns = {
+        '([^ ]*):([0-9]):', -- lua
+        '^ *File "(.*)", line ([0-9]+)',  -- python
+        '^(.*): line ([0-9]+)',  -- bash
+    },
 }
 ```
 
