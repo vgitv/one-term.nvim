@@ -15,7 +15,7 @@ Simple terminal toggle plugin:
 - [X] Customizable background terminal color
 - [X] Terminal buffer is unlisted (hidden  from `:ls` command)
 - [X] Send lines to the terminal buffer
-- [X] Jump to file X line Y using stacktrace
+- [X] Jump to file X line Y using stacktrace (see "Jump subcommand" section)
 
 For a list of all sub-commands see below.
 
@@ -31,7 +31,7 @@ necessary for my workflow.
 Consider reading `:help toggle-terminal` for further informations. The
 following sections will give a simple overview.
 
-| Subcommand | Description |
+| SUBCOMMAND | DESCRIPTION |
 |------|------|
 | `clear` | Clear the terminal window |
 | `exit` | Exit the terminal process |
@@ -174,18 +174,47 @@ require('toggle-terminal').setup {
         colorcolumn = '',  -- color column
     },
     stacktrace_patterns = {
-        '([^ ]*):([0-9]):', -- lua
+        '([^ :]*):([0-9]):', -- lua / cpp
         '^ *File "(.*)", line ([0-9]+)',  -- python
         '^(.*): line ([0-9]+)',  -- bash
     },
 }
 ```
 
-## Jump to file X line Y using stacktrace
+## Precisions about some subcommands
+
+### Jump subcommand
+
+I did not test many languages. If this subcommand does not work for your
+favorite language, it is up to you to define your own regular expressions (see
+`stacktrace_patterns` option). You must write a regular expression with two
+capturing groups, the first corresponding to the file name, the second to the
+line number.
+
+For instance if your stacktrace look like this:
+
+```
+Traceback (most recent call last):
+  File "/home/vgitv/truc.py", line 1, in <module>
+    prin("Hello")
+    ^^^^
+NameError: name 'prin' is not defined. Did you mean: 'print'?
+```
+
+You can have the following regular expression:
+
+```
+^ *File "(.*)", line ([0-9]+)
+```
+
+Note that the order of the regular expressions in `stacktrace_patterns` matters
+because the first match will interrupt the search and try to jump to the
+corresponding location.
 
 Tested languages:
 
 * lua
+* cpp
 * python
 * bash
 

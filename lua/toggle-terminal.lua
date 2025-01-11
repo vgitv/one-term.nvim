@@ -26,7 +26,7 @@ M.setup = function(opts)
         },
         -- regex patterns to go to file x line y using stacktrace
         stacktrace_patterns = opts.stacktrace_patterns or {
-            '([^ ]*):([0-9]):', -- lua
+            '([^ :]*):([0-9]):', -- lua / cpp
             '^ *File "(.*)", line ([0-9]+)',  -- python
             '^(.*): line ([0-9]+)',  -- bash
         },
