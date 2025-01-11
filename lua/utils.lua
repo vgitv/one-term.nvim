@@ -58,12 +58,13 @@ M.create_or_open_terminal = function(relative_height, enter, buf, local_options)
 
     if vim.bo[state.buf].buftype ~= 'terminal' then
         -- The options should be set first because the presence of 'number' may change the way
-        -- the prompt is display (becaus it changes the terminal width)
+        -- the prompt is display (because it changes the terminal width)
         M.set_local_options(state.win, local_options)
-        vim.api.nvim_set_option_value('buflisted', false, {buf = state.buf})
         vim.api.nvim_set_option_value('winhighlight', 'Normal:MainTerminalNormal', {win = state.win})
         -- Create terminal instance after setting local options
         vim.api.nvim_buf_call(state.buf, vim.cmd.terminal)
+        -- setting the buflisted option needs to be after calling terminal command
+        vim.api.nvim_set_option_value('buflisted', false, {buf = state.buf})
         state.chan = vim.bo[state.buf].channel
     end
 
