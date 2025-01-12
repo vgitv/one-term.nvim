@@ -1,8 +1,16 @@
-# one-term.nvim - one and only terminal buffer
+# One-term - One and only terminal
 
-## Toggle a terminal window
+Neovim Lua plugin to toggle a terminal window and more.
+
+### Toggle a terminal window
 
 ![one-term-overwiew](https://github.com/vgitv/resources/blob/main/one-term/images/one-term-overview.png)
+
+### Automatically jump to the problematic code
+
+![one-term-jump](https://github.com/vgitv/resources/blob/main/one-term/images/one-term-jump.png)
+
+### And more...
 
 ## Features
 
@@ -103,9 +111,8 @@ up.
 
 ## Installation
 
-**NB:** one-term will not define any key mapping for you, it only
-provides a user command. It's up to you to define you own mappings. Examples
-are given below.
+**NB:** one-term will not define any key mapping for you, it only provides a
+user command. It's up to you to define you own mappings.
 
 ### Minimal example with lazy.nvim
 
@@ -123,13 +130,6 @@ Those are the defaults options, which can be changed.
 ```lua
 {
     'vgitv/one-term.nvim',
-    cmd = 'Terminal',  -- lazy load on command
-    keys = {
-        { '<Leader>t', ':Oneterm toggle_window<CR>', desc = 'Toggle main terminal (small)', silent = true },
-        { '<Leader>T', ':Oneterm toggle_window 0.8<CR>', desc = 'Toggle main terminal (big)', silent = true },
-        { '<Leader><space>', ':Oneterm toggle_fullheight<CR>', desc = 'Toggle main terminal full height', silent = true },
-        { '<Leader>j', ':Oneterm jump<CR>', desc = 'Jump to error line using stacktrace', silent = true },
-    },  -- lazy load on keymap
     opts = {
         bg_color = '#000000',  -- main terminal background color
         startinsert = false,  -- start insert mode at term opening
