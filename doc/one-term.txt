@@ -1,100 +1,100 @@
-*toggle-terminal*                             Plugin to toggle a terminal window
+*one-term*                                    Plugin to toggle a terminal window
 
-CONTENTS                                              *toggle-terminal-contents*
+CONTENTS                                                     *one-term-contents*
 
-Introduction .................. |toggle-terminal-introduction|
-Commands ...................... |toggle-terminal-cmd|
-  clear ....................... |toggle-terminal-cmd-clear|
-  exit ........................ |toggle-terminal-cmd-exit|
-  jump ........................ |toggle-terminal-cmd-jump|
-  kill ........................ |toggle-terminal-cmd-kill|
-  run_previous ................ |toggle-terminal-cmd-run_previous|
-  send_current_line ........... |toggle-terminal-cmd-send_current_line|
-  send_visual_lines ........... |toggle-terminal-cmd-send_visual_lines|
-  toggle_fullheight ........... |toggle-terminal-cmd-toggle_fullheight|
-  toggle_window ............... |toggle-terminal-cmd-toggle_window|
-Examples ...................... |toggle-terminal-cmd-examples
-Configuration ................. |toggle-terminal-configuration|
-
-
-INTRODUCTION                                      *toggle-terminal-introduction*
-
-Toggle-terminal is a plugin for nvim that can spone a terminal in a dedicated
-buffer, display the terminal buffer is a split window, and toggle this window.
-There can be only one terminal buffer that Toggle-terminal know about, called
-"main terminal" through this documentation. If the main terminal is exited
-(ie. the terminal processus ends), a new terminal instance will be created
-next time toggle-terminal is summoned.
+Introduction .................... |one-term-introduction|
+Commands ........................ |one-term-cmd|
+  clear ......................... |one-term-cmd-clear|
+  exit .......................... |one-term-cmd-exit|
+  jump .......................... |one-term-cmd-jump|
+  kill .......................... |one-term-cmd-kill|
+  run_previous .................. |one-term-cmd-run_previous|
+  send_current_line ............. |one-term-cmd-send_current_line|
+  send_visual_lines ............. |one-term-cmd-send_visual_lines|
+  toggle_fullheight ............. |one-term-cmd-toggle_fullheight|
+  toggle_window ................. |one-term-cmd-toggle_window|
+Examples ........................ |one-term-cmd-examples
+Configuration ................... |one-term-configuration|
 
 
-COMMANDS                                        *:Terminal*  *toggle-terminal-cmd*
+INTRODUCTION                                             *one-term-introduction*
 
-Toggle-terminal provide only one user command |:Terminal| and does not define
-any default keybindings for nvim. The |:Terminal| command takes at least one
+one-term is a plugin for nvim that can spone a terminal in a dedicated buffer,
+display the terminal buffer is a split window, and toggle this window. There
+can be only one terminal buffer that one-term know about, called "main
+terminal" through this documentation. If the main terminal is exited (ie. the
+terminal processus ends), a new terminal instance will be created next time
+one-term is summoned.
+
+
+COMMANDS                                                *:Oneterm*  *one-term-cmd*
+
+one-term provides only one user command |:Oneterm| and does not define any
+default keybindings for nvim. The |:Oneterm| command takes at least one
 argument which is the subcommand name. The subcommand may (or may not) have
 arguments.
 
-`:Terminal <subcommand> [args...]`
+`:Oneterm <subcommand> [args...]`
 
 The subcommands are listed below.
 
 
-SUBCOMMAND CLEAR                                     *toggle-terminal-cmd-clear*
+SUBCOMMAND CLEAR                                            *one-term-cmd-clear*
 
 Clear the terminal window, without entering the terminal buffer. This is
 equivalent to Ctrl-L.
 
 
-SUBCOMMAND EXIT                                       *toggle-terminal-cmd-exit*
+SUBCOMMAND EXIT                                              *one-term-cmd-exit*
 
 Exit the terminal processus, without entering the terminal buffer. If you have
-nested shells, it fill fall back to the previous shell. This is equivalent to
+nested shells, it will fall back to the previous shell. This is equivalent to
 Ctrl-D.
 
 
-SUBCOMMAND JUMP                                       *toggle-terminal-cmd-jump*
+SUBCOMMAND JUMP                                              *one-term-cmd-jump*
 
 Jump from the stacktrace to the corresponding problematic code.
 
 If this subcommand does not work for a given language, it is possible to
 define custom regular expressions (see `stacktrace_patterns` option in the
-|toggle-terminal-configuration| section). The regular expression should have
-two capturing groups, the first corresponding to the file name, the second to
-the line number.
+|one-term-configuration| section). The regular expression should have two
+capturing groups, the first corresponding to the file name, the second to the
+line number.
 
 Note that the order of the regular expressions in `stacktrace_patterns`
 matters because the first match will interrupt the search and try to jump to
 the corresponding location.
 
 
-SUBCOMMAND KILL                                       *toggle-terminal-cmd-kill*
+SUBCOMMAND KILL                                              *one-term-cmd-kill*
 
 Kill the currently running comment, without entering the terminal buffer. This
 is equivalent to Ctrl-C.
 
 
-SUBCOMMAND RUN_PREVIOUS                       *toggle-terminal-cmd-run_previous*
+SUBCOMMAND RUN_PREVIOUS                              *one-term-cmd-run_previous*
 
 Run privous command, without entering the terminal buffer. This is equivalent
 to Ctrl-P followed by a Carriage Return. This subcommand wont do anything if
 the main terminal does not exist yet.
 
 
-SUBCOMMAND SEND_CURRENT_LINE             *toggle-terminal-cmd-send_current_line*
+SUBCOMMAND SEND_CURRENT_LINE                    *one-term-cmd-send_current_line*
 
 Send current line to the terminal buffer. Create the terminal buffer if it
 does not exist yet. If the terminal buffer exists but it's window is closed,
 open it.
 
 
-SUBCOMMAND SEND_VISUAL_LINES             *toggle-terminal-cmd-send_visual_lines*
+SUBCOMMAND SEND_VISUAL_LINES                    *one-term-cmd-send_visual_lines*
 
 Send selected lines to the terminal buffer. Create the terminal buffer if it
 does not exist yet. If the terminal buffer exists but it's window is closed,
 open it.
 
 
-SUBCOMMAND TOGGLE_FULLHEIGHT             *toggle-terminal-cmd-toggle_fullheight*
+SUBCOMMAND TOGGLE_FULLHEIGHT                    *one-term-cmd-toggle_fullheight*
 
 Allow the user to toggle the terminal height when it's window is displayed. It
 will resize the terminal window in such a way that it will occupy the maximum
@@ -103,7 +103,7 @@ relative to the whole neovim height (vim.o.lines) and not the height of the
 current window.
 
 
-SUBCOMMAND TOGGLE_WINDOW                     *toggle-terminal-cmd-toggle_window*
+SUBCOMMAND TOGGLE_WINDOW                            *one-term-cmd-toggle_window*
 
 The subcommand `toggle_window` does two things:
 
@@ -112,14 +112,14 @@ The subcommand `toggle_window` does two things:
    split window below the current one
 2. Every other times: toggle a split window displaying the main terminal
 
-This command take optionally one argument: the relative height of the terminal
-window.
+This command takes optionally one argument: the relative height of the
+terminal window.
 
 NB: the cursor can be on any window to close the terminal window with
-`:Terminal`
+`:Oneterm`
 
 
-EXAMPLES                                          *toggle-terminal-cmd-examples*
+EXAMPLES                                                 *one-term-cmd-examples*
 
 Here are some usage examples.
 >vim
@@ -127,16 +127,16 @@ Here are some usage examples.
     " When no argument is given to the toggle_window subcommand, it will use
     " the default `relative_height` that can be set through the setup function
     " (See CONFIGURATION below).
-    :Terminal toggle_window
+    :Oneterm toggle_window
 
     " Close the window (the terminal will still run in the background)
-    :Terminal toggle_window
+    :Oneterm toggle_window
 
     " Open the terminal again, this time occupying 80% of the current window
-    :Terminal toggle_window 0.8
+    :Oneterm toggle_window 0.8
 
     " Close the terminal window again
-    :Terminal toggle_window
+    :Oneterm toggle_window
 
     " Terminal buffer is unlisted
     :ls
@@ -145,47 +145,47 @@ Here are some usage examples.
     :ls!
 
     " open a terminal window occupying 30% of the current height
-    :Terminal toggle_window 0.3
+    :Oneterm toggle_window 0.3
 
     " 30% is not enough to see well... Let's increase the terminal height to
     " the maximum
-    :Terminal toggle_fullheight
+    :Oneterm toggle_fullheight
 
     " back to 30%
-    :Terminal toggle_fullheight
+    :Oneterm toggle_fullheight
 
     " When on a stacktrace, jump to the corresponding problematic code
-    :Terminal jump
+    :Oneterm jump
 
     " Send current line to the terminal buffer
-    :Terminal send_current_line
+    :Oneterm send_current_line
 
     " Send currently selected lines to the terminal buffer
-    :Terminal send_visual_lines
+    :Oneterm send_visual_lines
 
     " Run previously executed command without leaving your current buffer
-    :Terminal run_previous
+    :Oneterm run_previous
 
     " This command takes too much time... kill it without leaving your current buffer
-    :Terminal kill
+    :Oneterm kill
 
     " Clear terminal window without leaving your current buffer
-    :Terminal clear
+    :Oneterm clear
 
     " You dont need your terminal anymore, you can exit it without leaving your buffer
-    :Terminal exit
+    :Oneterm exit
 <
 
-CONFIGURATION                                    *toggle-terminal-configuration*
+CONFIGURATION                                           *one-term-configuration*
 
 Default configuration:
 >lua
-    require("toggle-terminal").setup {}
+    require("one-term").setup {}
 <
 
 Advanced configuration:
 >lua
-    require('toggle-terminal').setup {
+    require('one-term').setup {
         bg_color = '#000000',  -- main terminal background color
         startinsert = false,  -- start insert mode at term opening
         relative_height = 0.35,  -- relative height of the terminal window

@@ -1,10 +1,8 @@
-# Toggle-terminal.nvim
+# one-term.nvim - one and only terminal buffer
 
-## Introduction
+## Toggle a terminal window
 
-Simple terminal toggle plugin:
-
-![toggle-terminal-overwiew](https://github.com/vgitv/resources/blob/main/toggle-terminal/images/toggle-terminal-overview.png)
+![one-term-overwiew](https://github.com/vgitv/resources/blob/main/one-term/images/one-term-overview.png)
 
 ## Features
 
@@ -19,7 +17,7 @@ Simple terminal toggle plugin:
 
 For a list of all sub-commands see below.
 
-## Why another toggle-terminal plugin?
+## Why another terminal plugin?
 
 99% of the time I only need one main terminal buffer, to execute the script I
 am working on. For the remaining 1% I dont mind creating a terminal buffer
@@ -28,7 +26,7 @@ necessary for my workflow.
 
 ## Terminal subcommands
 
-Consider reading `:help toggle-terminal` for further informations. The
+Consider reading `:help one-term` for further informations. The
 following sections will give a simple overview.
 
 | SUBCOMMAND | DESCRIPTION |
@@ -54,16 +52,16 @@ up.
 
 ```vim
 " create a split window and open a new terminal
-:Terminal toggle_window
+:Oneterm toggle_window
 
 " close the window (the terminal will still run in the background)
-:Terminal toggle_window
+:Oneterm toggle_window
 
 " open the terminal again, this time occupying 80% of the current window
-:Terminal toggle_window 0.8
+:Oneterm toggle_window 0.8
 
 " close the terminal window again
-:Terminal toggle_window
+:Oneterm toggle_window
 
 " terminal buffer is unlisted
 :ls
@@ -72,40 +70,40 @@ up.
 :ls!
 
 " open a terminal window occupying 30% of the current height
-:Terminal toggle_window 0.3
+:Oneterm toggle_window 0.3
 
 " 30% is not enough to see well... Let's increase the terminal height to
 " the maximum
-:Terminal toggle_fullheight
+:Oneterm toggle_fullheight
 
 " back to 30%
-:Terminal toggle_fullheight
+:Oneterm toggle_fullheight
 
 " When on a stacktrace, jump to the corresponding problematic code
-:Terminal jump
+:Oneterm jump
 
 " Send current line to the terminal buffer
-:Terminal send_current_line
+:Oneterm send_current_line
 
 " Send currently selected lines to the terminal buffer
-:Terminal send_visual_lines
+:Oneterm send_visual_lines
 
 " Run previously executed command without leaving your current buffer
-:Terminal run_previous
+:Oneterm run_previous
 
 " This command takes too much time... kill it without leaving your current buffer
-:Terminal kill
+:Oneterm kill
 
 " Clear terminal window without leaving your current buffer
-:Terminal clear
+:Oneterm clear
 
 " You dont need your terminal anymore, you can exit it without leaving your buffer
-:Terminal exit
+:Oneterm exit
 ```
 
 ## Installation
 
-**NB:** toggle-terminal will not define any key mapping for you, it only
+**NB:** one-term will not define any key mapping for you, it only
 provides a user command. It's up to you to define you own mappings. Examples
 are given below.
 
@@ -113,7 +111,7 @@ are given below.
 
 ```lua
 {
-    'vgitv/toggle-terminal.nvim',
+    'vgitv/one-term.nvim',
     opts = {},
 }
 ```
@@ -124,13 +122,13 @@ Those are the defaults options, which can be changed.
 
 ```lua
 {
-    'vgitv/toggle-terminal.nvim',
+    'vgitv/one-term.nvim',
     cmd = 'Terminal',  -- lazy load on command
     keys = {
-        { '<Leader>t', ':Terminal toggle_window<CR>', desc = 'Toggle main terminal (small)', silent = true },
-        { '<Leader>T', ':Terminal toggle_window 0.8<CR>', desc = 'Toggle main terminal (big)', silent = true },
-        { '<Leader><space>', ':Terminal toggle_fullheight<CR>', desc = 'Toggle main terminal full height', silent = true },
-        { '<Leader>j', ':Terminal jump<CR>', desc = 'Jump to error line using stacktrace', silent = true },
+        { '<Leader>t', ':Oneterm toggle_window<CR>', desc = 'Toggle main terminal (small)', silent = true },
+        { '<Leader>T', ':Oneterm toggle_window 0.8<CR>', desc = 'Toggle main terminal (big)', silent = true },
+        { '<Leader><space>', ':Oneterm toggle_fullheight<CR>', desc = 'Toggle main terminal full height', silent = true },
+        { '<Leader>j', ':Oneterm jump<CR>', desc = 'Jump to error line using stacktrace', silent = true },
     },  -- lazy load on keymap
     opts = {
         bg_color = '#000000',  -- main terminal background color
@@ -158,12 +156,12 @@ function:
 
 ```lua
 -- simple usage
-require('toggle-terminal').setup {}
+require('one-term').setup {}
 ```
 
 ```lua
 -- advanced usage
-require('toggle-terminal').setup {
+require('one-term').setup {
     bg_color = '#000000',  -- main terminal background color
     startinsert = false,  -- start insert mode at term opening
     relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)

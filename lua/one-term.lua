@@ -46,12 +46,12 @@ M.setup = function(opts)
 
     -- User command
     vim.api.nvim_create_user_command(
-        'Terminal',
+        'Oneterm',
         function(o)
             load_command(unpack(o.fargs))
         end,
         {
-            desc = 'Terminal main command (see :help toggle-terminal)',
+            desc = 'Terminal main command (see :help one-term)',
             range = true,
             nargs = '*',
             complete = function(_, line, _)
