@@ -14,7 +14,7 @@ M.setup = function(opts)
 
     -- Plutin options
     local options = {
-        bg_color = opts.bg_color or '#000000',
+        bg_color = opts.bg_color or nil,
         startinsert = opts.startinsert or false,
         relative_height = opts.relative_height or 0.35,
         local_options = {
@@ -31,6 +31,22 @@ M.setup = function(opts)
             '^(.*): line ([0-9]+)',  -- bash
         },
     }
+
+    if not options.bg_color then
+        -- Try to guess a good background color for the main terminal window.
+        local factor = 0.75
+        local normal_bg = string.format("#%06x", vim.api.nvim_get_hl(0, { name = 'Normal', create = false }).bg)
+
+        local red = tonumber("0x" .. string.sub(normal_bg, 2, 3))
+        local green = tonumber("0x" .. string.sub(normal_bg, 4, 5))
+        local blue = tonumber("0x" .. string.sub(normal_bg, 6, 7))
+
+        local hex_red = string.format("%02x", red * factor)
+        local hex_green = string.format("%02x", green * factor)
+        local hex_blue = string.format("%02x", blue * factor)
+
+        options.bg_color = '#' .. hex_red .. hex_green .. hex_blue
+    end
 
     builtin.setup_options(options)
 

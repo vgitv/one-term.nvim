@@ -131,7 +131,7 @@ Those are the defaults options, which can be changed.
 {
     'vgitv/one-term.nvim',
     opts = {
-        bg_color = '#000000',  -- main terminal background color
+        bg_color = nil,  -- main terminal background color
         startinsert = false,  -- start insert mode at term opening
         relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
         local_options = {
@@ -162,7 +162,7 @@ require('one-term').setup {}
 ```lua
 -- advanced usage
 require('one-term').setup {
-    bg_color = '#000000',  -- main terminal background color
+    bg_color = nil,  -- main terminal background color
     startinsert = false,  -- start insert mode at term opening
     relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
     local_options = {
@@ -172,12 +172,26 @@ require('one-term').setup {
         colorcolumn = '',  -- color column
     },
     stacktrace_patterns = {
-        '([^ :]*):([0-9]):', -- lua / cpp
+        '([^ :]*):([0-9]):',  -- lua / cpp
         '^ *File "(.*)", line ([0-9]+)',  -- python
         '^(.*): line ([0-9]+)',  -- bash
     },
 }
 ```
+
+
+## Precisions about some configurations
+
+* `bg_color`: if `nil`, the background color will be guessed by applying a
+  factor to each red / green / blue part of the Normal background highlight
+  group. So be sure to load your colorscheme first. Else you could force the
+  backgroupe terminal color with a hex value, for instance `#151515`.
+* `relative_height`: the height compared to the total height of the neovim
+  instance (vim.o.lines). NB: this is not the same as the current window
+  height.
+* `stacktrace_patterns`: see the jump subcommand below. This is an important
+  configuration you may want to look at.
+
 
 ## Precisions about some subcommands
 
