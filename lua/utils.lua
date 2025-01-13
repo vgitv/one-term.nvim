@@ -65,8 +65,9 @@ M.create_or_open_terminal = function(relative_height, enter, buf, local_options)
         vim.api.nvim_buf_call(state.buf, vim.cmd.terminal)
         -- setting the buflisted option needs to be after calling terminal command
         vim.api.nvim_set_option_value('buflisted', false, {buf = state.buf})
-        state.chan = vim.bo[state.buf].channel
     end
+
+    state.chan = vim.bo[state.buf].channel
 
     return state
 end
