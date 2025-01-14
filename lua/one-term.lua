@@ -4,11 +4,43 @@ local M = {}
 local builtin = require('builtin')
 
 
+---Run a specific subcommand
+---@param cmd string
+---@param ... any
 local load_command = function(cmd, ...)
     builtin.subcommands[cmd](...)
 end
 
 
+---The main terminal background could be darker than the editor background
+---@param opts table
+local set_term_bg_hi = function(opts)
+    opts.factor = opts.factor or 0.75
+    local color
+
+    if opts.bg_color then
+        color = opts.bg_color
+    else
+        -- Try to guess a good background color for the main terminal window.
+        local normal_bg = string.format("#%06x", vim.api.nvim_get_hl(0, { name = 'Normal', create = false }).bg)
+
+        local red = tonumber("0x" .. string.sub(normal_bg, 2, 3))
+        local green = tonumber("0x" .. string.sub(normal_bg, 4, 5))
+        local blue = tonumber("0x" .. string.sub(normal_bg, 6, 7))
+
+        local hex_red = string.format("%02x", red * opts.factor)
+        local hex_green = string.format("%02x", green * opts.factor)
+        local hex_blue = string.format("%02x", blue * opts.factor)
+
+        color = '#' .. hex_red .. hex_green .. hex_blue
+    end
+
+    vim.cmd.highlight('MainTerminalNormal guibg=' .. color)
+end
+
+
+---Plugin setup function
+---@param opts table
 M.setup = function(opts)
     opts = opts or {}
 
@@ -32,26 +64,25 @@ M.setup = function(opts)
         },
     }
 
-    if not options.bg_color then
-        -- Try to guess a good background color for the main terminal window.
-        local factor = 0.75
-        local normal_bg = string.format("#%06x", vim.api.nvim_get_hl(0, { name = 'Normal', create = false }).bg)
-
-        local red = tonumber("0x" .. string.sub(normal_bg, 2, 3))
-        local green = tonumber("0x" .. string.sub(normal_bg, 4, 5))
-        local blue = tonumber("0x" .. string.sub(normal_bg, 6, 7))
-
-        local hex_red = string.format("%02x", red * factor)
-        local hex_green = string.format("%02x", green * factor)
-        local hex_blue = string.format("%02x", blue * factor)
-
-        options.bg_color = '#' .. hex_red .. hex_green .. hex_blue
-    end
-
+    -- make options visible from builtin module
     builtin.setup_options(options)
 
-    -- The main terminal background could be darker than the editor background
-    vim.cmd.highlight('MainTerminalNormal guibg=' .. options.bg_color)
+    -- define main terminal highlight group
+    set_term_bg_hi({ bg_color = options.bg_color })
+
+    -- when switching colorscheme, the bg color will adapt
+    if not options.bg_color then
+        vim.api.nvim_create_autocmd(
+            'ColorScheme',
+            {
+                desc = 'Update terminal background color',
+                group = vim.api.nvim_create_augroup('one_term_setup_augroup', { clear = true }),
+                callback = function()
+                    set_term_bg_hi({ bg_color = options.bg_color })
+                end
+            }
+        )
+    end
 
     -- Build subcommand completion list
     local choices = {}
