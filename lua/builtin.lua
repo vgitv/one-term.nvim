@@ -91,13 +91,13 @@ M.subcommands.send_visual_lines = function()
 end
 
 
----Jump to file X line Y from stacktrace
+---Jump to error location
 M.subcommands.jump = function()
     if vim.api.nvim_get_current_win() == state.win then
         local current_line = vim.api.nvim_get_current_line()
         local filepath = nil
         local linenumber = nil
-        for _, pattern in pairs(options.stacktrace_patterns) do
+        for _, pattern in pairs(options.errorformat) do
             filepath, linenumber = string.match(current_line, pattern)
             if filepath and linenumber then
                 break

@@ -55,17 +55,26 @@ Ctrl-D.
 
 SUBCOMMAND JUMP                                              *one-term-cmd-jump*
 
-Jump from the stacktrace to the corresponding problematic code.
+Jump from an error in the command output to the corresponding problematic
+code.
+
+This command may overlap in some circumstances the native errorformat
+functionnality (see `:h error-file-format`). If you are using a compiler and
+you build your program with `:make` you should probably use this native
+functionnality instead, and commands like `:copen`, `:cnext` etc. The _jump_
+subcommand is convenient when you run a script directly in the main terminal
+window and when this script returns error messages (without calling `:make`
+command). You can then jump directly to the problematic location.
 
 If this subcommand does not work for a given language, it is possible to
-define custom regular expressions (see `stacktrace_patterns` option in the
+define custom regular expressions (see `errorformat` option in the
 |one-term-configuration| section). The regular expression should have two
 capturing groups, the first corresponding to the file name, the second to the
 line number.
 
-Note that the order of the regular expressions in `stacktrace_patterns`
-matters because the first match will interrupt the search and try to jump to
-the corresponding location.
+Note that the order of the regular expressions in `errorformat` matters
+because the first match will interrupt the search and try to jump to the
+corresponding location.
 
 
 SUBCOMMAND KILL                                              *one-term-cmd-kill*
@@ -172,7 +181,7 @@ Here are some usage examples.
     " back to 30%
     :Oneterm toggle_fullheight
 
-    " When on a stacktrace, jump to the corresponding problematic code
+    " When on an error message, jump to the corresponding problematic code
     :Oneterm jump
 
     " Send current line to the terminal buffer
@@ -213,7 +222,7 @@ Advanced configuration:
             cursorline = false,  -- cursor line in main terminal window
             colorcolumn = '',  -- color column
         },
-        stacktrace_patterns = {
+        errorformat = {
             '([^ ]*):([0-9]):', -- lua
             '^ *File "(.*)", line ([0-9]+)',  -- python
             '^(.*): line ([0-9]+)',  -- bash

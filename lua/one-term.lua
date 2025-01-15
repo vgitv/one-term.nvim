@@ -56,8 +56,8 @@ M.setup = function(opts)
             colorcolumn = opts.local_options.colorcolumn or '',
             scrolloff = opts.local_options.scrolloff or 0,
         },
-        -- regex patterns to go to file x line y using stacktrace
-        stacktrace_patterns = opts.stacktrace_patterns or {
+        -- regex patterns used to jump to the error location
+        errorformat = opts.errorformat or {
             '([^ :]*):([0-9]):', -- lua / cpp
             '^ *File "(.*)", line ([0-9]+)',  -- python
             '^(.*): line ([0-9]+)',  -- bash

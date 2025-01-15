@@ -6,6 +6,7 @@ one-term-cmd-examples	one-term.txt	/*one-term-cmd-examples*
 one-term-cmd-exit	one-term.txt	/*one-term-cmd-exit*
 one-term-cmd-jump	one-term.txt	/*one-term-cmd-jump*
 one-term-cmd-kill	one-term.txt	/*one-term-cmd-kill*
+one-term-cmd-resize	one-term.txt	/*one-term-cmd-resize*
 one-term-cmd-run_previous	one-term.txt	/*one-term-cmd-run_previous*
 one-term-cmd-send_current_line	one-term.txt	/*one-term-cmd-send_current_line*
 one-term-cmd-send_visual_lines	one-term.txt	/*one-term-cmd-send_visual_lines*

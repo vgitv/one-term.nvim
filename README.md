@@ -21,7 +21,7 @@ Neovim Lua plugin to toggle a terminal window and more.
 - [X] Customizable background terminal color
 - [X] Terminal buffer is unlisted (hidden  from `:ls` command)
 - [X] Send lines to the terminal buffer
-- [X] Jump to file X line Y using stacktrace (see "Jump subcommand" section)
+- [X] Jump to the error location using a command output (see "Jump subcommand" section)
 
 For a list of all sub-commands see below.
 
@@ -41,7 +41,7 @@ following sections will give a simple overview.
 |---------------------|----------------------------------------------------|
 | `clear`             | Clear the terminal window                          |
 | `exit`              | Exit the terminal process                          |
-| `jump`              | Jump from the stacktrace to the problematic code   |
+| `jump`              | Jump to the error location using a command output  |
 | `kill`              | Kill currently running command                     |
 | `resize`            | Resize the terminal window                         |
 | `run_previous`      | Run previous command (without leaving your buffer) |
@@ -88,7 +88,7 @@ up.
 " back to 30%
 :Oneterm toggle_fullheight
 
-" When on a stacktrace, jump to the corresponding problematic code
+" When on an error message, jump to the corresponding problematic code
 :Oneterm jump
 
 " Send current line to the terminal buffer
@@ -141,8 +141,8 @@ Those are the defaults options, which can be changed.
             cursorline = false,  -- cursor line in main terminal window
             colorcolumn = '',  -- color column
         },
-        stacktrace_patterns = {
-            '([^ ]*):([0-9]):', -- lua
+        errorformat = {
+            '([^ :]*):([0-9]):', -- lua
             '^ *File "(.*)", line ([0-9]+)',  -- python
             '^(.*): line ([0-9]+)',  -- bash
         },
@@ -172,7 +172,7 @@ require('one-term').setup {
         cursorline = false,  -- cursor line in main terminal window
         colorcolumn = '',  -- color column
     },
-    stacktrace_patterns = {
+    errorformat = {
         '([^ :]*):([0-9]):',  -- lua / cpp
         '^ *File "(.*)", line ([0-9]+)',  -- python
         '^(.*): line ([0-9]+)',  -- bash
@@ -190,7 +190,7 @@ require('one-term').setup {
 * `relative_height`: the height compared to the total height of the neovim
   instance (vim.o.lines). NB: this is not the same as the current window
   height.
-* `stacktrace_patterns`: see the jump subcommand below. This is an important
+* `errorformat`: see the jump subcommand below. This is an important
   configuration you may want to look at.
 
 
@@ -198,13 +198,20 @@ require('one-term').setup {
 
 ### Jump subcommand
 
-I did not test many languages. If this subcommand does not work for your
-favorite language, it is up to you to define your own regular expressions (see
-`stacktrace_patterns` option). You must write a regular expression with two
-capturing groups, the first corresponding to the file name, the second to the
-line number.
+This command may overlap in some circumstances the native errorformat
+functionnality (see `:h error-file-format`). If you are using a compiler and
+you build your program with `:make` you should probably use this native
+functionnality instead, and commands like `:copen`, `:cnext` etc. The _jump_
+subcommand is convenient when you run a script directly in the main terminal
+window and when this script returns error messages (without calling `:make`
+command). You can then jump directly to the problematic location.
 
-For instance if your stacktrace look like this:
+If this subcommand does not work for your favorite language, it is up to you to
+define your own regular expressions (see `errorformat` option). You must write
+a regular expression with two capturing groups, the first corresponding to the
+file name, the second to the line number.
+
+For instance if your command output looks like this:
 
 ```
 Traceback (most recent call last):
@@ -220,7 +227,7 @@ You can have the following regular expression:
 ^ *File "(.*)", line ([0-9]+)
 ```
 
-Note that the order of the regular expressions in `stacktrace_patterns` matters
+Note that the order of the regular expressions in `errorformat` matters
 because the first match will interrupt the search and try to jump to the
 corresponding location.
 
