@@ -37,17 +37,17 @@ necessary for my workflow.
 Consider reading `:help one-term` for further informations. The
 following sections will give a simple overview.
 
-| SUBCOMMAND | DESCRIPTION |
-|------|------|
-| `clear` | Clear the terminal window |
-| `exit` | Exit the terminal process |
-| `jump` | Jump from the stacktrace to the problematic code |
-| `kill` | Kill currently running command |
-| `run_previous` | Run previous command (without leaving your buffer) |
-| `send_current_line` | Send current line to the terminal |
-| `send_visual_lines` | Send visual lines to the terminal |
-| `toggle_fullheight` | Toggle terminal full height |
-| `toggle_window` | Toggle terminal window |
+| SUBCOMMAND          | DESCRIPTION                                        |
+|---------------------|----------------------------------------------------|
+| `clear`             | Clear the terminal window                          |
+| `exit`              | Exit the terminal process                          |
+| `jump`              | Jump from the stacktrace to the problematic code   |
+| `kill`              | Kill currently running command                     |
+| `run_previous`      | Run previous command (without leaving your buffer) |
+| `send_current_line` | Send current line to the terminal                  |
+| `send_visual_lines` | Send visual lines to the terminal                  |
+| `toggle_fullheight` | Toggle terminal full height                        |
+| `toggle_window`     | Toggle terminal window                             |
 
 ## Learn by examples
 

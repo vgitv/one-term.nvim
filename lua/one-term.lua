@@ -101,10 +101,16 @@ M.setup = function(opts)
             desc = 'Terminal main command (see :help one-term)',
             range = true,
             nargs = '*',
-            complete = function(_, line, _)
+            complete = function(arglead, line, _)
                 local l = vim.split(line, "%s+")
+                local matches = {}
                 if #l == 2 then
-                    return choices
+                    for _, cmd in ipairs(choices) do
+                        if string.match(cmd, "^" .. arglead) then
+                            table.insert(matches, cmd)
+                        end
+                    end
+                    return matches
                 end
             end
         }
