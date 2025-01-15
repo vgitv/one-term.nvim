@@ -17,12 +17,8 @@ end
 ---@param opts table Options for the window creation
 local create_window_below = function(opts)
     opts = opts or {}
-    -- for key, value in pairs(opts) do
-    --     print(key, value)
-    -- end
-    opts.enter = opts.enter
 
-    -- Calculate window height
+    local enter = opts.enter or false
     local height = opts.height or math.floor(vim.o.lines * 0.5)
 
     -- Get or create new buffer
@@ -41,20 +37,23 @@ local create_window_below = function(opts)
     }
 
     -- Open window
-    local win = vim.api.nvim_open_win(buf, opts.enter, win_config)
+    local win = vim.api.nvim_open_win(buf, enter, win_config)
 
     return { buf = buf, win = win, height = height }
 end
 
 
 ---Create a new terminal instance or open the buffer in a new window if it already exists
+---@param state table Terminal state that will be updated
 ---@param relative_height number Relative height of the future window
----@param enter boolean Enter the window after it's creation
----@param buf integer Buffer id
 ---@param local_options table Local options to apply to the term buffer
-M.create_or_open_terminal = function(relative_height, enter, buf, local_options)
+---@param enter boolean Enter the window after it's creation
+M.create_or_open_terminal = function(state, relative_height, local_options, enter)
     local height = math.floor(vim.o.lines * relative_height)
-    local state = create_window_below { height = height, buf = buf, enter = enter }
+    local win_prop = create_window_below { height = height, buf = state.buf, enter = enter }
+    state.buf = win_prop.buf
+    state.win = win_prop.win
+    state.height = win_prop.height
 
     if vim.bo[state.buf].buftype ~= 'terminal' then
         -- The options should be set first because the presence of 'number' may change the way
@@ -68,21 +67,18 @@ M.create_or_open_terminal = function(relative_height, enter, buf, local_options)
     end
 
     state.chan = vim.bo[state.buf].channel
-
-    return state
+    state.full_height = false
 end
 
 
 ---When it's needed to have a terminal window opened but without entering the terminal window
+---@param state table Terminal state that will be updated
 ---@param relative_height number Relative height of the future window
----@param state table State of the terminal
 ---@param local_options table Local options to apply to the term buffer
-M.ensure_open_terminal = function(relative_height, state, local_options)
+M.ensure_open_terminal = function(state, relative_height, local_options)
     if not vim.api.nvim_win_is_valid(state.win) then
-        state = M.create_or_open_terminal(relative_height, false, state.buf, local_options)
+        M.create_or_open_terminal(state, relative_height, local_options, false)
     end
-
-    return state
 end
 
 

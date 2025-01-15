@@ -14,13 +14,10 @@ local options = {}
 local state = {
     buf = -1,  -- needs to be invalid at first hence -1
     win = -1,  -- needs to be invalid at first hence -1
-    height = nil,
-    chan = nil,
+    height = nil,  -- terminal window initial height
+    chan = nil,  -- terminal window channel
+    full_height = false,  -- is terminal full height?
 }
-
--- is the terminal full height?
-local full_height = false
-
 
 M.setup_options = function(opts)
     options = opts or {}
@@ -32,7 +29,7 @@ end
 M.subcommands.toggle_window = function(relative_height)
     relative_height = relative_height or options.relative_height
     if not vim.api.nvim_win_is_valid(state.win) then
-        state = utils.create_or_open_terminal(relative_height, true, state.buf, options.local_options)
+        utils.create_or_open_terminal(state, relative_height, options.local_options, true)
         if options.startinsert then
             vim.cmd.startinsert()
         end
@@ -45,12 +42,12 @@ end
 ---Make the terminal window full height
 M.subcommands.toggle_fullheight = function()
     if vim.api.nvim_win_is_valid(state.win) then
-        if full_height then
+        if state.full_height then
             vim.api.nvim_win_set_height(state.win, state.height)
-            full_height = false
+            state.full_height = false
         else
             vim.api.nvim_win_set_height(state.win, vim.o.lines)
-            full_height = true
+            state.full_height = true
         end
     else
         print('The terminal window must be open to run this command')
@@ -60,7 +57,7 @@ end
 
 -- Send line under cursor into the terminal
 M.subcommands.send_current_line = function()
-    state = utils.ensure_open_terminal(options.relative_height, state, options.local_options)
+    utils.ensure_open_terminal(state, options.relative_height, options.local_options)
     local current_line = vim.api.nvim_get_current_line()
     -- trim line
     local exec_line = current_line:gsub('^%s+', ''):gsub('%s+$', '')
@@ -75,7 +72,7 @@ end
 
 ---Send visually selected lines to the terminal
 M.subcommands.send_visual_lines = function()
-    state = utils.ensure_open_terminal(options.relative_height, state, options.local_options)
+    utils.ensure_open_terminal(state, options.relative_height, options.local_options)
     local start_line = vim.fn.getpos("'<")[2]
     local end_line = vim.fn.getpos("'>")[2]
     print(start_line, end_line)
@@ -126,7 +123,7 @@ M.subcommands.run_previous = function()
         return
     end
 
-    state = utils.ensure_open_terminal(options.relative_height, state, options.local_options)
+    utils.ensure_open_terminal(state, options.relative_height, options.local_options)
 
     -- Send Ctrl-p signal to the terminal followed by carriage return
     vim.api.nvim_chan_send(state.chan, '\x10\x0d')
