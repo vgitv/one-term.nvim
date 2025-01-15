@@ -28,7 +28,7 @@ end
 
 
 ---Split current window
----@param relative_height number
+---@param relative_height number Relative height of the future window
 M.subcommands.toggle_window = function(relative_height)
     relative_height = relative_height or options.relative_height
     if not vim.api.nvim_win_is_valid(state.win) then
@@ -42,7 +42,7 @@ M.subcommands.toggle_window = function(relative_height)
 end
 
 
--- Make the terminal window full height
+---Make the terminal window full height
 M.subcommands.toggle_fullheight = function()
     if vim.api.nvim_win_is_valid(state.win) then
         if full_height then
@@ -73,7 +73,7 @@ M.subcommands.send_current_line = function()
 end
 
 
--- Send visually selected lines to the terminal
+---Send visually selected lines to the terminal
 M.subcommands.send_visual_lines = function()
     state = utils.ensure_open_terminal(options.relative_height, state, options.local_options)
     local start_line = vim.fn.getpos("'<")[2]
@@ -91,7 +91,7 @@ M.subcommands.send_visual_lines = function()
 end
 
 
--- Jump to file X line Y from stacktrace
+---Jump to file X line Y from stacktrace
 M.subcommands.jump = function()
     if vim.api.nvim_get_current_win() == state.win then
         local current_line = vim.api.nvim_get_current_line()
@@ -117,7 +117,7 @@ M.subcommands.jump = function()
 end
 
 
--- Run previous command without leaving buffer
+---Run previous command without leaving buffer
 M.subcommands.run_previous = function()
     if not vim.api.nvim_buf_is_valid(state.buf) then
         -- If the main terminal doesnt exist, the previous command has good chances to be a nvim command!
@@ -135,7 +135,7 @@ M.subcommands.run_previous = function()
 end
 
 
--- Clear terminal
+---Clear terminal
 M.subcommands.clear = function()
     if vim.api.nvim_win_is_valid(state.win) then
         -- Send Ctrl-l signal to the terminal
@@ -145,7 +145,7 @@ M.subcommands.clear = function()
     end
 end
 
--- Kill currently running command
+---Kill currently running command
 M.subcommands.kill = function()
     if vim.api.nvim_win_is_valid(state.win) then
         -- Send Ctrl-c signal to the terminal
@@ -156,7 +156,7 @@ M.subcommands.kill = function()
 end
 
 
--- Exit terminal
+---Exit terminal
 M.subcommands.exit = function()
     if vim.api.nvim_buf_is_valid(state.buf) then
         -- Send Ctrl-d signal to the terminal
@@ -164,6 +164,27 @@ M.subcommands.exit = function()
         print('Terminal successfully exited')
     else
         print('No terminal to exit')
+    end
+end
+
+
+---Resize terminal window
+---@param mouvement string Mouvement for window resizing like +5 or -2 for instance
+M.subcommands.resize = function(mouvement)
+    if vim.api.nvim_win_is_valid(state.win) then
+        local current_height = vim.api.nvim_win_get_height(state.win)
+        local height
+        if string.match(mouvement, '^+[0-9]+$') then
+            height = current_height + tonumber(string.sub(mouvement, 2))
+        elseif string.match(mouvement, '^-[0-9]+$') then
+            height = current_height - tonumber(string.sub(mouvement, 2))
+        else
+            print('ERROR - Invalid argument')
+            return
+        end
+        vim.api.nvim_win_set_height(state.win, height)
+    else
+        print('The terminal window must be open to run this command')
     end
 end
 

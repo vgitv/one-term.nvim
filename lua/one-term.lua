@@ -5,8 +5,8 @@ local builtin = require('builtin')
 
 
 ---Run a specific subcommand
----@param cmd string
----@param ... any
+---@param cmd string Subcommand name
+---@param ... any Subcommand parameters
 local load_command = function(cmd, ...)
     builtin.subcommands[cmd](...)
 end
@@ -40,7 +40,7 @@ end
 
 
 ---Plugin setup function
----@param opts table
+---@param opts table Main setup options
 M.setup = function(opts)
     opts = opts or {}
 

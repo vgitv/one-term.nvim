@@ -4,8 +4,8 @@ local M = {}
 
 
 ---Set window local options given a window id
----@param win integer
----@param opts table
+---@param win integer Window id
+---@param opts table Local options to apply
 M.set_local_options = function(win, opts)
     for opt_name, opt_value in pairs(opts) do
         vim.api.nvim_set_option_value(opt_name, opt_value, {win = win})
@@ -14,7 +14,7 @@ end
 
 
 ---Create a split window below the current one
----@param opts table
+---@param opts table Options for the window creation
 local create_window_below = function(opts)
     opts = opts or {}
     -- for key, value in pairs(opts) do
@@ -48,10 +48,10 @@ end
 
 
 ---Create a new terminal instance or open the buffer in a new window if it already exists
----@param relative_height number
----@param enter boolean
----@param buf integer
----@param local_options table
+---@param relative_height number Relative height of the future window
+---@param enter boolean Enter the window after it's creation
+---@param buf integer Buffer id
+---@param local_options table Local options to apply to the term buffer
 M.create_or_open_terminal = function(relative_height, enter, buf, local_options)
     local height = math.floor(vim.o.lines * relative_height)
     local state = create_window_below { height = height, buf = buf, enter = enter }
@@ -74,9 +74,9 @@ end
 
 
 ---When it's needed to have a terminal window opened but without entering the terminal window
----@param relative_height number
----@param state table
----@param local_options table
+---@param relative_height number Relative height of the future window
+---@param state table State of the terminal
+---@param local_options table Local options to apply to the term buffer
 M.ensure_open_terminal = function(relative_height, state, local_options)
     if not vim.api.nvim_win_is_valid(state.win) then
         state = M.create_or_open_terminal(relative_height, false, state.buf, local_options)
@@ -87,7 +87,7 @@ end
 
 
 ---Scroll to the bottom of the buffer
----@param win integer
+---@param win integer Window id
 M.scroll_down = function(win)
     local current_win = vim.api.nvim_get_current_win()
     vim.api.nvim_set_current_win(win)

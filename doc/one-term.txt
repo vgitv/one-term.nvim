@@ -8,6 +8,7 @@ Commands ........................ |one-term-cmd|
   exit .......................... |one-term-cmd-exit|
   jump .......................... |one-term-cmd-jump|
   kill .......................... |one-term-cmd-kill|
+  resize ........................ |one-term-cmd-resize|
   run_previous .................. |one-term-cmd-run_previous|
   send_current_line ............. |one-term-cmd-send_current_line|
   send_visual_lines ............. |one-term-cmd-send_visual_lines|
@@ -72,6 +73,23 @@ SUBCOMMAND KILL                                              *one-term-cmd-kill*
 Kill the currently running comment, without entering the terminal buffer. This
 is equivalent to Ctrl-C.
 
+
+SUBCOMMAND RESIZE                                          *one-term-cmd-resize*
+
+Resize the terminal window. Will only work if the terminal window is open.
+This subcommand takes one argument:
+
+* `+N` -> increase the terminal height by N
+* `-N` -> decrease the terminal height by N
+
+Examples:
+>vim
+    " Increase the terminal height (5 lines)
+    :Oneterm resize +5
+
+    " Decrease the terminal height (1 line)
+    :Oneterm resize -1
+<
 
 SUBCOMMAND RUN_PREVIOUS                              *one-term-cmd-run_previous*
 
