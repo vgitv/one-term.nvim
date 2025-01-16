@@ -15,7 +15,7 @@ Commands ........................ |one-term-cmd|
   send_visual_lines ............. |one-term-cmd-send_visual_lines|
   toggle_fullheight ............. |one-term-cmd-toggle_fullheight|
   toggle_window ................. |one-term-cmd-toggle_window|
-Examples ........................ |one-term-cmd-examples
+Examples ........................ |one-term-cmd-examples|
 Configuration ................... |one-term-configuration|
 
 
