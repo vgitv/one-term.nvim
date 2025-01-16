@@ -227,7 +227,7 @@ Default configuration:
 Advanced configuration:
 >lua
     require('one-term').setup {
-        bg_color = '#000000',  -- main terminal background color
+        bg_color = nil,  -- main terminal background color
         startinsert = false,  -- start insert mode at term opening
         relative_height = 0.35,  -- relative height of the terminal window
         local_options = {
@@ -235,13 +235,43 @@ Advanced configuration:
             relativenumber = false,  -- no relative number in main terminal window
             cursorline = false,  -- cursor line in main terminal window
             colorcolumn = '',  -- color column
+            scrolloff = 0,  -- scrolloff can be disturbing in terminal window
         },
         errorformat = {
-            '([^ ]*):([0-9]):', -- lua
+            '([^ :]*):([0-9]):', -- lua
             '^ *File "(.*)", line ([0-9]+)',  -- python
             '^(.*): line ([0-9]+)',  -- bash
         },
     }
 <
+
+Details about configuration items ~
+
+    bg_color: ~
+
+        If `nil`, the background color will be guessed by applying a factor to
+        each red / green / blue part of the Normal background highlight group.
+        So be sure to load your colorscheme first. Else you could force the
+        backgroupe terminal color with a hex value, for instance `#151515`.
+
+    startinsert: ~
+
+        Start insert mode automatically when the terminal is summoned.
+
+    relative_height: ~
+
+        Relative height of the terminal window. Note that it is relative to
+        the total height (`vim.o.lines`), not the height of the current
+        window.
+
+    local_options: ~
+
+        Vim options table that can be set locally to the terminal window. See
+        the default setup for available options.
+
+    errorformat: ~
+
+        Regular expressions table used by the `jump` subcommand. See
+        |one-term-cmd-jump| for details.
 
 vim:tw=80:ts=2:et:ft=help:cc=+1:

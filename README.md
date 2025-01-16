@@ -10,8 +10,7 @@ Neovim Lua plugin to toggle a terminal window and more.
 * [Terminal subcommands](#terminal-subcommands)
 * [Learn by examples](#learn-by-examples)
 * [Installation](#installation)
-* [Precisions about the configuration](#precisions-about-the-configuration)
-* [Precisions about some subcommands](#precisions-about-some-subcommands)
+* [Details about the jump subcommand](#details-about-the-jump-subcommand)
 * [How to contribute](#how-to-contribute)
 * [Inspired from](#inspired-from)
 
@@ -197,23 +196,10 @@ require('one-term').setup {
 }
 ```
 
-
-## Precisions about the configuration
-
-* `bg_color`: if `nil`, the background color will be guessed by applying a
-  factor to each red / green / blue part of the Normal background highlight
-  group. So be sure to load your colorscheme first. Else you could force the
-  backgroupe terminal color with a hex value, for instance `#151515`.
-* `relative_height`: the height compared to the total height of the neovim
-  instance (vim.o.lines). NB: this is not the same as the current window
-  height.
-* `errorformat`: see the jump subcommand below. This is an important
-  configuration you may want to look at.
+See `:help one-term-configuration` for details about configuration items.
 
 
-## Precisions about some subcommands
-
-### Jump subcommand
+## Details about the jump subcommand
 
 This command may overlap in some circumstances the native errorformat
 functionnality (see `:h error-file-format`). If you are using a compiler and
@@ -248,7 +234,7 @@ Note that the order of the regular expressions in `errorformat` matters
 because the first match will interrupt the search and try to jump to the
 corresponding location.
 
-Tested languages:
+The default configuration should work at least for the following languages:
 
 * lua
 * cpp
