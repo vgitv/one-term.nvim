@@ -2,7 +2,6 @@
 
 local M = {}
 
-
 ---Set window local options given a window id
 ---@param win integer Window id
 ---@param opts table Local options to apply
@@ -11,7 +10,6 @@ M.set_local_options = function(win, opts)
         vim.api.nvim_set_option_value(opt_name, opt_value, { win = win })
     end
 end
-
 
 ---Create a split window below the current one
 ---@param opts table Options for the window creation
@@ -31,7 +29,7 @@ local create_window_below = function(opts)
 
     -- Define window configuration
     local win_config = {
-        split = 'below',
+        split = "below",
         win = 0,
         height = height,
     }
@@ -41,7 +39,6 @@ local create_window_below = function(opts)
 
     return { buf = buf, win = win, height = height }
 end
-
 
 ---Create a new terminal instance or open the buffer in a new window if it already exists
 ---@param state table Terminal state that will be updated
@@ -55,21 +52,20 @@ M.create_or_open_terminal = function(state, relative_height, local_options, ente
     state.win = win_prop.win
     state.height = win_prop.height
 
-    if vim.bo[state.buf].buftype ~= 'terminal' then
+    if vim.bo[state.buf].buftype ~= "terminal" then
         -- The options should be set first because the presence of 'number' may change the way
         -- the prompt is display (because it changes the terminal width)
         M.set_local_options(state.win, local_options)
-        vim.api.nvim_set_option_value('winhighlight', 'Normal:MainTerminalNormal', {win = state.win})
+        vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = state.win })
         -- Create terminal instance after setting local options
         vim.api.nvim_buf_call(state.buf, vim.cmd.terminal)
         -- setting the buflisted option needs to be after calling terminal command
-        vim.api.nvim_set_option_value('buflisted', false, {buf = state.buf})
+        vim.api.nvim_set_option_value("buflisted", false, { buf = state.buf })
     end
 
     state.chan = vim.bo[state.buf].channel
     state.full_height = false
 end
-
 
 ---When it's needed to have a terminal window opened but without entering the terminal window
 ---@param state table Terminal state that will be updated
@@ -81,15 +77,13 @@ M.ensure_open_terminal = function(state, relative_height, local_options)
     end
 end
 
-
 ---Scroll to the bottom of the buffer
 ---@param win integer Window id
 M.scroll_down = function(win)
     local current_win = vim.api.nvim_get_current_win()
     vim.api.nvim_set_current_win(win)
-    vim.cmd("normal! G")
+    vim.cmd "normal! G"
     vim.api.nvim_set_current_win(current_win)
 end
-
 
 return M
