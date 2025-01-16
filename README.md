@@ -2,6 +2,21 @@
 
 Neovim Lua plugin to toggle a terminal window and more.
 
+## Table of contents
+
+* [Overview](#overview)
+* [Features](#features)
+* [Why another terminal plugin?](#why-another-terminal-plugin)
+* [Terminal subcommands](#terminal-subcommands)
+* [Learn by examples](#learn-by-examples)
+* [Installation](#installation)
+* [Precisions about the configuration](#precisions-about-the-configuration)
+* [Precisions about some subcommands](#precisions-about-some-subcommands)
+* [How to contribute](#how-to-contribute)
+* [Inspired from](#inspired-from)
+
+## Overview
+
 ### Toggle a terminal window
 
 ![one-term-overwiew](https://github.com/vgitv/resources/blob/main/one-term/images/one-term-overview.png)
@@ -30,7 +45,8 @@ For a list of all sub-commands see below.
 99% of the time I only need one main terminal buffer, to execute the script I
 am working on. For the remaining 1% I dont mind creating a terminal buffer
 manually. Therefore most plugins out there are much more complex than is
-necessary for my workflow.
+necessary for my workflow. Besides I have added some functionnalities that I
+think interesting.
 
 ## Terminal subcommands
 
@@ -182,7 +198,7 @@ require('one-term').setup {
 ```
 
 
-## Precisions about some configurations
+## Precisions about the configuration
 
 * `bg_color`: if `nil`, the background color will be guessed by applying a
   factor to each red / green / blue part of the Normal background highlight
