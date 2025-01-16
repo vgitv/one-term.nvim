@@ -181,6 +181,7 @@ M.subcommands.run = function(...)
     local cmd = table.concat({ ... }, " ")
     utils.ensure_open_terminal(state, options.relative_height, options.local_options)
     vim.api.nvim_chan_send(state.chan, cmd .. "\x0d")
+    utils.scroll_down(state.win)
 end
 
 return M
