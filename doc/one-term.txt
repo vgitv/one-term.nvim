@@ -9,6 +9,7 @@ Commands ........................ |one-term-cmd|
   jump .......................... |one-term-cmd-jump|
   kill .......................... |one-term-cmd-kill|
   resize ........................ |one-term-cmd-resize|
+  run ........................... |one-term-cmd-run|
   run_previous .................. |one-term-cmd-run_previous|
   send_current_line ............. |one-term-cmd-send_current_line|
   send_visual_lines ............. |one-term-cmd-send_visual_lines|
@@ -98,6 +99,19 @@ Examples:
 
     " Decrease the terminal height (1 line)
     :Oneterm resize -1
+<
+
+SUBCOMMAND RUN                                                *one-term-cmd-run*
+
+Run an arbitrary command.
+
+Examples:
+>vim
+    " Will print 'hello' to the terminal
+    :Oneterm run echo hello
+
+    " Execute ipython interpreter
+    :Oneterm run ipython
 <
 
 SUBCOMMAND RUN_PREVIOUS                              *one-term-cmd-run_previous*

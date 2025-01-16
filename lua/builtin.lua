@@ -175,4 +175,12 @@ M.subcommands.resize = function(mouvement)
     end
 end
 
+---Run arbitrary command
+---@param ... any Command line
+M.subcommands.run = function(...)
+    local cmd = table.concat({ ... }, " ")
+    utils.ensure_open_terminal(state, options.relative_height, options.local_options)
+    vim.api.nvim_chan_send(state.chan, cmd .. "\x0d")
+end
+
 return M

@@ -44,6 +44,7 @@ following sections will give a simple overview.
 | `jump`              | Jump to the error location using a command output  |
 | `kill`              | Kill currently running command                     |
 | `resize`            | Resize the terminal window                         |
+| `run`               | Run an arbitrary command                           |
 | `run_previous`      | Run previous command (without leaving your buffer) |
 | `send_current_line` | Send current line to the terminal                  |
 | `send_visual_lines` | Send visual lines to the terminal                  |
