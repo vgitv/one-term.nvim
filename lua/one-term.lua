@@ -15,7 +15,7 @@ end
 ---The main terminal background could be darker than the editor background
 ---@param opts table
 local set_term_bg_hi = function(opts)
-    opts.factor = opts.factor or 0.75
+    local factor = opts.factor or 0.75
     local color
 
     if opts.bg_color then
@@ -28,9 +28,9 @@ local set_term_bg_hi = function(opts)
         local green = tonumber("0x" .. string.sub(normal_bg, 4, 5))
         local blue = tonumber("0x" .. string.sub(normal_bg, 6, 7))
 
-        local hex_red = string.format("%02x", red * opts.factor)
-        local hex_green = string.format("%02x", green * opts.factor)
-        local hex_blue = string.format("%02x", blue * opts.factor)
+        local hex_red = string.format("%02x", red * factor)
+        local hex_green = string.format("%02x", green * factor)
+        local hex_blue = string.format("%02x", blue * factor)
 
         color = '#' .. hex_red .. hex_green .. hex_blue
     end

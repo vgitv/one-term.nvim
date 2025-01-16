@@ -8,7 +8,7 @@ local M = {}
 ---@param opts table Local options to apply
 M.set_local_options = function(win, opts)
     for opt_name, opt_value in pairs(opts) do
-        vim.api.nvim_set_option_value(opt_name, opt_value, {win = win})
+        vim.api.nvim_set_option_value(opt_name, opt_value, { win = win })
     end
 end
 
