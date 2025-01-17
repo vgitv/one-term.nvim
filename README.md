@@ -32,10 +32,10 @@ Neovim Lua plugin to toggle a terminal window and more.
 - [X] Toggle the terminal window
 - [X] Rerun the last command without leaving your buffer
 - [X] Easily resize the terminal window
-- [X] Customizable background terminal color
-- [X] Terminal buffer is unlisted (hidden  from `:ls` command)
+- [X] Automatically darken terminal background
 - [X] Send lines to the terminal buffer
-- [X] Jump to the error location using a command output (see "Jump subcommand" section)
+- [X] Jump to the error location using the command output
+- [X] Terminal buffer is unlisted (hidden  from `:ls` command)
 
 For a list of all sub-commands see below.
 
