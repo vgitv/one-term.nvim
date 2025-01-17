@@ -1,4 +1,4 @@
-# One-term - One and only terminal
+# One-term - One single terminal
 
 Neovim Lua plugin to toggle a terminal window and more.
 
@@ -7,7 +7,7 @@ Neovim Lua plugin to toggle a terminal window and more.
 * [Overview](#overview)
 * [Features](#features)
 * [Why another terminal plugin?](#why-another-terminal-plugin)
-* [Terminal subcommands](#terminal-subcommands)
+* [Oneterm subcommands](#oneterm-subcommands)
 * [Learn by examples](#learn-by-examples)
 * [Installation](#installation)
 * [Details about the jump subcommand](#details-about-the-jump-subcommand)
@@ -47,10 +47,17 @@ manually. Therefore most plugins out there are much more complex than is
 necessary for my workflow. Besides I have added some functionnalities that I
 think interesting.
 
-## Terminal subcommands
+## Oneterm subcommands
 
-Consider reading `:help one-term` for further informations. The
-following sections will give a simple overview.
+This plugin provides only one user command named _Oneterm_ and does not define
+any default keybindings for nvim. The _Oneterm_ command takes at least one
+argument which is the subcommand name. The subcommand may (or may not) have
+arguments.
+
+`:Oneterm <subcommand> [args...]`
+
+The subcommands are listed below. Consider reading `:help one-term` for further
+informations.
 
 | SUBCOMMAND          | DESCRIPTION                                        |
 |---------------------|----------------------------------------------------|
