@@ -1,0 +1,277 @@
+*one-term*                                    Plugin to toggle a terminal window
+
+CONTENTS                                                     *one-term-contents*
+
+Introduction .................... |one-term-introduction|
+Commands ........................ |one-term-cmd|
+  clear ......................... |one-term-cmd-clear|
+  exit .......................... |one-term-cmd-exit|
+  jump .......................... |one-term-cmd-jump|
+  kill .......................... |one-term-cmd-kill|
+  resize ........................ |one-term-cmd-resize|
+  run ........................... |one-term-cmd-run|
+  run_previous .................. |one-term-cmd-run_previous|
+  send_current_line ............. |one-term-cmd-send_current_line|
+  send_visual_lines ............. |one-term-cmd-send_visual_lines|
+  toggle_fullheight ............. |one-term-cmd-toggle_fullheight|
+  toggle_window ................. |one-term-cmd-toggle_window|
+Examples ........................ |one-term-cmd-examples|
+Configuration ................... |one-term-configuration|
+
+
+INTRODUCTION                                             *one-term-introduction*
+
+one-term is a plugin for nvim that can spone a terminal in a dedicated buffer,
+display the terminal buffer is a split window, and toggle this window. There
+can be only one terminal buffer that one-term know about, called "main
+terminal" through this documentation. If the main terminal is exited (ie. the
+terminal processus ends), a new terminal instance will be created next time
+one-term is summoned.
+
+
+COMMANDS                                                *:Oneterm*  *one-term-cmd*
+
+one-term provides only one user command |:Oneterm| and does not define any
+default keybindings for nvim. The |:Oneterm| command takes at least one
+argument which is the subcommand name. The subcommand may (or may not) have
+arguments.
+
+`:Oneterm <subcommand> [args...]`
+
+The subcommands are listed below.
+
+
+SUBCOMMAND CLEAR                                            *one-term-cmd-clear*
+
+Clear the terminal window, without entering the terminal buffer. This is
+equivalent to Ctrl-L.
+
+
+SUBCOMMAND EXIT                                              *one-term-cmd-exit*
+
+Exit the terminal processus, without entering the terminal buffer. If you have
+nested shells, it will fall back to the previous shell. This is equivalent to
+Ctrl-D.
+
+
+SUBCOMMAND JUMP                                              *one-term-cmd-jump*
+
+Jump from an error in the command output to the corresponding problematic
+code.
+
+This command may overlap in some circumstances the native errorformat
+functionnality (see `:h error-file-format`). If you are using a compiler and
+you build your program with `:make` you should probably use this native
+functionnality instead, and commands like `:copen`, `:cnext` etc. The _jump_
+subcommand is convenient when you run a script directly in the main terminal
+window and when this script returns error messages (without calling `:make`
+command). You can then jump directly to the problematic location.
+
+If this subcommand does not work for a given language, it is possible to
+define custom regular expressions (see `errorformat` option in the
+|one-term-configuration| section). The regular expression should have two
+capturing groups, the first corresponding to the file name, the second to the
+line number.
+
+Note that the order of the regular expressions in `errorformat` matters
+because the first match will interrupt the search and try to jump to the
+corresponding location.
+
+
+SUBCOMMAND KILL                                              *one-term-cmd-kill*
+
+Kill the currently running comment, without entering the terminal buffer. This
+is equivalent to Ctrl-C.
+
+
+SUBCOMMAND RESIZE                                          *one-term-cmd-resize*
+
+Resize the terminal window. Will only work if the terminal window is open.
+This subcommand takes one argument:
+
+* `+N` -> increase the terminal height by N
+* `-N` -> decrease the terminal height by N
+
+Examples:
+>vim
+    " Increase the terminal height (5 lines)
+    :Oneterm resize +5
+
+    " Decrease the terminal height (1 line)
+    :Oneterm resize -1
+<
+
+SUBCOMMAND RUN                                                *one-term-cmd-run*
+
+Run an arbitrary command.
+
+Examples:
+>vim
+    " Will print 'hello' to the terminal
+    :Oneterm run echo hello
+
+    " Execute ipython interpreter
+    :Oneterm run ipython
+<
+
+SUBCOMMAND RUN_PREVIOUS                              *one-term-cmd-run_previous*
+
+Run privous command, without entering the terminal buffer. This is equivalent
+to Ctrl-P followed by a Carriage Return. This subcommand wont do anything if
+the main terminal does not exist yet.
+
+
+SUBCOMMAND SEND_CURRENT_LINE                    *one-term-cmd-send_current_line*
+
+Send current line to the terminal buffer. Create the terminal buffer if it
+does not exist yet. If the terminal buffer exists but it's window is closed,
+open it.
+
+
+SUBCOMMAND SEND_VISUAL_LINES                    *one-term-cmd-send_visual_lines*
+
+Send selected lines to the terminal buffer. Create the terminal buffer if it
+does not exist yet. If the terminal buffer exists but it's window is closed,
+open it.
+
+
+SUBCOMMAND TOGGLE_FULLHEIGHT                    *one-term-cmd-toggle_fullheight*
+
+Allow the user to toggle the terminal height when it's window is displayed. It
+will resize the terminal window in such a way that it will occupy the maximum
+height (leaving only one line for the top window). Note that the height is
+relative to the whole neovim height (vim.o.lines) and not the height of the
+current window.
+
+
+SUBCOMMAND TOGGLE_WINDOW                            *one-term-cmd-toggle_window*
+
+The subcommand `toggle_window` does two things:
+
+1. The first time it is called (or if the main terminal is exited): create a
+   new buffer, open a terminal in this buffer and display the buffer in a
+   split window below the current one
+2. Every other times: toggle a split window displaying the main terminal
+
+This command takes optionally one argument: the relative height of the
+terminal window.
+
+NB: the cursor can be on any window to close the terminal window with
+`:Oneterm`
+
+
+EXAMPLES                                                 *one-term-cmd-examples*
+
+Here are some usage examples.
+>vim
+    " Create a split window and open a new terminal.
+    " When no argument is given to the toggle_window subcommand, it will use
+    " the default `relative_height` that can be set through the setup function
+    " (See CONFIGURATION below).
+    :Oneterm toggle_window
+
+    " Close the window (the terminal will still run in the background)
+    :Oneterm toggle_window
+
+    " Open the terminal again, this time occupying 80% of the current window
+    :Oneterm toggle_window 0.8
+
+    " Close the terminal window again
+    :Oneterm toggle_window
+
+    " Terminal buffer is unlisted
+    :ls
+
+    " You can see the terminal buffer this way
+    :ls!
+
+    " open a terminal window occupying 30% of the current height
+    :Oneterm toggle_window 0.3
+
+    " 30% is not enough to see well... Let's increase the terminal height to
+    " the maximum
+    :Oneterm toggle_fullheight
+
+    " back to 30%
+    :Oneterm toggle_fullheight
+
+    " When on an error message, jump to the corresponding problematic code
+    :Oneterm jump
+
+    " Send current line to the terminal buffer
+    :Oneterm send_current_line
+
+    " Send currently selected lines to the terminal buffer
+    :Oneterm send_visual_lines
+
+    " Run previously executed command without leaving your current buffer
+    :Oneterm run_previous
+
+    " This command takes too much time... kill it without leaving your current buffer
+    :Oneterm kill
+
+    " Clear terminal window without leaving your current buffer
+    :Oneterm clear
+
+    " You dont need your terminal anymore, you can exit it without leaving your buffer
+    :Oneterm exit
+<
+
+CONFIGURATION                                           *one-term-configuration*
+
+Default configuration:
+>lua
+    require("one-term").setup {}
+<
+
+Advanced configuration:
+>lua
+    require('one-term').setup {
+        bg_color = nil,  -- main terminal background color
+        startinsert = false,  -- start insert mode at term opening
+        relative_height = 0.35,  -- relative height of the terminal window
+        local_options = {
+            number = false,  -- no number in main terminal window
+            relativenumber = false,  -- no relative number in main terminal window
+            cursorline = false,  -- cursor line in main terminal window
+            colorcolumn = '',  -- color column
+            scrolloff = 0,  -- scrolloff can be disturbing in terminal window
+        },
+        errorformat = {
+            '([^ :]*):([0-9]):', -- lua
+            '^ *File "(.*)", line ([0-9]+)',  -- python
+            '^(.*): line ([0-9]+)',  -- bash
+        },
+    }
+<
+
+Details about configuration items ~
+
+    bg_color: ~
+
+        If `nil`, the background color will be guessed by applying a factor to
+        each red / green / blue part of the Normal background highlight group.
+        So be sure to load your colorscheme first. Else you could force the
+        backgroupe terminal color with a hex value, for instance `#151515`.
+
+    startinsert: ~
+
+        Start insert mode automatically when the terminal is summoned.
+
+    relative_height: ~
+
+        Relative height of the terminal window. Note that it is relative to
+        the total height (`vim.o.lines`), not the height of the current
+        window.
+
+    local_options: ~
+
+        Vim options table that can be set locally to the terminal window. See
+        the default setup for available options.
+
+    errorformat: ~
+
+        Regular expressions table used by the `jump` subcommand. See
+        |one-term-cmd-jump| for details.
+
+vim:tw=80:ts=2:et:ft=help:cc=+1:
