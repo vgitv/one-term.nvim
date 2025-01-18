@@ -83,32 +83,31 @@ terminal buffer, you can still create it manually, the plugin will not mix them
 up.
 
 ```vim
-" create a split window and open a new terminal
+" Create a split window and open a new terminal
 :Oneterm toggle_window
 
-" close the window (the terminal will still run in the background)
+" Close the window (the terminal will still run in the background)
 :Oneterm toggle_window
 
-" open the terminal again, this time occupying 80% of the current window
+" Open the terminal again, this time occupying 80% of the current window
 :Oneterm toggle_window 0.8
 
-" close the terminal window again
+" Close the terminal window again
 :Oneterm toggle_window
 
-" terminal buffer is unlisted
+" Terminal buffer is unlisted
 :ls
 
-" you can see the terminal buffer this way
+" You can see the terminal buffer this way
 :ls!
 
-" open a terminal window occupying 30% of the current height
+" Open a terminal window occupying 30% of the current height
 :Oneterm toggle_window 0.3
 
-" 30% is not enough to see well... Let's increase the terminal height to
-" the maximum
+" 30% is not enough to see well... Let's increase the terminal height to the maximum
 :Oneterm toggle_fullheight
 
-" back to 30%
+" Back to 30%
 :Oneterm toggle_fullheight
 
 " When on an error message, jump to the corresponding problematic code
