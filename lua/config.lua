@@ -2,7 +2,7 @@ local M = {}
 
 ---The main terminal background could be darker than the editor background
 ---@param opts table
-local get_term_bg = function(opts)
+M.get_term_bg = function(opts)
     local factor = opts.factor or 0.75
     local color
 
@@ -27,7 +27,7 @@ local get_term_bg = function(opts)
 end
 
 M.options = {
-    bg_color = get_term_bg {},
+    bg_color = M.get_term_bg {},
     startinsert = false,
     relative_height = 0.35,
     local_options = {
