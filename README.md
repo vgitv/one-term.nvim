@@ -154,7 +154,7 @@ Those are the defaults options, which can be changed.
 {
     'vgitv/one-term.nvim',
     opts = {
-        bg_color = nil,  -- main terminal background color
+        bg_color_factor = 0.75,  -- factor to compute terminal bg color
         startinsert = false,  -- start insert mode at term opening
         relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
         local_options = {
@@ -185,7 +185,7 @@ require('one-term').setup {}
 ```lua
 -- advanced usage
 require('one-term').setup {
-    bg_color = nil,  -- main terminal background color
+    bg_color_factor = 0.75,  -- factor to compute terminal bg color
     startinsert = false,  -- start insert mode at term opening
     relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
     local_options = {

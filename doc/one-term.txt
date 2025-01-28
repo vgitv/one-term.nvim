@@ -227,7 +227,7 @@ Default configuration:
 Advanced configuration:
 >lua
     require('one-term').setup {
-        bg_color = nil,  -- main terminal background color
+        bg_color_factor = 0.75,  -- factor to compute term bg color
         startinsert = false,  -- start insert mode at term opening
         relative_height = 0.35,  -- relative height of the terminal window
         local_options = {
@@ -247,12 +247,14 @@ Advanced configuration:
 
 Details about configuration items ~
 
-    bg_color: ~
+    bg_color_factor: ~
 
-        If `nil`, the background color will be guessed by applying a factor to
-        each red / green / blue part of the Normal background highlight group.
-        So be sure to load your colorscheme first. Else you could force the
-        backgroupe terminal color with a hex value, for instance `#151515`.
+        The background color is calculated by applying a factor to each red /
+        green / blue part of the Normal background highlight group, so the
+        terminal background is different, but consistent with the colorscheme.
+        Setting this option to 1 means that the terminal background will be
+        the same as the Normal background. Smaller values will give darker
+        backgrounds.
 
     startinsert: ~
 

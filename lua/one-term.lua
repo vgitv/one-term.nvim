@@ -18,18 +18,4 @@ M.setup = function(opts)
     config.setup(opts)
 end
 
--- FIXME setting bg_color through setup function is no longer valid
-
-vim.cmd.highlight("MainTerminalNormal guibg=" .. config.options.bg_color)
-
--- when switching colorscheme, the bg color will adapt
-vim.api.nvim_create_autocmd("ColorScheme", {
-    desc = "Update terminal background color",
-    group = vim.api.nvim_create_augroup("one_term_setup_augroup", { clear = true }),
-    callback = function()
-        local bg_color = config.get_term_bg {}
-        vim.cmd.highlight("MainTerminalNormal guibg=" .. bg_color)
-    end,
-})
-
 return M
