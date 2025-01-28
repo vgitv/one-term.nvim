@@ -5,9 +5,7 @@ local M = {}
 M.subcommands = {}
 
 local utils = require "utils"
-
--- plugin options
-local options = {}
+local config = require "config"
 
 -- terminal state
 local state = {
@@ -18,17 +16,13 @@ local state = {
     full_height = false, -- is terminal full height?
 }
 
-M.setup_options = function(opts)
-    options = opts or {}
-end
-
 ---Split current window
 ---@param relative_height number Relative height of the future window
 M.subcommands.toggle_window = function(relative_height)
-    relative_height = relative_height or options.relative_height
+    relative_height = relative_height or config.options.relative_height
     if not vim.api.nvim_win_is_valid(state.win) then
-        utils.create_or_open_terminal(state, relative_height, options.local_options, true)
-        if options.startinsert then
+        utils.create_or_open_terminal(state, relative_height, config.options.local_options, true)
+        if config.options.startinsert then
             vim.cmd.startinsert()
         end
     else
@@ -53,7 +47,7 @@ end
 
 -- Send line under cursor into the terminal
 M.subcommands.send_current_line = function()
-    utils.ensure_open_terminal(state, options.relative_height, options.local_options)
+    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
     local current_line = vim.api.nvim_get_current_line()
     -- trim line
     local exec_line = current_line:gsub("^%s+", ""):gsub("%s+$", "")
@@ -67,7 +61,7 @@ end
 
 ---Send visually selected lines to the terminal
 M.subcommands.send_visual_lines = function()
-    utils.ensure_open_terminal(state, options.relative_height, options.local_options)
+    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
     local start_line = vim.fn.getpos("'<")[2]
     local end_line = vim.fn.getpos("'>")[2]
     print(start_line, end_line)
@@ -88,7 +82,7 @@ M.subcommands.jump = function()
         local current_line = vim.api.nvim_get_current_line()
         local filepath = nil
         local linenumber = nil
-        for _, pattern in pairs(options.errorformat) do
+        for _, pattern in pairs(config.options.errorformat) do
             filepath, linenumber = string.match(current_line, pattern)
             if filepath and linenumber then
                 break
@@ -116,7 +110,7 @@ M.subcommands.run_previous = function()
         return
     end
 
-    utils.ensure_open_terminal(state, options.relative_height, options.local_options)
+    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
 
     -- Send Ctrl-p signal to the terminal followed by carriage return
     vim.api.nvim_chan_send(state.chan, "\x10\x0d")
@@ -179,7 +173,7 @@ end
 ---@param ... any Command line
 M.subcommands.run = function(...)
     local cmd = table.concat({ ... }, " ")
-    utils.ensure_open_terminal(state, options.relative_height, options.local_options)
+    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
     vim.api.nvim_chan_send(state.chan, cmd .. "\x0d")
     utils.scroll_down(state.win)
 end
