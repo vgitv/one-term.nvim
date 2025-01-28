@@ -11,16 +11,12 @@ end, {
     complete = function(arglead, line, _)
         local l = vim.split(line, "%s+")
         local matches = {}
-        local choices = {}
+        local subcommands = vim.tbl_keys(require("builtin").subcommands)
 
-        -- Build subcommand completion list
-        for subcommand, _ in pairs(require("builtin").subcommands) do
-            table.insert(choices, subcommand)
-        end
-        table.sort(choices)
+        table.sort(subcommands)
 
         if #l == 2 then
-            for _, cmd in ipairs(choices) do
+            for _, cmd in ipairs(subcommands) do
                 if string.match(cmd, "^" .. arglead) then
                     table.insert(matches, cmd)
                 end
