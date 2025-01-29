@@ -3,6 +3,7 @@ if vim.g.loaded_one_term == 1 then
 end
 
 vim.api.nvim_create_user_command("Oneterm", function(o)
+    require "init"
     require("one-term").load_command(unpack(o.fargs))
 end, {
     desc = "Terminal main command (see :help one-term)",
