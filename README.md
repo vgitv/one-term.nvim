@@ -10,6 +10,8 @@ Neovim Lua plugin to toggle a terminal window and more.
 * [Oneterm subcommands](#oneterm-subcommands)
 * [Learn by examples](#learn-by-examples)
 * [Installation](#installation)
+    + [With Neovim native package management](#with-neovim-native-package-management)
+    + [With lazy.nvim](#with-lazynvim)
 * [Details about the jump subcommand](#details-about-the-jump-subcommand)
 * [How to contribute](#how-to-contribute)
 * [Inspired from](#inspired-from)
@@ -213,6 +215,8 @@ add lazy loading options and keymaps.
     },
 }
 ```
+
+See `:help one-term-configuration` for details about configuration items.
 
 ## Details about the jump subcommand
 
