@@ -10,6 +10,8 @@ Neovim Lua plugin to toggle a terminal window and more.
 * [Oneterm subcommands](#oneterm-subcommands)
 * [Learn by examples](#learn-by-examples)
 * [Installation](#installation)
+    + [With Neovim native package management](#with-neovim-native-package-management)
+    + [With lazy.nvim](#with-lazynvim)
 * [Details about the jump subcommand](#details-about-the-jump-subcommand)
 * [How to contribute](#how-to-contribute)
 * [Inspired from](#inspired-from)
@@ -83,32 +85,31 @@ terminal buffer, you can still create it manually, the plugin will not mix them
 up.
 
 ```vim
-" create a split window and open a new terminal
+" Create a split window and open a new terminal
 :Oneterm toggle_window
 
-" close the window (the terminal will still run in the background)
+" Close the window (the terminal will still run in the background)
 :Oneterm toggle_window
 
-" open the terminal again, this time occupying 80% of the current window
+" Open the terminal again, this time occupying 80% of the current window
 :Oneterm toggle_window 0.8
 
-" close the terminal window again
+" Close the terminal window again
 :Oneterm toggle_window
 
-" terminal buffer is unlisted
+" Terminal buffer is unlisted
 :ls
 
-" you can see the terminal buffer this way
+" You can see the terminal buffer this way
 :ls!
 
-" open a terminal window occupying 30% of the current height
+" Open a terminal window occupying 30% of the current height
 :Oneterm toggle_window 0.3
 
-" 30% is not enough to see well... Let's increase the terminal height to
-" the maximum
+" 30% is not enough to see well... Let's increase the terminal height to the maximum
 :Oneterm toggle_fullheight
 
-" back to 30%
+" Back to 30%
 :Oneterm toggle_fullheight
 
 " When on an error message, jump to the corresponding problematic code
@@ -138,55 +139,23 @@ up.
 **NB:** one-term will not define any key mapping for you, it only provides a
 user command. It's up to you to define you own mappings.
 
-### Minimal example with lazy.nvim
+### With Neovim native package management
+
+_Oneterm_ can be loaded using native package management (see `:help packages`).
+Just clone the repository into your `pack/*/start/` directory and restart
+Neovim. If you are satisfied with the defaults, nothing else is required, you
+can use the `Oneterm` command right away.
+
+Note that _Oneterm_ will lazy-load itself on the first `Oneterm` command, thus
+avoiding time-consuming startup.
+
+If you want to set specific options, you must explicitly call the setup
+function. Just pick the options you are interested in and put them into your
+nvim configuration. Here are the default options:
 
 ```lua
-{
-    'vgitv/one-term.nvim',
-    opts = {},
-}
-```
-
-### Longer example with lazy.nvim
-
-Those are the defaults options, which can be changed.
-
-```lua
-{
-    'vgitv/one-term.nvim',
-    opts = {
-        bg_color = nil,  -- main terminal background color
-        startinsert = false,  -- start insert mode at term opening
-        relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
-        local_options = {
-            number = false,  -- no number in main terminal window
-            relativenumber = false,  -- no relative number in main terminal window
-            cursorline = false,  -- cursor line in main terminal window
-            colorcolumn = '',  -- color column
-        },
-        errorformat = {
-            '([^ :]*):([0-9]):', -- lua
-            '^ *File "(.*)", line ([0-9]+)',  -- python
-            '^(.*): line ([0-9]+)',  -- bash
-        },
-    },
-}
-```
-
-### Neovim native package management
-
-Make sure to add the plugin directory to your runtimepath, then call the setup
-function:
-
-```lua
--- simple usage
-require('one-term').setup {}
-```
-
-```lua
--- advanced usage
 require('one-term').setup {
-    bg_color = nil,  -- main terminal background color
+    bg_color_factor = 0.75,  -- factor to compute terminal bg color
     startinsert = false,  -- start insert mode at term opening
     relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
     local_options = {
@@ -205,6 +174,49 @@ require('one-term').setup {
 
 See `:help one-term-configuration` for details about configuration items.
 
+### With lazy.nvim
+
+#### Minimal example
+
+If you are satisfied with the defaults, there is no need to call the setup
+function (that means you dont even have to define an empty _opt_ key). Note
+that _Oneterm_ will lazy-load itself on the first `Oneterm` command.
+
+```lua
+{
+    'vgitv/one-term.nvim'
+}
+```
+
+#### Longer example
+
+Those are the defaults options, which can be changed. Dont copy this
+configuration as is, just pick the options you want to override. Feel free to
+add lazy loading options and keymaps.
+
+```lua
+{
+    'vgitv/one-term.nvim',
+    opts = {
+        bg_color_factor = 0.75,  -- factor to compute terminal bg color
+        startinsert = false,  -- start insert mode at term opening
+        relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+        local_options = {
+            number = false,  -- no number in main terminal window
+            relativenumber = false,  -- no relative number in main terminal window
+            cursorline = false,  -- cursor line in main terminal window
+            colorcolumn = '',  -- color column
+        },
+        errorformat = {
+            '([^ :]*):([0-9]):', -- lua
+            '^ *File "(.*)", line ([0-9]+)',  -- python
+            '^(.*): line ([0-9]+)',  -- bash
+        },
+    },
+}
+```
+
+See `:help one-term-configuration` for details about configuration items.
 
 ## Details about the jump subcommand
 

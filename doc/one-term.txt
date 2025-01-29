@@ -185,14 +185,14 @@ Here are some usage examples.
     " You can see the terminal buffer this way
     :ls!
 
-    " open a terminal window occupying 30% of the current height
+    " Open a terminal window occupying 30% of the current height
     :Oneterm toggle_window 0.3
 
     " 30% is not enough to see well... Let's increase the terminal height to
     " the maximum
     :Oneterm toggle_fullheight
 
-    " back to 30%
+    " Back to 30%
     :Oneterm toggle_fullheight
 
     " When on an error message, jump to the corresponding problematic code
@@ -223,11 +223,14 @@ Default configuration:
 >lua
     require("one-term").setup {}
 <
+Note that if you are satisfied with the defaults, it is not even required to
+call the setup function. Just put the plugin into your runtimepath. The plugin
+will lazy-load itself on the first `Oneterm` command.
 
 Advanced configuration:
 >lua
     require('one-term').setup {
-        bg_color = nil,  -- main terminal background color
+        bg_color_factor = 0.75,  -- factor to compute term bg color
         startinsert = false,  -- start insert mode at term opening
         relative_height = 0.35,  -- relative height of the terminal window
         local_options = {
@@ -247,12 +250,16 @@ Advanced configuration:
 
 Details about configuration items ~
 
-    bg_color: ~
+    bg_color_factor: ~
 
-        If `nil`, the background color will be guessed by applying a factor to
-        each red / green / blue part of the Normal background highlight group.
-        So be sure to load your colorscheme first. Else you could force the
-        backgroupe terminal color with a hex value, for instance `#151515`.
+        The background color is calculated by applying a factor to each red /
+        green / blue part of the Normal background highlight group, so the
+        terminal background is different, but consistent with the colorscheme.
+        Setting this option to 1 means that the terminal background will be
+        the same as the Normal background. Smaller values will give darker
+        backgrounds, higher values will give lighter backgrounds. Values
+        beetween 0.75 and 1.25 will usually give good results, feel free to
+        experiment.
 
     startinsert: ~
 
