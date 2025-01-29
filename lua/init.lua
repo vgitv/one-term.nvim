@@ -16,9 +16,9 @@ local get_term_bg = function(opts)
     local green = tonumber("0x" .. string.sub(normal_bg, 4, 5))
     local blue = tonumber("0x" .. string.sub(normal_bg, 6, 7))
 
-    local hex_red = string.format("%02x", red * factor)
-    local hex_green = string.format("%02x", green * factor)
-    local hex_blue = string.format("%02x", blue * factor)
+    local hex_red = string.format("%02x", math.min(red * factor, 255))
+    local hex_green = string.format("%02x", math.min(green * factor, 255))
+    local hex_blue = string.format("%02x", math.min(blue * factor, 255))
 
     return "#" .. hex_red .. hex_green .. hex_blue
 end
@@ -26,7 +26,7 @@ end
 ---Initialisation function
 local set_term_hl = function()
     local color = get_term_bg { factor = config.options.bg_color_factor }
-    vim.cmd.highlight("MainTerminalNormal guibg=" .. color)
+    vim.api.nvim_set_hl(0, "MainTerminalNormal", { bg = color })
 end
 
 -- when switching colorscheme, the bg color will adapt

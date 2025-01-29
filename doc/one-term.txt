@@ -223,6 +223,9 @@ Default configuration:
 >lua
     require("one-term").setup {}
 <
+Note that if you are satisfied with the defaults, it is not even required to
+call the setup function. Just put the plugin into your runtimepath. The plugin
+will lazy-load itself on the first `Oneterm` command.
 
 Advanced configuration:
 >lua
@@ -254,7 +257,9 @@ Details about configuration items ~
         terminal background is different, but consistent with the colorscheme.
         Setting this option to 1 means that the terminal background will be
         the same as the Normal background. Smaller values will give darker
-        backgrounds.
+        backgrounds, higher values will give lighter backgrounds. Values
+        beetween 0.75 and 1.25 will usually give good results, feel free to
+        experiment.
 
     startinsert: ~
 

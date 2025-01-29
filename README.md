@@ -137,18 +137,60 @@ up.
 **NB:** one-term will not define any key mapping for you, it only provides a
 user command. It's up to you to define you own mappings.
 
-### Minimal example with lazy.nvim
+### With Neovim native package management
+
+_Oneterm_ can be loaded using native package management (see `:help packages`).
+Just clone the repository into your `pack/*/start/` directory and restart
+Neovim. If you are satisfied with the defaults, nothing else is required, you
+can use the `Oneterm` command right away.
+
+Note that _Oneterm_ will lazy-load itself on the first `Oneterm` command, thus
+avoiding time-consuming startup.
+
+If you want to set specific options, you must explicitly call the setup
+function. Just pick the options you are interested in and put them into your
+nvim configuration. Here are the default options:
 
 ```lua
-{
-    'vgitv/one-term.nvim',
-    opts = {},
+require('one-term').setup {
+    bg_color_factor = 0.75,  -- factor to compute terminal bg color
+    startinsert = false,  -- start insert mode at term opening
+    relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+    local_options = {
+        number = false,  -- no number in main terminal window
+        relativenumber = false,  -- no relative number in main terminal window
+        cursorline = false,  -- cursor line in main terminal window
+        colorcolumn = '',  -- color column
+    },
+    errorformat = {
+        '([^ :]*):([0-9]):',  -- lua / cpp
+        '^ *File "(.*)", line ([0-9]+)',  -- python
+        '^(.*): line ([0-9]+)',  -- bash
+    },
 }
 ```
 
-### Longer example with lazy.nvim
+See `:help one-term-configuration` for details about configuration items.
 
-Those are the defaults options, which can be changed.
+### With lazy.nvim
+
+#### Minimal example
+
+If you are satisfied with the defaults, there is no need to call the setup
+function (that means you dont even have to define an empty _opt_ key). Note
+that _Oneterm_ will lazy-load itself on the first `Oneterm` command.
+
+```lua
+{
+    'vgitv/one-term.nvim'
+}
+```
+
+#### Longer example
+
+Those are the defaults options, which can be changed. Dont copy this
+configuration as is, just pick the options you want to override. Feel free to
+add lazy loading options and keymaps.
 
 ```lua
 {
@@ -171,39 +213,6 @@ Those are the defaults options, which can be changed.
     },
 }
 ```
-
-### Neovim native package management
-
-Make sure to add the plugin directory to your runtimepath, then call the setup
-function:
-
-```lua
--- simple usage
-require('one-term').setup {}
-```
-
-```lua
--- advanced usage
-require('one-term').setup {
-    bg_color_factor = 0.75,  -- factor to compute terminal bg color
-    startinsert = false,  -- start insert mode at term opening
-    relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
-    local_options = {
-        number = false,  -- no number in main terminal window
-        relativenumber = false,  -- no relative number in main terminal window
-        cursorline = false,  -- cursor line in main terminal window
-        colorcolumn = '',  -- color column
-    },
-    errorformat = {
-        '([^ :]*):([0-9]):',  -- lua / cpp
-        '^ *File "(.*)", line ([0-9]+)',  -- python
-        '^(.*): line ([0-9]+)',  -- bash
-    },
-}
-```
-
-See `:help one-term-configuration` for details about configuration items.
-
 
 ## Details about the jump subcommand
 

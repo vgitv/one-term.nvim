@@ -1,5 +1,4 @@
--- Here are defined the :Terminal builtin subcommands:
--- :Terminal <builtin-subcommand>
+-- Here are defined the builtin subcommands
 
 local M = {}
 M.subcommands = {}
