@@ -44,7 +44,7 @@ M.subcommands.toggle_fullheight = function()
     end
 end
 
--- Send line under cursor into the terminal
+---Send line under cursor into the terminal
 M.subcommands.send_current_line = function()
     utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
     local current_line = vim.api.nvim_get_current_line()
@@ -73,6 +73,11 @@ M.subcommands.send_visual_lines = function()
     end
 
     utils.scroll_down(state.win)
+end
+
+---Send visual selection
+M.subcommands.send_visual_selection = function()
+    --
 end
 
 ---Jump to error location
