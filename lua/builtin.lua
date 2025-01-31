@@ -63,7 +63,6 @@ M.subcommands.send_visual_lines = function()
     utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
     local start_line = vim.fn.getpos("'<")[2]
     local end_line = vim.fn.getpos("'>")[2]
-    print(start_line, end_line)
     local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
     for _, line in ipairs(lines) do
         local exec_line = line:gsub("^%s+", ""):gsub("%s+$", "")
@@ -77,7 +76,22 @@ end
 
 ---Send visual selection
 M.subcommands.send_visual_selection = function()
-    --
+    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
+    local start_pos = vim.fn.getpos("'<")
+    local end_pos = vim.fn.getpos("'>")
+    local start_row, start_col = unpack(start_pos, 2, 3)
+    local end_row, end_col = unpack(end_pos, 2, 3)
+    -- Why -1? Because the doc says:
+    -- Indexing is zero-based. Row indices are end-inclusive, and column indices are end-exclusive.
+    local text = vim.api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col, {})
+    for _, line in ipairs(text) do
+        local exec_line = line:gsub("^%s+", ""):gsub("%s+$", "")
+        -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
+        -- / loop etc. (like python). And it should be a blank line after each end of function / loop etc.
+        vim.api.nvim_chan_send(state.chan, exec_line .. "\x0d")
+    end
+
+    utils.scroll_down(state.win)
 end
 
 ---Jump to error location
