@@ -13,6 +13,7 @@ Commands ........................ |one-term-cmd|
   run_previous .................. |one-term-cmd-run_previous|
   send_current_line ............. |one-term-cmd-send_current_line|
   send_visual_lines ............. |one-term-cmd-send_visual_lines|
+  send_visual_selection ......... |one-term-cmd-send_visual_selection|
   toggle_fullheight ............. |one-term-cmd-toggle_fullheight|
   toggle_window ................. |one-term-cmd-toggle_window|
 Examples ........................ |one-term-cmd-examples|
@@ -131,6 +132,13 @@ open it.
 SUBCOMMAND SEND_VISUAL_LINES                    *one-term-cmd-send_visual_lines*
 
 Send selected lines to the terminal buffer. Create the terminal buffer if it
+does not exist yet. If the terminal buffer exists but it's window is closed,
+open it.
+
+
+SUBCOMMAND SEND_VISUAL_SELECTION            *one-term-cmd-send_visual_selection*
+
+Send selected text to the terminal buffer. Create the terminal buffer if it
 does not exist yet. If the terminal buffer exists but it's window is closed,
 open it.
 

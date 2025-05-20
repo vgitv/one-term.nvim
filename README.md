@@ -61,19 +61,20 @@ arguments.
 The subcommands are listed below. Consider reading `:help one-term` for further
 informations.
 
-| SUBCOMMAND          | DESCRIPTION                                        |
-|---------------------|----------------------------------------------------|
-| `clear`             | Clear the terminal window                          |
-| `exit`              | Exit the terminal process                          |
-| `jump`              | Jump to the error location using a command output  |
-| `kill`              | Kill currently running command                     |
-| `resize`            | Resize the terminal window                         |
-| `run`               | Run an arbitrary command                           |
-| `run_previous`      | Run previous command (without leaving your buffer) |
-| `send_current_line` | Send current line to the terminal                  |
-| `send_visual_lines` | Send visual lines to the terminal                  |
-| `toggle_fullheight` | Toggle terminal full height                        |
-| `toggle_window`     | Toggle terminal window                             |
+| SUBCOMMAND              | DESCRIPTION                                        |
+|-------------------------|----------------------------------------------------|
+| `clear`                 | Clear the terminal window                          |
+| `exit`                  | Exit the terminal process                          |
+| `jump`                  | Jump to the error location using a command output  |
+| `kill`                  | Kill currently running command                     |
+| `resize`                | Resize the terminal window                         |
+| `run`                   | Run an arbitrary command                           |
+| `run_previous`          | Run previous command (without leaving your buffer) |
+| `send_current_line`     | Send current line to the terminal                  |
+| `send_visual_lines`     | Send visual lines to the terminal                  |
+| `send_visual_selection` | Send visual selection to the terminal              |
+| `toggle_fullheight`     | Toggle terminal full height                        |
+| `toggle_window`         | Toggle terminal window                             |
 
 ## Learn by examples
 
