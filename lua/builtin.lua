@@ -77,8 +77,8 @@ end
 ---Send visual selection
 M.subcommands.send_visual_selection = function()
     utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
-    local start_pos = vim.fn.getpos("'<")
-    local end_pos = vim.fn.getpos("'>")
+    local start_pos = vim.fn.getpos "'<"
+    local end_pos = vim.fn.getpos "'>"
     local start_row, start_col = unpack(start_pos, 2, 3)
     local end_row, end_col = unpack(end_pos, 2, 3)
     -- Why -1? Because the doc says:
@@ -191,6 +191,16 @@ end
 ---@param ... any Command line
 M.subcommands.run = function(...)
     local cmd = table.concat({ ... }, " ")
+    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
+    vim.api.nvim_chan_send(state.chan, cmd .. "\x0d")
+    utils.scroll_down(state.win)
+end
+
+---Launch commands from a .nvim/launch.lua config file
+M.subcommands.launch = function(name)
+    name = name or "default"
+    local launch_config = dofile ".nvim/launch.lua"
+    local cmd = table.concat(launch_config.configurations[name]["cmd"], " ")
     utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
     vim.api.nvim_chan_send(state.chan, cmd .. "\x0d")
     utils.scroll_down(state.win)
