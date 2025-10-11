@@ -8,6 +8,7 @@ Commands ........................ |one-term-cmd|
   exit .......................... |one-term-cmd-exit|
   jump .......................... |one-term-cmd-jump|
   kill .......................... |one-term-cmd-kill|
+  launch ........................ |one-term-cmd-launch|
   resize ........................ |one-term-cmd-resize|
   run ........................... |one-term-cmd-run|
   run_previous .................. |one-term-cmd-run_previous|
@@ -83,6 +84,45 @@ SUBCOMMAND KILL                                              *one-term-cmd-kill*
 
 Kill the currently running comment, without entering the terminal buffer. This
 is equivalent to Ctrl-C.
+
+
+SUBCOMMAND LAUNCH                                          *one-term-cmd-launch*
+
+Launch a command read from a lua configuration file `.nvim/launch.lua` located
+in the current directory. With no additional arguments, the command will launch
+the configuration named "default". Else it will load the given configuration.
+>vim
+    " this two commands are equivalent
+    :Oneterm launch
+    :Oneterm launch default
+
+    " launch the configuration named "custom"
+    :Oneterm launch custom
+<
+
+Note that this command will not search parent directories to find the
+configuration file.
+
+`.nvim/launch.lua` example:
+>lua
+    return {
+        configurations = {
+            default = {
+                cmd = {
+                    "python",
+                    "main.py",
+                },
+            },
+            custom = {
+                cmd = {
+                    "python",
+                    "main.py",
+                    "argument",
+                },
+            },
+        },
+    }
+<
 
 
 SUBCOMMAND RESIZE                                          *one-term-cmd-resize*
