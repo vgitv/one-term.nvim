@@ -67,6 +67,7 @@ informations.
 | `exit`                  | Exit the terminal process                          |
 | `jump`                  | Jump to the error location using a command output  |
 | `kill`                  | Kill currently running command                     |
+| `launch`                | Launch commands read from a config file            |
 | `resize`                | Resize the terminal window                         |
 | `run`                   | Run an arbitrary command                           |
 | `run_previous`          | Run previous command (without leaving your buffer) |
