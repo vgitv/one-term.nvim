@@ -197,7 +197,7 @@ M.subcommands.run = function(...)
 end
 
 ---Launch commands from a .nvim/launch.lua config file
----@param name configuration name to launch
+---@param name string configuration name to launch
 M.subcommands.launch = function(name)
     name = name or "default"
     local launch_config = dofile ".nvim/launch.lua"
