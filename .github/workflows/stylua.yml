@@ -1,0 +1,17 @@
+---
+name: Stylua
+run-name: "Stylua (${{ github.actor }})"
+on:
+  - push
+jobs:
+  stylua:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@main
+      - name: Stylua check
+        uses: JohnnyMorganz/stylua-action@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --color=always --check lua
