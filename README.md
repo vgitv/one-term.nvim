@@ -1,6 +1,7 @@
-# One-term - One single terminal
+# One-term - One single terminal [![Stylua](https://github.com/vgitv/one-term.nvim/actions/workflows/stylua.yml/badge.svg)](https://github.com/vgitv/one-term.nvim/actions/workflows/stylua.yml)
 
-Neovim Lua plugin to toggle a terminal window and more.
+> Neovim Lua plugin to toggle a terminal window and more.
+
 
 ## Table of contents
 
@@ -13,8 +14,8 @@ Neovim Lua plugin to toggle a terminal window and more.
     + [With Neovim native package management](#with-neovim-native-package-management)
     + [With lazy.nvim](#with-lazynvim)
 * [Details about the jump subcommand](#details-about-the-jump-subcommand)
-* [How to contribute](#how-to-contribute)
 * [Inspired from](#inspired-from)
+
 
 ## Overview
 
@@ -22,11 +23,14 @@ Neovim Lua plugin to toggle a terminal window and more.
 
 ![one-term-overwiew](https://github.com/vgitv/resources/blob/main/one-term/images/one-term-overview.png)
 
+
 ### Automatically jump to the problematic code
 
 ![one-term-jump](https://github.com/vgitv/resources/blob/main/one-term/images/one-term-jump.png)
 
+
 ### And more...
+
 
 ## Features
 
@@ -41,6 +45,7 @@ Neovim Lua plugin to toggle a terminal window and more.
 
 For a list of all sub-commands see below.
 
+
 ## Why another terminal plugin?
 
 99% of the time I only need one main terminal buffer, to execute the script I
@@ -48,6 +53,7 @@ am working on. For the remaining 1% I dont mind creating a terminal buffer
 manually. Therefore most plugins out there are much more complex than is
 necessary for my workflow. Besides I have added some functionnalities that I
 think interesting.
+
 
 ## Oneterm subcommands
 
@@ -76,6 +82,7 @@ informations.
 | `send_visual_selection` | Send visual selection to the terminal              |
 | `toggle_fullheight`     | Toggle terminal full height                        |
 | `toggle_window`         | Toggle terminal window                             |
+
 
 ## Learn by examples
 
@@ -136,10 +143,12 @@ up.
 :Oneterm exit
 ```
 
+
 ## Installation
 
 **NB:** one-term will not define any key mapping for you, it only provides a
 user command. It's up to you to define you own mappings.
+
 
 ### With Neovim native package management
 
@@ -176,6 +185,7 @@ require('one-term').setup {
 
 See `:help one-term-configuration` for details about configuration items.
 
+
 ### With lazy.nvim
 
 #### Minimal example
@@ -202,7 +212,7 @@ add lazy loading options and keymaps.
     opts = {
         bg_color_factor = 0.75,  -- factor to compute terminal bg color
         startinsert = false,  -- start insert mode at term opening
-        relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+        relative_height = 0.35,  -- relative height of the terminal window (beetween 0-1)
         local_options = {
             number = false,  -- no number in main terminal window
             relativenumber = false,  -- no relative number in main terminal window
@@ -219,6 +229,7 @@ add lazy loading options and keymaps.
 ```
 
 See `:help one-term-configuration` for details about configuration items.
+
 
 ## Details about the jump subcommand
 
@@ -237,19 +248,15 @@ file name, the second to the line number.
 
 For instance if your command output looks like this:
 
-```
-Traceback (most recent call last):
-  File "/home/vgitv/truc.py", line 1, in <module>
-    prin("Hello")
-    ^^^^
-NameError: name 'prin' is not defined. Did you mean: 'print'?
-```
+    Traceback (most recent call last):
+    File "/home/vgitv/truc.py", line 1, in <module>
+        prin("Hello")
+        ^^^^
+    NameError: name 'prin' is not defined. Did you mean: 'print'?
 
 You can have the following regular expression:
 
-```
-^ *File "(.*)", line ([0-9]+)
-```
+    ^ *File "(.*)", line ([0-9]+)
 
 Note that the order of the regular expressions in `errorformat` matters
 because the first match will interrupt the search and try to jump to the
@@ -262,36 +269,6 @@ The default configuration should work at least for the following languages:
 * python
 * bash
 
-## How to contribute
-
-Help and suggestions are welcome!
-
-If you want to test things locally, you can add a custom subcommand by adding a
-function to the table `M.subcommands` in the _builtin_ module.
-
-For instance this function ...
-
-```lua
-M.subcommands.say_hello_to = function(name)
-    print("Hello, " .. name .. "!")
-end
-```
-
-... will allow you to run this command ...
-
-```vim
-:Oneterm say_hello_to Bob
-```
-
-... that will output:
-
-```
-Hello, Bob!
-```
-
-You dont have to worry about the command completion, it will adapt
-automatically. All you have to do is to write the function. Any command
-parameters will be passed on to the function.
 
 ## Inspired from
 
