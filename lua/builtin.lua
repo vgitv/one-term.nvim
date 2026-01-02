@@ -3,7 +3,7 @@
 local M = {}
 M.subcommands = {}
 
-local utils = require("utils")
+local utils = require "utils"
 local config = require "config"
 
 -- terminal state
