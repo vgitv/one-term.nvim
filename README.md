@@ -7,7 +7,6 @@
 
 * [Overview](#overview)
 * [Features](#features)
-* [Why another terminal plugin?](#why-another-terminal-plugin)
 * [Oneterm subcommands](#oneterm-subcommands)
 * [Learn by examples](#learn-by-examples)
 * [Installation](#installation)
@@ -19,17 +18,7 @@
 
 ## Overview
 
-### Toggle a terminal window
-
 ![one-term-overwiew](https://github.com/vgitv/resources/blob/main/one-term/images/one-term-overview.png)
-
-
-### Automatically jump to the problematic code
-
-![one-term-jump](https://github.com/vgitv/resources/blob/main/one-term/images/one-term-jump.png)
-
-
-### And more...
 
 
 ## Features
@@ -40,19 +29,19 @@
 - [X] Easily resize the terminal window
 - [X] Automatically darken terminal background
 - [X] Send lines to the terminal buffer
-- [X] Jump to the error location using the command output
-- [X] Terminal buffer is unlisted (hidden  from `:ls` command)
+- [X] Jump from a command output to the corresponding error location in your code
+- [X] Unlisted terminal buffer (hidden  from `:ls` command)
 
 For a list of all sub-commands see below.
 
-
-## Why another terminal plugin?
-
-99% of the time I only need one main terminal buffer, to execute the script I
-am working on. For the remaining 1% I dont mind creating a terminal buffer
-manually. Therefore most plugins out there are much more complex than is
-necessary for my workflow. Besides I have added some functionnalities that I
-think interesting.
+> [!NOTE]
+> _Why another terminal plugin?_
+>
+> 99% of the time I only need one main terminal buffer, to execute the script I
+> am working on. For the remaining 1% I dont mind creating a terminal buffer
+> manually. Therefore most plugins out there are much more complex than is
+> necessary for my workflow. Besides I have added some functionnalities that I
+> think interesting.
 
 
 ## Oneterm subcommands
@@ -146,8 +135,9 @@ up.
 
 ## Installation
 
-**NB:** one-term will not define any key mapping for you, it only provides a
-user command. It's up to you to define you own mappings.
+> [!TIP]
+> one-term will not define any key mapping for you, it only provides a user
+> command. It's up to you to define you own mappings.
 
 
 ### With Neovim native package management
