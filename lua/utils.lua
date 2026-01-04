@@ -30,7 +30,7 @@ local create_window_below = function(opts)
     -- Define window configuration
     local win_config = {
         split = "below",
-        win = 0,
+        win = -1,
         height = height,
     }
 
