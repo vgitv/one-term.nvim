@@ -9,13 +9,14 @@ local terminal_instance
 ---Get or create new terminal instance (singleton design)
 function Terminal:get_instance()
     if not terminal_instance then
-        local terminal = {}
-
-        terminal.buf = -1 -- needs to be invalid at first hence -1
-        terminal.win = -1 -- needs to be invalid at first hence -1
-        terminal.height = nil -- terminal window initial height
-        terminal.chan = nil -- terminal window channel
-        terminal.full_height = false -- is terminal full height?
+        local terminal = {
+            buf = -1, -- needs to be invalid at first hence -1
+            win = -1, -- needs to be invalid at first hence -1
+            height = nil, -- terminal window initial height
+            chan = nil, -- terminal window channel
+            full_height = false, -- is terminal full height?
+            current_layout = nil,
+        }
 
         self.__index = self
         terminal_instance = setmetatable(terminal, self)

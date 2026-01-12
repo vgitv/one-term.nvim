@@ -17,6 +17,12 @@ M.options = {
         '^ *File "(.*)", line ([0-9]+)', -- python
         "^(.*): line ([0-9]+)", -- bash
     },
+    enabled_layouts = {
+        "vertical",
+        "horizontal",
+        "stack",
+        "floating",
+    },
 }
 
 ---Override default options
