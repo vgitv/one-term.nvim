@@ -13,7 +13,7 @@ M.subcommands.toggle_window = function(relative_height)
     local term = terminal.Terminal:get_instance()
     relative_height = relative_height or config.options.relative_height
     if not vim.api.nvim_win_is_valid(term.win) then
-        term:create_or_open_terminal(relative_height, config.options.local_options, true)
+        term:create_or_open(relative_height, config.options.local_options, true)
         if config.options.startinsert then
             vim.cmd.startinsert()
         end
@@ -41,7 +41,7 @@ end
 ---Send line under cursor into the terminal
 M.subcommands.send_current_line = function()
     local term = terminal.Terminal:get_instance()
-    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
+    term:ensure_open(config.options.relative_height, config.options.local_options)
     local current_line = vim.api.nvim_get_current_line()
     -- trim line
     local exec_line = current_line:gsub("^%s+", ""):gsub("%s+$", "")
@@ -56,7 +56,7 @@ end
 ---Send visually selected lines to the terminal
 M.subcommands.send_visual_lines = function()
     local term = terminal.Terminal:get_instance()
-    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
+    term:ensure_open(config.options.relative_height, config.options.local_options)
     local start_line = vim.fn.getpos("'<")[2]
     local end_line = vim.fn.getpos("'>")[2]
     local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
@@ -73,7 +73,7 @@ end
 ---Send visual selection
 M.subcommands.send_visual_selection = function()
     local term = terminal.Terminal:get_instance()
-    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
+    term:ensure_open(config.options.relative_height, config.options.local_options)
     local start_pos = vim.fn.getpos "'<"
     local end_pos = vim.fn.getpos "'>"
     local start_row, start_col = unpack(start_pos, 2, 3)
@@ -127,7 +127,7 @@ M.subcommands.run_previous = function()
         return
     end
 
-    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
+    term:ensure_open(config.options.relative_height, config.options.local_options)
 
     -- Send Ctrl-p signal to the terminal followed by carriage return
     vim.api.nvim_chan_send(term.chan, "\x10\x0d")
@@ -195,7 +195,7 @@ end
 M.subcommands.run = function(...)
     local term = terminal.Terminal:get_instance()
     local cmd = table.concat({ ... }, " ")
-    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
+    term:ensure_open(config.options.relative_height, config.options.local_options)
     vim.api.nvim_chan_send(term.chan, cmd .. "\x0d")
     utils.scroll_down(term.win)
 end
@@ -207,7 +207,7 @@ M.subcommands.launch = function(name)
     name = name or "default"
     local launch_config = dofile ".nvim/launch.lua"
     local cmd = table.concat(launch_config.configurations[name]["cmd"], " ")
-    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
+    term:ensure_open(config.options.relative_height, config.options.local_options)
     vim.api.nvim_chan_send(term.chan, cmd .. "\x0d")
     utils.scroll_down(term.win)
 end

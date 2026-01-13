@@ -3,7 +3,6 @@
 local M = {}
 local builtin = require "builtin"
 local config = require "config"
-local terminal = require "terminal"
 
 ---Run a specific subcommand
 ---@param cmd string Subcommand name
@@ -17,6 +16,7 @@ end
 M.setup = function(opts)
     opts = opts or {}
     config.setup(opts)
+    -- Init should be inside the setup function because it should run last (if the user calls the setup function)
     require "init"
 end
 

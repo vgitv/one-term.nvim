@@ -2,32 +2,31 @@ local M = {}
 M.Terminal = {}
 
 local utils = require "utils"
-local config = require "config"
 
-local terminal_instance = nil
-
-function M.Terminal:new()
-    local terminal = {}
-
-    terminal.buf = -1 -- needs to be invalid at first hence -1
-    terminal.win = -1 -- needs to be invalid at first hence -1
-    terminal.height = nil -- terminal window initial height
-    terminal.chan = nil -- terminal window channel
-    terminal.full_height = false -- is terminal full height?
-
-    self.__index = self
-    return setmetatable(terminal, self)
-end
+local terminal_instance
 
 ---Get or create new terminal instance (singleton design)
 function M.Terminal:get_instance()
     if not terminal_instance then
-        terminal_instance = M.Terminal:new()
+        local terminal = {}
+
+        terminal.buf = -1 -- needs to be invalid at first hence -1
+        terminal.win = -1 -- needs to be invalid at first hence -1
+        terminal.height = nil -- terminal window initial height
+        terminal.chan = nil -- terminal window channel
+        terminal.full_height = false -- is terminal full height?
+
+        self.__index = self
+        terminal_instance = setmetatable(terminal, self)
     end
     return terminal_instance
 end
 
-function M.Terminal:create_or_open_terminal(relative_height, local_options, enter)
+---Create a new terminal instance or open the buffer in a new window if it already exists
+---@param relative_height number Relative height of the future window
+---@param local_options table Local options to apply to the term buffer
+---@param enter boolean Enter the window after it's creation
+function M.Terminal:create_or_open(relative_height, local_options, enter)
     local height = math.floor(vim.o.lines * relative_height)
     local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
     self.buf = win_prop.buf
@@ -52,9 +51,9 @@ end
 ---When it's needed to have a terminal window opened but without entering the terminal window
 ---@param relative_height number Relative height of the future window
 ---@param local_options table Local options to apply to the term buffer
-function M.Terminal:ensure_open_terminal(relative_height, local_options)
+function M.Terminal:ensure_open(relative_height, local_options)
     if not vim.api.nvim_win_is_valid(self.win) then
-        self:create_or_open_terminal(relative_height, local_options, false)
+        self:create_or_open(relative_height, local_options, false)
     end
 end
 
