@@ -1,14 +1,12 @@
 -- Here are defined the builtin subcommands
 
 local M = {}
-M.subcommands = {}
 
-local utils = require "utils"
 local config = require "config"
 
 ---Split current window
 ---@param relative_height number Relative height of the future window
-function M.subcommands.toggle_window(term, relative_height)
+function M.toggle_window(term, relative_height)
     relative_height = relative_height or config.options.relative_height
     if not vim.api.nvim_win_is_valid(term.win) then
         term:create_or_open(relative_height, config.options.local_options, true)
@@ -21,7 +19,7 @@ function M.subcommands.toggle_window(term, relative_height)
 end
 
 ---Make the terminal window full height
-function M.subcommands.toggle_fullheight(term)
+function M.toggle_fullheight(term)
     if vim.api.nvim_win_is_valid(term.win) then
         if term.full_height then
             vim.api.nvim_win_set_height(term.win, term.height)
@@ -36,7 +34,7 @@ function M.subcommands.toggle_fullheight(term)
 end
 
 ---Send line under cursor into the terminal
-function M.subcommands.send_current_line(term)
+function M.send_current_line(term)
     term:ensure_open(config.options.relative_height, config.options.local_options)
     local current_line = vim.api.nvim_get_current_line()
     -- trim line
@@ -48,7 +46,7 @@ function M.subcommands.send_current_line(term)
 end
 
 ---Send visually selected lines to the terminal
-function M.subcommands.send_visual_lines(term)
+function M.send_visual_lines(term)
     term:ensure_open(config.options.relative_height, config.options.local_options)
     local start_line = vim.fn.getpos("'<")[2]
     local end_line = vim.fn.getpos("'>")[2]
@@ -62,7 +60,7 @@ function M.subcommands.send_visual_lines(term)
 end
 
 ---Send visual selection
-function M.subcommands.send_visual_selection(term)
+function M.send_visual_selection(term)
     term:ensure_open(config.options.relative_height, config.options.local_options)
     local start_pos = vim.fn.getpos "'<"
     local end_pos = vim.fn.getpos "'>"
@@ -80,7 +78,7 @@ function M.subcommands.send_visual_selection(term)
 end
 
 ---Jump to error location
-function M.subcommands.jump(term)
+function M.jump(term)
     if vim.api.nvim_get_current_win() == term.win then
         local current_line = vim.api.nvim_get_current_line()
         local filepath = nil
@@ -105,7 +103,7 @@ function M.subcommands.jump(term)
 end
 
 ---Run previous command without leaving buffer
-function M.subcommands.run_previous(term)
+function M.run_previous(term)
     if not vim.api.nvim_buf_is_valid(term.buf) then
         -- If the main terminal doesnt exist, the previous command has good chances to be a nvim command!
         -- This will prevent from accidentally opening a new neovim instance inside the terminal buffer.
@@ -120,7 +118,7 @@ function M.subcommands.run_previous(term)
 end
 
 ---Clear terminal
-function M.subcommands.clear(term)
+function M.clear(term)
     if vim.api.nvim_win_is_valid(term.win) then
         -- Send Ctrl-l signal to the terminal
         vim.api.nvim_chan_send(term.chan, "\x0c")
@@ -130,7 +128,7 @@ function M.subcommands.clear(term)
 end
 
 ---Kill currently running command
-function M.subcommands.kill(term)
+function M.kill(term)
     if vim.api.nvim_win_is_valid(term.win) then
         -- Send Ctrl-c signal to the terminal
         vim.api.nvim_chan_send(term.chan, "\x03")
@@ -140,7 +138,7 @@ function M.subcommands.kill(term)
 end
 
 ---Exit terminal
-function M.subcommands.exit(term)
+function M.exit(term)
     if vim.api.nvim_buf_is_valid(term.buf) then
         -- Send Ctrl-d signal to the terminal
         vim.api.nvim_chan_send(term.chan, "\x04")
@@ -152,7 +150,7 @@ end
 
 ---Resize terminal window
 ---@param mouvement string Mouvement for window resizing like +5 or -2 for instance
-function M.subcommands.resize(term, mouvement)
+function M.resize(term, mouvement)
     if vim.api.nvim_win_is_valid(term.win) then
         local current_height = vim.api.nvim_win_get_height(term.win)
         local height
@@ -172,7 +170,7 @@ end
 
 ---Run arbitrary command
 ---@param ... any Command line
-function M.subcommands.run(term, ...)
+function M.run(term, ...)
     local cmd = table.concat({ ... }, " ")
     term:ensure_open(config.options.relative_height, config.options.local_options)
     term:exec(cmd)
@@ -180,7 +178,7 @@ end
 
 ---Launch commands from a .nvim/launch.lua config file
 ---@param name string configuration name to launch
-function M.subcommands.launch(term, name)
+function M.launch(term, name)
     name = name or "default"
     local launch_config = dofile ".nvim/launch.lua"
     local cmd = table.concat(launch_config.configurations[name]["cmd"], " ")

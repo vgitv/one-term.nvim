@@ -10,7 +10,7 @@ local Terminal = require "terminal"
 ---@param ... any Subcommand parameters
 function M.load_command(cmd, ...)
     local term = Terminal:get_instance()
-    builtin.subcommands[cmd](term, ...)
+    builtin[cmd](term, ...)
 end
 
 ---Plugin setup function

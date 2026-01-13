@@ -12,7 +12,7 @@ end, {
     complete = function(arglead, line, _)
         local l = vim.split(line, "%s+")
         local matches = {}
-        local subcommands = vim.tbl_keys(require("builtin").subcommands)
+        local subcommands = vim.tbl_keys(require "builtin")
 
         table.sort(subcommands)
 
