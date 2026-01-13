@@ -49,16 +49,13 @@ function M.Terminal:create_or_open_terminal(relative_height, local_options, ente
     self.full_height = false
 end
 
--- function M.Terminal:toggle_window(relative_height)
---     relative_height = relative_height or config.options.relative_height
---     if not vim.api.nvim_win_is_valid(self.win) then
---         self:_create_or_open_terminal(relative_height, config.options.local_options, true)
---         if config.options.startinsert then
---             vim.cmd.startinsert()
---         end
---     else
---         vim.api.nvim_win_hide(self.win)
---     end
--- end
+---When it's needed to have a terminal window opened but without entering the terminal window
+---@param relative_height number Relative height of the future window
+---@param local_options table Local options to apply to the term buffer
+function M.Terminal:ensure_open_terminal(relative_height, local_options)
+    if not vim.api.nvim_win_is_valid(self.win) then
+        self:create_or_open_terminal(relative_height, local_options, false)
+    end
+end
 
 return M

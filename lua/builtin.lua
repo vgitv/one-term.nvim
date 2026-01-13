@@ -7,15 +7,6 @@ local utils = require "utils"
 local config = require "config"
 local terminal = require "terminal"
 
--- terminal state
-local state = {
-    buf = -1, -- needs to be invalid at first hence -1
-    win = -1, -- needs to be invalid at first hence -1
-    height = nil, -- terminal window initial height
-    chan = nil, -- terminal window channel
-    full_height = false, -- is terminal full height?
-}
-
 ---Split current window
 ---@param relative_height number Relative height of the future window
 M.subcommands.toggle_window = function(relative_height)
@@ -33,13 +24,14 @@ end
 
 ---Make the terminal window full height
 M.subcommands.toggle_fullheight = function()
-    if vim.api.nvim_win_is_valid(state.win) then
-        if state.full_height then
-            vim.api.nvim_win_set_height(state.win, state.height)
-            state.full_height = false
+    local term = terminal.Terminal:get_instance()
+    if vim.api.nvim_win_is_valid(term.win) then
+        if term.full_height then
+            vim.api.nvim_win_set_height(term.win, term.height)
+            term.full_height = false
         else
-            vim.api.nvim_win_set_height(state.win, vim.o.lines)
-            state.full_height = true
+            vim.api.nvim_win_set_height(term.win, vim.o.lines)
+            term.full_height = true
         end
     else
         print "The terminal window must be open to run this command"
@@ -48,21 +40,23 @@ end
 
 ---Send line under cursor into the terminal
 M.subcommands.send_current_line = function()
-    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
+    local term = terminal.Terminal:get_instance()
+    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
     local current_line = vim.api.nvim_get_current_line()
     -- trim line
     local exec_line = current_line:gsub("^%s+", ""):gsub("%s+$", "")
     if exec_line == "" then
         return
     end
-    vim.api.nvim_chan_send(state.chan, exec_line .. "\x0d")
+    vim.api.nvim_chan_send(term.chan, exec_line .. "\x0d")
 
-    utils.scroll_down(state.win)
+    utils.scroll_down(term.win)
 end
 
 ---Send visually selected lines to the terminal
 M.subcommands.send_visual_lines = function()
-    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
+    local term = terminal.Terminal:get_instance()
+    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
     local start_line = vim.fn.getpos("'<")[2]
     local end_line = vim.fn.getpos("'>")[2]
     local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
@@ -70,15 +64,16 @@ M.subcommands.send_visual_lines = function()
         local exec_line = line:gsub("^%s+", ""):gsub("%s+$", "")
         -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
         -- / loop etc. (like python). And it should be a blank line after each end of function / loop etc.
-        vim.api.nvim_chan_send(state.chan, exec_line .. "\x0d")
+        vim.api.nvim_chan_send(term.chan, exec_line .. "\x0d")
     end
 
-    utils.scroll_down(state.win)
+    utils.scroll_down(term.win)
 end
 
 ---Send visual selection
 M.subcommands.send_visual_selection = function()
-    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
+    local term = terminal.Terminal:get_instance()
+    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
     local start_pos = vim.fn.getpos "'<"
     local end_pos = vim.fn.getpos "'>"
     local start_row, start_col = unpack(start_pos, 2, 3)
@@ -90,15 +85,16 @@ M.subcommands.send_visual_selection = function()
         local exec_line = line:gsub("^%s+", ""):gsub("%s+$", "")
         -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
         -- / loop etc. (like python). And it should be a blank line after each end of function / loop etc.
-        vim.api.nvim_chan_send(state.chan, exec_line .. "\x0d")
+        vim.api.nvim_chan_send(term.chan, exec_line .. "\x0d")
     end
 
-    utils.scroll_down(state.win)
+    utils.scroll_down(term.win)
 end
 
 ---Jump to error location
 M.subcommands.jump = function()
-    if vim.api.nvim_get_current_win() == state.win then
+    local term = terminal.Terminal:get_instance()
+    if vim.api.nvim_get_current_win() == term.win then
         local current_line = vim.api.nvim_get_current_line()
         local filepath = nil
         local linenumber = nil
@@ -123,26 +119,28 @@ end
 
 ---Run previous command without leaving buffer
 M.subcommands.run_previous = function()
-    if not vim.api.nvim_buf_is_valid(state.buf) then
+    local term = terminal.Terminal:get_instance()
+    if not vim.api.nvim_buf_is_valid(term.buf) then
         -- If the main terminal doesnt exist, the previous command has good chances to be a nvim command!
         -- This will prevent from accidentally opening a new neovim instance inside the terminal buffer.
         print "You need to create a terminal buffer first"
         return
     end
 
-    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
+    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
 
     -- Send Ctrl-p signal to the terminal followed by carriage return
-    vim.api.nvim_chan_send(state.chan, "\x10\x0d")
+    vim.api.nvim_chan_send(term.chan, "\x10\x0d")
 
-    utils.scroll_down(state.win)
+    utils.scroll_down(term.win)
 end
 
 ---Clear terminal
 M.subcommands.clear = function()
-    if vim.api.nvim_win_is_valid(state.win) then
+    local term = terminal.Terminal:get_instance()
+    if vim.api.nvim_win_is_valid(term.win) then
         -- Send Ctrl-l signal to the terminal
-        vim.api.nvim_chan_send(state.chan, "\x0c")
+        vim.api.nvim_chan_send(term.chan, "\x0c")
     else
         print "The terminal window must be open to run this command"
     end
@@ -150,9 +148,10 @@ end
 
 ---Kill currently running command
 M.subcommands.kill = function()
-    if vim.api.nvim_win_is_valid(state.win) then
+    local term = terminal.Terminal:get_instance()
+    if vim.api.nvim_win_is_valid(term.win) then
         -- Send Ctrl-c signal to the terminal
-        vim.api.nvim_chan_send(state.chan, "\x03")
+        vim.api.nvim_chan_send(term.chan, "\x03")
     else
         print "The terminal window must be open to run this command"
     end
@@ -160,9 +159,10 @@ end
 
 ---Exit terminal
 M.subcommands.exit = function()
-    if vim.api.nvim_buf_is_valid(state.buf) then
+    local term = terminal.Terminal:get_instance()
+    if vim.api.nvim_buf_is_valid(term.buf) then
         -- Send Ctrl-d signal to the terminal
-        vim.api.nvim_chan_send(state.chan, "\x04")
+        vim.api.nvim_chan_send(term.chan, "\x04")
         print "Terminal successfully exited"
     else
         print "No terminal to exit"
@@ -172,8 +172,9 @@ end
 ---Resize terminal window
 ---@param mouvement string Mouvement for window resizing like +5 or -2 for instance
 M.subcommands.resize = function(mouvement)
-    if vim.api.nvim_win_is_valid(state.win) then
-        local current_height = vim.api.nvim_win_get_height(state.win)
+    local term = terminal.Terminal:get_instance()
+    if vim.api.nvim_win_is_valid(term.win) then
+        local current_height = vim.api.nvim_win_get_height(term.win)
         local height
         if string.match(mouvement, "^+[0-9]+$") then
             height = current_height + tonumber(string.sub(mouvement, 2))
@@ -183,7 +184,7 @@ M.subcommands.resize = function(mouvement)
             print "ERROR - Invalid argument"
             return
         end
-        vim.api.nvim_win_set_height(state.win, height)
+        vim.api.nvim_win_set_height(term.win, height)
     else
         print "The terminal window must be open to run this command"
     end
@@ -192,21 +193,23 @@ end
 ---Run arbitrary command
 ---@param ... any Command line
 M.subcommands.run = function(...)
+    local term = terminal.Terminal:get_instance()
     local cmd = table.concat({ ... }, " ")
-    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
-    vim.api.nvim_chan_send(state.chan, cmd .. "\x0d")
-    utils.scroll_down(state.win)
+    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
+    vim.api.nvim_chan_send(term.chan, cmd .. "\x0d")
+    utils.scroll_down(term.win)
 end
 
 ---Launch commands from a .nvim/launch.lua config file
 ---@param name string configuration name to launch
 M.subcommands.launch = function(name)
+    local term = terminal.Terminal:get_instance()
     name = name or "default"
     local launch_config = dofile ".nvim/launch.lua"
     local cmd = table.concat(launch_config.configurations[name]["cmd"], " ")
-    utils.ensure_open_terminal(state, config.options.relative_height, config.options.local_options)
-    vim.api.nvim_chan_send(state.chan, cmd .. "\x0d")
-    utils.scroll_down(state.win)
+    term:ensure_open_terminal(config.options.relative_height, config.options.local_options)
+    vim.api.nvim_chan_send(term.chan, cmd .. "\x0d")
+    utils.scroll_down(term.win)
 end
 
 return M
