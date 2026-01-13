@@ -2,6 +2,8 @@
 
 > Neovim Lua plugin to toggle a terminal window and more.
 
+> [!CAUTION]
+> This project is a work in progress, and may be subject to breaking changes.
 
 ## Table of contents
 

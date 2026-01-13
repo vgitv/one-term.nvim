@@ -1,12 +1,11 @@
-local M = {}
-M.Terminal = {}
+local Terminal = {}
 
 local utils = require "utils"
 
 local terminal_instance
 
 ---Get or create new terminal instance (singleton design)
-function M.Terminal:get_instance()
+function Terminal:get_instance()
     if not terminal_instance then
         local terminal = {}
 
@@ -26,7 +25,7 @@ end
 ---@param relative_height number Relative height of the future window
 ---@param local_options table Local options to apply to the term buffer
 ---@param enter boolean Enter the window after it's creation
-function M.Terminal:create_or_open(relative_height, local_options, enter)
+function Terminal:create_or_open(relative_height, local_options, enter)
     local height = math.floor(vim.o.lines * relative_height)
     local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
     self.buf = win_prop.buf
@@ -51,10 +50,10 @@ end
 ---When it's needed to have a terminal window opened but without entering the terminal window
 ---@param relative_height number Relative height of the future window
 ---@param local_options table Local options to apply to the term buffer
-function M.Terminal:ensure_open(relative_height, local_options)
+function Terminal:ensure_open(relative_height, local_options)
     if not vim.api.nvim_win_is_valid(self.win) then
         self:create_or_open(relative_height, local_options, false)
     end
 end
 
-return M
+return Terminal
