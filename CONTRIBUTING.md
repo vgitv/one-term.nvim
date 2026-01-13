@@ -9,7 +9,7 @@ must have at least one argument, which is the terminal instance.
 For instance this function ...
 
 ```lua
-M.subcommands.say_hello_to = function(term, name)
+function M.subcommands.say_hello_to(term, name)
     print("Hello, " .. name .. "!")
 end
 ```
