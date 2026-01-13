@@ -5,6 +5,7 @@ M.subcommands = {}
 
 local utils = require "utils"
 local config = require "config"
+local terminal = require "terminal"
 
 -- terminal state
 local state = {
@@ -18,14 +19,15 @@ local state = {
 ---Split current window
 ---@param relative_height number Relative height of the future window
 M.subcommands.toggle_window = function(relative_height)
+    local term = terminal.Terminal:get_instance()
     relative_height = relative_height or config.options.relative_height
-    if not vim.api.nvim_win_is_valid(state.win) then
-        utils.create_or_open_terminal(state, relative_height, config.options.local_options, true)
+    if not vim.api.nvim_win_is_valid(term.win) then
+        term:create_or_open_terminal(relative_height, config.options.local_options, true)
         if config.options.startinsert then
             vim.cmd.startinsert()
         end
     else
-        vim.api.nvim_win_hide(state.win)
+        vim.api.nvim_win_hide(term.win)
     end
 end
 

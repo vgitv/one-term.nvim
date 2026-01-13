@@ -3,6 +3,7 @@
 local M = {}
 local builtin = require "builtin"
 local config = require "config"
+local terminal = require "terminal"
 
 ---Run a specific subcommand
 ---@param cmd string Subcommand name

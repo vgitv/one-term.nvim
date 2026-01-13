@@ -1,0 +1,64 @@
+local M = {}
+M.Terminal = {}
+
+local utils = require "utils"
+local config = require "config"
+
+local terminal_instance = nil
+
+function M.Terminal:new()
+    local terminal = {}
+
+    terminal.buf = -1 -- needs to be invalid at first hence -1
+    terminal.win = -1 -- needs to be invalid at first hence -1
+    terminal.height = nil -- terminal window initial height
+    terminal.chan = nil -- terminal window channel
+    terminal.full_height = false -- is terminal full height?
+
+    self.__index = self
+    return setmetatable(terminal, self)
+end
+
+---Get or create new terminal instance (singleton design)
+function M.Terminal:get_instance()
+    if not terminal_instance then
+        terminal_instance = M.Terminal:new()
+    end
+    return terminal_instance
+end
+
+function M.Terminal:create_or_open_terminal(relative_height, local_options, enter)
+    local height = math.floor(vim.o.lines * relative_height)
+    local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
+    self.buf = win_prop.buf
+    self.win = win_prop.win
+    self.height = win_prop.height
+
+    if vim.bo[self.buf].buftype ~= "terminal" then
+        -- The options should be set first because the presence of 'number' may change the way
+        -- the prompt is display (because it changes the terminal width)
+        utils.set_local_options(self.win, local_options)
+        vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
+        -- Create terminal instance after setting local options
+        vim.api.nvim_buf_call(self.buf, vim.cmd.terminal)
+        -- setting the buflisted option needs to be after calling terminal command
+        vim.api.nvim_set_option_value("buflisted", false, { buf = self.buf })
+    end
+
+    self.chan = vim.bo[self.buf].channel
+    self.full_height = false
+end
+
+-- function M.Terminal:toggle_window(relative_height)
+--     relative_height = relative_height or config.options.relative_height
+--     if not vim.api.nvim_win_is_valid(self.win) then
+--         self:_create_or_open_terminal(relative_height, config.options.local_options, true)
+--         if config.options.startinsert then
+--             vim.cmd.startinsert()
+--         end
+--     else
+--         vim.api.nvim_win_hide(self.win)
+--     end
+-- end
+
+return M
