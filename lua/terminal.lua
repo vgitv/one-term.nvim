@@ -56,4 +56,11 @@ function Terminal:ensure_open(relative_height, local_options)
     end
 end
 
+---Execute script inside the terminal
+---@param script string The script (could be multiline)
+function Terminal:exec(script)
+    vim.api.nvim_chan_send(self.chan, script .. "\x0d")
+    utils.scroll_down(self.win)
+end
+
 return Terminal

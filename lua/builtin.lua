@@ -44,9 +44,7 @@ function M.subcommands.send_current_line(term)
     if exec_line == "" then
         return
     end
-    vim.api.nvim_chan_send(term.chan, exec_line .. "\x0d")
-
-    utils.scroll_down(term.win)
+    term:exec(exec_line)
 end
 
 ---Send visually selected lines to the terminal
@@ -59,10 +57,8 @@ function M.subcommands.send_visual_lines(term)
         local exec_line = line:gsub("^%s+", ""):gsub("%s+$", "")
         -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
         -- / loop etc. (like python). And it should be a blank line after each end of function / loop etc.
-        vim.api.nvim_chan_send(term.chan, exec_line .. "\x0d")
+        term:exec(exec_line)
     end
-
-    utils.scroll_down(term.win)
 end
 
 ---Send visual selection
@@ -79,10 +75,8 @@ function M.subcommands.send_visual_selection(term)
         local exec_line = line:gsub("^%s+", ""):gsub("%s+$", "")
         -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
         -- / loop etc. (like python). And it should be a blank line after each end of function / loop etc.
-        vim.api.nvim_chan_send(term.chan, exec_line .. "\x0d")
+        term:exec(exec_line)
     end
-
-    utils.scroll_down(term.win)
 end
 
 ---Jump to error location
@@ -121,10 +115,8 @@ function M.subcommands.run_previous(term)
 
     term:ensure_open(config.options.relative_height, config.options.local_options)
 
-    -- Send Ctrl-p signal to the terminal followed by carriage return
-    vim.api.nvim_chan_send(term.chan, "\x10\x0d")
-
-    utils.scroll_down(term.win)
+    -- Send Ctrl-p signal to the terminal
+    term:exec "\x10"
 end
 
 ---Clear terminal
@@ -183,8 +175,7 @@ end
 function M.subcommands.run(term, ...)
     local cmd = table.concat({ ... }, " ")
     term:ensure_open(config.options.relative_height, config.options.local_options)
-    vim.api.nvim_chan_send(term.chan, cmd .. "\x0d")
-    utils.scroll_down(term.win)
+    term:exec(cmd)
 end
 
 ---Launch commands from a .nvim/launch.lua config file
@@ -194,8 +185,7 @@ function M.subcommands.launch(term, name)
     local launch_config = dofile ".nvim/launch.lua"
     local cmd = table.concat(launch_config.configurations[name]["cmd"], " ")
     term:ensure_open(config.options.relative_height, config.options.local_options)
-    vim.api.nvim_chan_send(term.chan, cmd .. "\x0d")
-    utils.scroll_down(term.win)
+    term:exec(cmd)
 end
 
 return M
