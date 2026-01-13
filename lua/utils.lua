@@ -5,7 +5,7 @@ local M = {}
 ---Set window local options given a window id
 ---@param win integer Window id
 ---@param opts table Local options to apply
-M.set_local_options = function(win, opts)
+function M.set_local_options(win, opts)
     for opt_name, opt_value in pairs(opts) do
         vim.api.nvim_set_option_value(opt_name, opt_value, { win = win })
     end
@@ -13,7 +13,7 @@ end
 
 ---Create a split window below the current one
 ---@param opts table Options for the window creation
-M.create_window_below = function(opts)
+function M.create_window_below(opts)
     opts = opts or {}
 
     local enter = opts.enter or false
@@ -42,7 +42,7 @@ end
 
 ---Scroll to the bottom of the buffer
 ---@param win integer Window id
-M.scroll_down = function(win)
+function M.scroll_down(win)
     local current_win = vim.api.nvim_get_current_win()
     vim.api.nvim_set_current_win(win)
     vim.cmd "normal! G"

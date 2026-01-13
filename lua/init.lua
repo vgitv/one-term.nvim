@@ -7,7 +7,7 @@ local config = require "config"
 ---Compute main terminal background color
 ---@param factor number Factor to apply to red / green / blue parts of Normal bg color
 ---@return string: Terminal background color in the form #XXXXXX
-local get_term_bg = function(factor)
+local function get_term_bg(factor)
     factor = math.max(0, factor or 0.75)
 
     -- Try to guess a good background color for the main terminal window.
@@ -26,7 +26,7 @@ local get_term_bg = function(factor)
 end
 
 ---Set terminal highlight group for later background color
-local set_term_hl = function()
+local function set_term_hl()
     local color = get_term_bg(config.options.bg_color_factor)
     vim.api.nvim_set_hl(0, "MainTerminalNormal", { bg = color })
 end
