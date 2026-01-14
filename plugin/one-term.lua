@@ -4,7 +4,7 @@ end
 
 vim.api.nvim_create_user_command("Oneterm", function(o)
     require "init"
-    require("one-term").load_command(unpack(o.fargs))
+    require("one-term").call_subcommand(unpack(o.fargs))
 end, {
     desc = "Terminal main command (see :help one-term)",
     range = true,
