@@ -2,7 +2,7 @@
 
 local M = {}
 
-local config = require "config"
+local config = require "term.config"
 
 ---Split current window
 ---@param relative_height number Relative height of the future window

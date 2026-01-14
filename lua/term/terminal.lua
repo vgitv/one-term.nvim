@@ -1,6 +1,8 @@
+-- Terminal class-like table
+
 local Terminal = {}
 
-local utils = require "utils"
+local utils = require "term.utils"
 
 local terminal_instance
 
