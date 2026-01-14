@@ -1,3 +1,7 @@
+-- This plugin file is automatically sourced by nvim, and define the Oneterm user command.
+-- It allows the one-term plugin to lazily load itself the first time the Oneterm command is fired (by delaying the
+-- require calls).
+
 if vim.g.loaded_one_term == 1 then
     return
 end

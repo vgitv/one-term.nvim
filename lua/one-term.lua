@@ -1,5 +1,5 @@
 -- This is the main plugin script.
--- It's file name should not conflict with the directory containing modules, it can lead to unexpected errors.
+-- It's file name should not conflict with the directory containing modules, which can lead to unexpected errors.
 
 local M = {}
 local builtin = require "term.builtin"

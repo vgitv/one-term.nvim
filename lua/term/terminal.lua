@@ -1,3 +1,5 @@
+-- Terminal class-like table
+
 local Terminal = {}
 
 local utils = require "term.utils"
