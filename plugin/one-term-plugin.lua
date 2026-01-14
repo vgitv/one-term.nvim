@@ -3,7 +3,9 @@ if vim.g.loaded_one_term == 1 then
 end
 
 vim.api.nvim_create_user_command("Oneterm", function(o)
-    require "one-term.init"
+    -- If the setup function is not called, we must nevertheless call the init module. With the 'require' keyword, we
+    -- make sure this will run only once.
+    require "term.init"
     require("one-term").call_subcommand(unpack(o.fargs))
 end, {
     desc = "Terminal main command (see :help one-term)",
@@ -12,7 +14,7 @@ end, {
     complete = function(arglead, line, _)
         local l = vim.split(line, "%s+")
         local matches = {}
-        local subcommands = vim.tbl_keys(require "one-term.builtin")
+        local subcommands = vim.tbl_keys(require "term.builtin")
 
         table.sort(subcommands)
 

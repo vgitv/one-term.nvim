@@ -1,6 +1,6 @@
 local Terminal = {}
 
-local utils = require "one-term.utils"
+local utils = require "term.utils"
 
 local terminal_instance
 
