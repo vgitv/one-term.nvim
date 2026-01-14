@@ -1,9 +1,9 @@
 -- Main plugin script
 
 local M = {}
-local builtin = require "builtin"
-local config = require "config"
-local Terminal = require "terminal"
+local builtin = require "one-term.builtin"
+local config = require "one-term.config"
+local Terminal = require "one-term.terminal"
 
 ---Run a specific subcommand
 ---@param subcmd_name string Subcommand name
@@ -19,7 +19,7 @@ function M.setup(opts)
     opts = opts or {}
     config.setup(opts)
     -- Init should be inside the setup function because it should run last (if the user calls the setup function)
-    require "init"
+    require "one-term.init"
 end
 
 return M

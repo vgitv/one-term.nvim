@@ -3,7 +3,7 @@ if vim.g.loaded_one_term == 1 then
 end
 
 vim.api.nvim_create_user_command("Oneterm", function(o)
-    require "init"
+    require "one-term.init"
     require("one-term").call_subcommand(unpack(o.fargs))
 end, {
     desc = "Terminal main command (see :help one-term)",
@@ -12,7 +12,7 @@ end, {
     complete = function(arglead, line, _)
         local l = vim.split(line, "%s+")
         local matches = {}
-        local subcommands = vim.tbl_keys(require "builtin")
+        local subcommands = vim.tbl_keys(require "one-term.builtin")
 
         table.sort(subcommands)
 

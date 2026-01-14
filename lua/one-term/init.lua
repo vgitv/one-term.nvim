@@ -2,7 +2,7 @@
 -- This init module must be run even if the setup function is not called so the plugin is usable with default options
 -- without the need of calling the setup function with empty arguments.
 
-local config = require "config"
+local config = require "one-term.config"
 
 ---Compute main terminal background color
 ---@param factor number Factor to apply to red / green / blue parts of Normal bg color
