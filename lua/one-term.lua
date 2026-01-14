@@ -6,11 +6,11 @@ local config = require "config"
 local Terminal = require "terminal"
 
 ---Run a specific subcommand
----@param cmd string Subcommand name
+---@param subcmd_name string Subcommand name
 ---@param ... any Subcommand parameters
-function M.load_command(cmd, ...)
+function M.call_subcommand(subcmd_name, ...)
     local term = Terminal:get_instance()
-    builtin.subcommands[cmd](term, ...)
+    builtin[subcmd_name](term, ...)
 end
 
 ---Plugin setup function
