@@ -16,6 +16,7 @@ function Terminal:get_instance(opt)
             height = nil, -- terminal window initial height
             chan = nil, -- terminal window channel
             full_height = false, -- is terminal full height?
+            layout = opt.enabled_layouts[1], -- default is the first enabled layout
         }
 
         self.__index = self
@@ -27,8 +28,8 @@ end
 ---Create a new terminal instance or open the buffer in a new window if it already exists
 ---@param relative_height number Relative height of the future window
 ---@param enter boolean Enter the window after it's creation
-function Terminal:create_or_open(relative_height, enter)
-    local height = math.floor(vim.o.lines * relative_height)
+function Terminal:create_or_open(enter)
+    local height = math.floor(vim.o.lines * self.options.relative_height)
     local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
     self.buf = win_prop.buf
     self.win = win_prop.win

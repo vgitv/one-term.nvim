@@ -3,11 +3,9 @@
 local M = {}
 
 ---Split current window
----@param relative_height number Relative height of the future window
-function M.toggle_window(term, relative_height)
-    relative_height = relative_height or term.options.relative_height
+function M.toggle_window(term)
     if not vim.api.nvim_win_is_valid(term.win) then
-        term:create_or_open(relative_height, true)
+        term:create_or_open(true)
         if term.options.startinsert then
             vim.cmd.startinsert()
         end
