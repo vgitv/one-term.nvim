@@ -15,7 +15,6 @@ function Terminal:get_instance(opt)
             height = nil, -- terminal window initial height
             chan = nil, -- terminal window channel
             full_height = false, -- is terminal full height?
-            current_layout = nil,
             options = opt, -- plugin options
         }
 
