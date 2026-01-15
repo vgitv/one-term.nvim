@@ -17,7 +17,7 @@ function Terminal:get_instance(opt)
             width = nil,
             chan = nil, -- terminal window channel
             full_height = false, -- is terminal full height?
-            layout = opt.enabled_layouts[1], -- default is the first enabled layout
+            layout = 1, -- default is the first enabled layout
         }
 
         self.__index = self
@@ -29,13 +29,13 @@ end
 ---Create a new terminal instance or open the buffer in a new window if it already exists
 ---@param enter boolean Enter the window after it's creation
 function Terminal:create_or_open(enter)
-    if self.layout == "vertical" then
+    if self.options.enabled_layouts[self.layout] == "vertical" then
         local height = math.floor(vim.o.lines * self.options.relative_height)
         local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
         self.buf = win_prop.buf
         self.win = win_prop.win
         self.height = win_prop.height
-    elseif self.layout == "horizontal" then
+    elseif self.options.enabled_layouts[self.layout] == "horizontal" then
         local width = math.floor(vim.o.columns * self.options.relative_width)
         local win_prop = utils.create_window_right { width = width, buf = self.buf, enter = enter }
         self.buf = win_prop.buf
@@ -74,11 +74,11 @@ function Terminal:exec(script)
     utils.scroll_down(self.win)
 end
 
-function Terminal:set_layout(name)
+function Terminal:set_layout(layout)
     if vim.api.nvim_win_is_valid(self.win) then
         vim.api.nvim_win_hide(self.win)
     end
-    self.layout = name
+    self.layout = layout
     self:ensure_open()
 end
 

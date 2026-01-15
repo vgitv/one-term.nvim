@@ -183,7 +183,7 @@ function M.launch(term, name)
 end
 
 function M.next_layout(term)
-    print ""
+    term:set_layout(term.layout % #term.options.enabled_layouts + 1)
 end
 
 return M
