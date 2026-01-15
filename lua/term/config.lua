@@ -20,7 +20,7 @@ M.options = {
 }
 
 ---Override default options
-function M.setup(user_options)
+function M.setup_options(user_options)
     M.options = vim.tbl_deep_extend("force", M.options, user_options or {})
 end
 
