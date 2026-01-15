@@ -75,6 +75,11 @@ function Terminal:exec(script)
 end
 
 function Terminal:set_layout(layout)
+    if layout > #self.options.enabled_layouts then
+        print "ERROR - Invalid layout range"
+        return
+    end
+
     if vim.api.nvim_win_is_valid(self.win) then
         vim.api.nvim_win_hide(self.win)
     end
