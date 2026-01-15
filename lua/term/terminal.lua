@@ -10,12 +10,12 @@ local terminal_instance
 function Terminal:get_instance(opt)
     if not terminal_instance then
         local terminal = {
+            options = opt, -- plugin options
             buf = -1, -- needs to be invalid at first hence -1
             win = -1, -- needs to be invalid at first hence -1
             height = nil, -- terminal window initial height
             chan = nil, -- terminal window channel
             full_height = false, -- is terminal full height?
-            options = opt, -- plugin options
         }
 
         self.__index = self
