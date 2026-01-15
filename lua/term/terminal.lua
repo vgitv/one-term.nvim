@@ -67,11 +67,19 @@ function Terminal:ensure_open()
     end
 end
 
+-- TODO: make the return optional and use this method in the clear / kill commands
+-- TODO: ensure open inside the exec
 ---Execute script inside the terminal
 ---@param script string The script (could be multiline)
 function Terminal:exec(script)
     vim.api.nvim_chan_send(self.chan, script .. "\x0d")
     utils.scroll_down(self.win)
+end
+
+function Terminal:hide()
+    if vim.api.nvim_win_is_valid(self.win) then
+        vim.api.nvim_win_hide(self.win)
+    end
 end
 
 -- FIXME: description
@@ -82,9 +90,7 @@ function Terminal:set_layout(layout)
         return
     end
 
-    if vim.api.nvim_win_is_valid(self.win) then
-        vim.api.nvim_win_hide(self.win)
-    end
+    self:hide()
     self.layout = layout
     self:ensure_open()
 end

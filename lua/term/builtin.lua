@@ -115,6 +115,7 @@ function M.run_previous(term)
     term:exec "\x10"
 end
 
+-- TODO: use a method to know if the terminal exists
 ---Clear terminal
 function M.clear(term)
     if vim.api.nvim_win_is_valid(term.win) then
