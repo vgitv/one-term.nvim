@@ -2,7 +2,6 @@
 
 local M = {}
 
--- FIXME: doc breaking change
 ---Split current window
 function M.toggle_window(term)
     if not vim.api.nvim_win_is_valid(term.win) then

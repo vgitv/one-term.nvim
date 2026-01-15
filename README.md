@@ -77,6 +77,9 @@ informations.
 
 ## Learn by examples
 
+> [!IMPORTANT]
+> This is not a full set of examples, but just a few commands to get started.
+
 Obviously you should define key mappings for all or part of the following
 commands. Remember that this plugin allows only one main terminal buffer, so
 you dont have to worry about which terminal you will interact with. This makes
@@ -91,25 +94,19 @@ up.
 " Close the window (the terminal will still run in the background)
 :Oneterm toggle_window
 
-" Open the terminal again, this time occupying 80% of the current window
-:Oneterm toggle_window 0.8
-
-" Close the terminal window again
-:Oneterm toggle_window
-
 " Terminal buffer is unlisted
 :ls
 
 " You can see the terminal buffer this way
 :ls!
 
-" Open a terminal window occupying 30% of the current height
-:Oneterm toggle_window 0.3
+" Open the terminal window again
+:Oneterm toggle_window
 
-" 30% is not enough to see well... Let's increase the terminal height to the maximum
+" Increase the terminal height to the maximum
 :Oneterm toggle_fullheight
 
-" Back to 30%
+" Back initial size
 :Oneterm toggle_fullheight
 
 " When on an error message, jump to the corresponding problematic code

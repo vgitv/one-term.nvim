@@ -201,30 +201,15 @@ The subcommand `toggle_window` does two things:
    split window below the current one
 2. Every other times: toggle a split window displaying the main terminal
 
-This command takes optionally one argument: the relative height of the
-terminal window.
-
-NB: the cursor can be on any window to close the terminal window with
-`:Oneterm`
-
 
 EXAMPLES                                                 *one-term-cmd-examples*
 
 Here are some usage examples.
 >vim
-    " Create a split window and open a new terminal.
-    " When no argument is given to the toggle_window subcommand, it will use
-    " the default `relative_height` that can be set through the setup function
-    " (See CONFIGURATION below).
+    " Create a split window and open a new terminal
     :Oneterm toggle_window
 
     " Close the window (the terminal will still run in the background)
-    :Oneterm toggle_window
-
-    " Open the terminal again, this time occupying 80% of the current window
-    :Oneterm toggle_window 0.8
-
-    " Close the terminal window again
     :Oneterm toggle_window
 
     " Terminal buffer is unlisted
@@ -233,14 +218,13 @@ Here are some usage examples.
     " You can see the terminal buffer this way
     :ls!
 
-    " Open a terminal window occupying 30% of the current height
-    :Oneterm toggle_window 0.3
+    " Open the terminal window again
+    :Oneterm toggle_window
 
-    " 30% is not enough to see well... Let's increase the terminal height to
-    " the maximum
+    " Increase the terminal height to the maximum
     :Oneterm toggle_fullheight
 
-    " Back to 30%
+    " Back to initial size
     :Oneterm toggle_fullheight
 
     " When on an error message, jump to the corresponding problematic code

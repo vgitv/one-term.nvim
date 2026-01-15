@@ -82,8 +82,8 @@ function Terminal:hide()
     end
 end
 
--- FIXME: description
--- FIXME: this is not the setter for the layout member
+---Set the layout given it's index
+---@param layout integer layout index from the enabled_layouts table
 function Terminal:set_layout(layout)
     if layout > #self.options.enabled_layouts then
         print "ERROR - Invalid layout range"

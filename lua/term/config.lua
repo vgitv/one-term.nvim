@@ -21,7 +21,7 @@ M.options = {
     enabled_layouts = {
         "vertical",
         "horizontal",
-    }
+    },
 }
 
 ---Override default options
