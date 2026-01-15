@@ -7,7 +7,7 @@ local utils = require "term.utils"
 local terminal_instance
 
 ---Get or create new terminal instance (singleton design)
-function Terminal:get_instance()
+function Terminal:get_instance(opt)
     if not terminal_instance then
         local terminal = {
             buf = -1, -- needs to be invalid at first hence -1
@@ -16,6 +16,7 @@ function Terminal:get_instance()
             chan = nil, -- terminal window channel
             full_height = false, -- is terminal full height?
             current_layout = nil,
+            options = opt, -- plugin options
         }
 
         self.__index = self
@@ -26,9 +27,8 @@ end
 
 ---Create a new terminal instance or open the buffer in a new window if it already exists
 ---@param relative_height number Relative height of the future window
----@param local_options table Local options to apply to the term buffer
 ---@param enter boolean Enter the window after it's creation
-function Terminal:create_or_open(relative_height, local_options, enter)
+function Terminal:create_or_open(relative_height, enter)
     local height = math.floor(vim.o.lines * relative_height)
     local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
     self.buf = win_prop.buf
@@ -38,7 +38,7 @@ function Terminal:create_or_open(relative_height, local_options, enter)
     if vim.bo[self.buf].buftype ~= "terminal" then
         -- The options should be set first because the presence of 'number' may change the way
         -- the prompt is display (because it changes the terminal width)
-        utils.set_local_options(self.win, local_options)
+        utils.set_local_options(self.win, self.options.local_options)
         vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
         -- Create terminal instance after setting local options
         vim.api.nvim_buf_call(self.buf, vim.cmd.terminal)
@@ -51,11 +51,9 @@ function Terminal:create_or_open(relative_height, local_options, enter)
 end
 
 ---When it's needed to have a terminal window opened but without entering the terminal window
----@param relative_height number Relative height of the future window
----@param local_options table Local options to apply to the term buffer
-function Terminal:ensure_open(relative_height, local_options)
+function Terminal:ensure_open()
     if not vim.api.nvim_win_is_valid(self.win) then
-        self:create_or_open(relative_height, local_options, false)
+        self:create_or_open(self.options.relative_height, false)
     end
 end
 

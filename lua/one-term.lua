@@ -10,7 +10,7 @@ local Terminal = require "term.terminal"
 ---@param subcmd_name string Subcommand name
 ---@param ... any Subcommand parameters
 function M.call_subcommand(subcmd_name, ...)
-    local term = Terminal:get_instance()
+    local term = Terminal:get_instance(config.options)
     builtin[subcmd_name](term, ...)
 end
 

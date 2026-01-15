@@ -20,8 +20,6 @@ M.options = {
     enabled_layouts = {
         "vertical",
         "horizontal",
-        "stack",
-        "floating",
     },
 }
 

@@ -2,15 +2,13 @@
 
 local M = {}
 
-local config = require "term.config"
-
 ---Split current window
 ---@param relative_height number Relative height of the future window
 function M.toggle_window(term, relative_height)
-    relative_height = relative_height or config.options.relative_height
+    relative_height = relative_height or term.options.relative_height
     if not vim.api.nvim_win_is_valid(term.win) then
-        term:create_or_open(relative_height, config.options.local_options, true)
-        if config.options.startinsert then
+        term:create_or_open(relative_height, true)
+        if term.options.startinsert then
             vim.cmd.startinsert()
         end
     else
@@ -35,7 +33,7 @@ end
 
 ---Send line under cursor into the terminal
 function M.send_current_line(term)
-    term:ensure_open(config.options.relative_height, config.options.local_options)
+    term:ensure_open()
     local current_line = vim.api.nvim_get_current_line()
     -- trim line
     local exec_line = current_line:gsub("^%s+", ""):gsub("%s+$", "")
@@ -47,7 +45,7 @@ end
 
 ---Send visually selected lines to the terminal
 function M.send_visual_lines(term)
-    term:ensure_open(config.options.relative_height, config.options.local_options)
+    term:ensure_open()
     local start_line = vim.fn.getpos("'<")[2]
     local end_line = vim.fn.getpos("'>")[2]
     local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
@@ -61,7 +59,7 @@ end
 
 ---Send visual selection
 function M.send_visual_selection(term)
-    term:ensure_open(config.options.relative_height, config.options.local_options)
+    term:ensure_open()
     local start_pos = vim.fn.getpos "'<"
     local end_pos = vim.fn.getpos "'>"
     local start_row, start_col = unpack(start_pos, 2, 3)
@@ -83,7 +81,7 @@ function M.jump(term)
         local current_line = vim.api.nvim_get_current_line()
         local filepath = nil
         local linenumber = nil
-        for _, pattern in pairs(config.options.errorformat) do
+        for _, pattern in pairs(term.options.errorformat) do
             filepath, linenumber = string.match(current_line, pattern)
             if filepath and linenumber then
                 break
@@ -111,7 +109,7 @@ function M.run_previous(term)
         return
     end
 
-    term:ensure_open(config.options.relative_height, config.options.local_options)
+    term:ensure_open()
 
     -- Send Ctrl-p signal to the terminal
     term:exec "\x10"
@@ -172,7 +170,7 @@ end
 ---@param ... any Command line
 function M.run(term, ...)
     local cmd = table.concat({ ... }, " ")
-    term:ensure_open(config.options.relative_height, config.options.local_options)
+    term:ensure_open()
     term:exec(cmd)
 end
 
@@ -182,7 +180,7 @@ function M.launch(term, name)
     name = name or "default"
     local launch_config = dofile ".nvim/launch.lua"
     local cmd = table.concat(launch_config.configurations[name]["cmd"], " ")
-    term:ensure_open(config.options.relative_height, config.options.local_options)
+    term:ensure_open()
     term:exec(cmd)
 end
 
