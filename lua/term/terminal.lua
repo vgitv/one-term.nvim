@@ -1,5 +1,14 @@
 -- Terminal class-like table
 
+---@class Terminal
+---@field options table Plugin options
+---@field buf integer Terminal buffer id
+---@field win integer Terminal window id
+---@field height integer Terminal height in lines
+---@field width integer Terminal width in columns
+---@field chan integer Terminal window channel
+---@field full_height boolean
+---@field layout integer Layout id
 local Terminal = {}
 
 local utils = require "term.utils"

@@ -3,6 +3,7 @@
 local M = {}
 
 ---Split current window
+---@param term Terminal
 function M.toggle_window(term)
     if not vim.api.nvim_win_is_valid(term.win) then
         term:create_or_open(true)
@@ -16,6 +17,7 @@ end
 
 -- FIXME: no sense for horizontal layout, change with a stacked window (floating)
 ---Make the terminal window full height
+---@param term Terminal
 function M.toggle_fullheight(term)
     if vim.api.nvim_win_is_valid(term.win) then
         if term.full_height then
@@ -31,6 +33,7 @@ function M.toggle_fullheight(term)
 end
 
 ---Send line under cursor into the terminal
+---@param term Terminal
 function M.send_current_line(term)
     term:ensure_open()
     local current_line = vim.api.nvim_get_current_line()
@@ -43,6 +46,7 @@ function M.send_current_line(term)
 end
 
 ---Send visually selected lines to the terminal
+---@param term Terminal
 function M.send_visual_lines(term)
     term:ensure_open()
     local start_line = vim.fn.getpos("'<")[2]
@@ -57,6 +61,7 @@ function M.send_visual_lines(term)
 end
 
 ---Send visual selection
+---@param term Terminal
 function M.send_visual_selection(term)
     term:ensure_open()
     local start_pos = vim.fn.getpos "'<"
@@ -75,6 +80,7 @@ function M.send_visual_selection(term)
 end
 
 ---Jump to error location
+---@param term Terminal
 function M.jump(term)
     if vim.api.nvim_get_current_win() == term.win then
         local current_line = vim.api.nvim_get_current_line()
@@ -100,6 +106,7 @@ function M.jump(term)
 end
 
 ---Run previous command without leaving buffer
+---@param term Terminal
 function M.run_previous(term)
     if not vim.api.nvim_buf_is_valid(term.buf) then
         -- If the main terminal doesnt exist, the previous command has good chances to be a nvim command!
@@ -116,6 +123,7 @@ end
 
 -- TODO: use a method to know if the terminal exists
 ---Clear terminal
+---@param term Terminal
 function M.clear(term)
     if vim.api.nvim_win_is_valid(term.win) then
         -- Send Ctrl-l signal to the terminal
@@ -126,6 +134,7 @@ function M.clear(term)
 end
 
 ---Kill currently running command
+---@param term Terminal
 function M.kill(term)
     if vim.api.nvim_win_is_valid(term.win) then
         -- Send Ctrl-c signal to the terminal
@@ -136,6 +145,7 @@ function M.kill(term)
 end
 
 ---Exit terminal
+---@param term Terminal
 function M.exit(term)
     if vim.api.nvim_buf_is_valid(term.buf) then
         -- Send Ctrl-d signal to the terminal
@@ -147,6 +157,7 @@ function M.exit(term)
 end
 
 ---Resize terminal window
+---@param term Terminal
 ---@param mouvement string Mouvement for window resizing like +5 or -2 for instance
 function M.resize(term, mouvement)
     if vim.api.nvim_win_is_valid(term.win) then
@@ -167,6 +178,7 @@ function M.resize(term, mouvement)
 end
 
 ---Run arbitrary command
+---@param term Terminal
 ---@param ... any Command line
 function M.run(term, ...)
     local cmd = table.concat({ ... }, " ")
@@ -175,6 +187,7 @@ function M.run(term, ...)
 end
 
 ---Launch commands from a .nvim/launch.lua config file
+---@param term Terminal
 ---@param name string configuration name to launch
 function M.launch(term, name)
     name = name or "default"
@@ -184,6 +197,8 @@ function M.launch(term, name)
     term:exec(cmd)
 end
 
+---Cycle through layouts
+---@param term Terminal
 function M.next_layout(term)
     term:set_layout(term.layout % #term.options.enabled_layouts + 1)
 end
