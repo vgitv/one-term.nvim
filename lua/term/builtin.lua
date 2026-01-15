@@ -2,6 +2,7 @@
 
 local M = {}
 
+-- FIXME: doc breaking change
 ---Split current window
 function M.toggle_window(term)
     if not vim.api.nvim_win_is_valid(term.win) then
@@ -14,6 +15,7 @@ function M.toggle_window(term)
     end
 end
 
+-- FIXME: no sense for horizontal layout, change with a stacked window (floating)
 ---Make the terminal window full height
 function M.toggle_fullheight(term)
     if vim.api.nvim_win_is_valid(term.win) then

@@ -74,6 +74,8 @@ function Terminal:exec(script)
     utils.scroll_down(self.win)
 end
 
+-- FIXME: description
+-- FIXME: this is not the setter for the layout member
 function Terminal:set_layout(layout)
     if layout > #self.options.enabled_layouts then
         print "ERROR - Invalid layout range"
