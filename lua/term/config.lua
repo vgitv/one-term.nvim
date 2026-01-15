@@ -4,6 +4,7 @@ M.options = {
     bg_color_factor = 0.75,
     startinsert = false,
     relative_height = 0.35,
+    relative_width = 0.45,
     local_options = {
         number = false,
         relativenumber = false,

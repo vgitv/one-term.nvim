@@ -182,4 +182,8 @@ function M.launch(term, name)
     term:exec(cmd)
 end
 
+function M.next_layout(term)
+    print ""
+end
+
 return M

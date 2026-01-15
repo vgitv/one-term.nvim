@@ -14,6 +14,7 @@ function Terminal:get_instance(opt)
             buf = -1, -- needs to be invalid at first hence -1
             win = -1, -- needs to be invalid at first hence -1
             height = nil, -- terminal window initial height
+            width = nil,
             chan = nil, -- terminal window channel
             full_height = false, -- is terminal full height?
             layout = opt.enabled_layouts[1], -- default is the first enabled layout
@@ -26,14 +27,23 @@ function Terminal:get_instance(opt)
 end
 
 ---Create a new terminal instance or open the buffer in a new window if it already exists
----@param relative_height number Relative height of the future window
 ---@param enter boolean Enter the window after it's creation
 function Terminal:create_or_open(enter)
-    local height = math.floor(vim.o.lines * self.options.relative_height)
-    local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
-    self.buf = win_prop.buf
-    self.win = win_prop.win
-    self.height = win_prop.height
+    if self.layout == "vertical" then
+        local height = math.floor(vim.o.lines * self.options.relative_height)
+        local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
+        self.buf = win_prop.buf
+        self.win = win_prop.win
+        self.height = win_prop.height
+    elseif self.layout == "horizontal" then
+        local width = math.floor(vim.o.columns * self.options.relative_width)
+        local win_prop = utils.create_window_right { width = width, buf = self.buf, enter = enter }
+        self.buf = win_prop.buf
+        self.win = win_prop.win
+        self.width = win_prop.width
+    else
+        print("ERROR, unknown layout " .. self.layout)
+    end
 
     if vim.bo[self.buf].buftype ~= "terminal" then
         -- The options should be set first because the presence of 'number' may change the way
@@ -53,7 +63,7 @@ end
 ---When it's needed to have a terminal window opened but without entering the terminal window
 function Terminal:ensure_open()
     if not vim.api.nvim_win_is_valid(self.win) then
-        self:create_or_open(self.options.relative_height, false)
+        self:create_or_open(false)
     end
 end
 
@@ -62,6 +72,14 @@ end
 function Terminal:exec(script)
     vim.api.nvim_chan_send(self.chan, script .. "\x0d")
     utils.scroll_down(self.win)
+end
+
+function Terminal:set_layout(name)
+    if vim.api.nvim_win_is_valid(self.win) then
+        vim.api.nvim_win_hide(self.win)
+    end
+    self.layout = name
+    self:ensure_open()
 end
 
 return Terminal

@@ -11,6 +11,14 @@ function M.set_local_options(win, opts)
     end
 end
 
+local function get_buf(buf)
+    if vim.api.nvim_buf_is_valid(buf) then
+        return buf
+    else
+        return vim.api.nvim_create_buf(false, true)
+    end
+end
+
 ---Create a split window below the current one
 ---@param opts table Options for the window creation
 function M.create_window_below(opts)
@@ -20,12 +28,7 @@ function M.create_window_below(opts)
     local height = opts.height or math.floor(vim.o.lines * 0.5)
 
     -- Get or create new buffer
-    local buf = nil
-    if vim.api.nvim_buf_is_valid(opts.buf) then
-        buf = opts.buf
-    else
-        buf = vim.api.nvim_create_buf(false, true)
-    end
+    local buf = get_buf(opts.buf)
 
     -- Define window configuration
     local win_config = {
@@ -38,6 +41,28 @@ function M.create_window_below(opts)
     local win = vim.api.nvim_open_win(buf, enter, win_config)
 
     return { buf = buf, win = win, height = height }
+end
+
+function M.create_window_right(opts)
+    opts = opts or {}
+
+    local enter = opts.enter or false
+    local width = opts.width or math.floor(vim.o.columns * 0.5)
+
+    -- Get or create new buffer
+    local buf = get_buf(opts.buf)
+
+    -- Define window configuration
+    local win_config = {
+        split = "right",
+        win = -1,
+        width = width,
+    }
+
+    -- Open window
+    local win = vim.api.nvim_open_win(buf, enter, win_config)
+
+    return { buf = buf, win = win, width = width }
 end
 
 ---Scroll to the bottom of the buffer
