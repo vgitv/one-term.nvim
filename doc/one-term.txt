@@ -15,7 +15,7 @@ Commands ........................ |one-term-cmd|
   send_current_line ............. |one-term-cmd-send_current_line|
   send_visual_lines ............. |one-term-cmd-send_visual_lines|
   send_visual_selection ......... |one-term-cmd-send_visual_selection|
-  toggle_fullheight ............. |one-term-cmd-toggle_fullheight|
+  toggle_fullscreen ............. |one-term-cmd-toggle_fullscreen|
   toggle_window ................. |one-term-cmd-toggle_window|
 Examples ........................ |one-term-cmd-examples|
 Configuration ................... |one-term-configuration|
@@ -183,13 +183,10 @@ does not exist yet. If the terminal buffer exists but it's window is closed,
 open it.
 
 
-SUBCOMMAND TOGGLE_FULLHEIGHT                    *one-term-cmd-toggle_fullheight*
+SUBCOMMAND TOGGLE_FULLSCREEN                    *one-term-cmd-toggle_fullscreen*
 
-Allow the user to toggle the terminal height when it's window is displayed. It
-will resize the terminal window in such a way that it will occupy the maximum
-height (leaving only one line for the top window). Note that the height is
-relative to the whole neovim height (vim.o.lines) and not the height of the
-current window.
+Allow the user to temporarily switch to a full screen terminal when it's window
+is displayed.
 
 
 SUBCOMMAND TOGGLE_WINDOW                            *one-term-cmd-toggle_window*
@@ -221,11 +218,11 @@ Here are some usage examples.
     " Open the terminal window again
     :Oneterm toggle_window
 
-    " Increase the terminal height to the maximum
-    :Oneterm toggle_fullheight
+    " Full screen terminal
+    :Oneterm toggle_fullscreen
 
     " Back to initial size
-    :Oneterm toggle_fullheight
+    :Oneterm toggle_fullscreen
 
     " When on an error message, jump to the corresponding problematic code
     :Oneterm jump

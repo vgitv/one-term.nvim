@@ -5,10 +5,10 @@
 ---@field buf integer Terminal buffer id
 ---@field win integer Terminal window id
 ---@field chan integer Terminal window channel
----@field full_height boolean
+---@field fullscreen_win integer
 ---@field layout integer Layout id
----@field height integer
----@field width integer
+---@field height integer Terminal height
+---@field width integer Terminal width
 local Terminal = {}
 
 local utils = require "term.utils"
@@ -25,7 +25,7 @@ function Terminal:get_instance(opt)
             buf = -1, -- needs to be invalid at first hence -1
             win = -1, -- needs to be invalid at first hence -1
             chan = nil, -- terminal window channel
-            full_height = false, -- is terminal full height?
+            fullscreen_win = -1,
             layout = 1, -- default is the first enabled layout
             layout_name = default_layout,
             height = math.floor(vim.o.lines * (opt[default_layout].relative_height or 0)),
@@ -60,7 +60,6 @@ function Terminal:create_or_open(enter)
     end
 
     self.chan = vim.bo[self.buf].channel
-    self.full_height = false
 end
 
 ---When it's needed to have a terminal window opened
@@ -109,6 +108,25 @@ function Terminal:set_layout(layout)
     self.width = math.floor(vim.o.columns * (self.options[self.layout_name].relative_width or 0))
 
     self:ensure_open()
+end
+
+---Is the terminal fullscreen?
+---@return boolean
+function Terminal:is_fullscreen()
+    return vim.api.nvim_win_is_valid(self.fullscreen_win)
+end
+
+---Activate fullscreen mode
+function Terminal:activate_fullscreen()
+    self:hide()
+    self.buf, self.win = utils.create_window["floating"] {
+        height = vim.o.lines - 3, -- for window border
+        width = vim.o.columns,
+        buf = self.buf,
+        enter = true,
+    }
+    -- HACK: if the floating window is closed using :q instead of calling the toggle_fullscreen
+    self.fullscreen_win = self.win
 end
 
 return Terminal

@@ -71,7 +71,7 @@ informations.
 | `send_current_line`     | Send current line to the terminal                  |
 | `send_visual_lines`     | Send visual lines to the terminal                  |
 | `send_visual_selection` | Send visual selection to the terminal              |
-| `toggle_fullheight`     | Toggle terminal full height                        |
+| `toggle_fullscreen`     | Toggle terminal full screen                        |
 | `toggle_window`         | Toggle terminal window                             |
 
 
@@ -103,11 +103,11 @@ up.
 " Open the terminal window again
 :Oneterm toggle_window
 
-" Increase the terminal height to the maximum
-:Oneterm toggle_fullheight
+" Full screen terminal
+:Oneterm toggle_fullscreen
 
-" Back initial size
-:Oneterm toggle_fullheight
+" Back to initial size
+:Oneterm toggle_fullscreen
 
 " When on an error message, jump to the corresponding problematic code
 :Oneterm jump

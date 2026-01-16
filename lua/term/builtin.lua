@@ -15,17 +15,16 @@ function M.toggle_window(term)
     end
 end
 
--- FIXME: no sense for horizontal layout, change with a stacked window (floating)
----Make the terminal window full height
+---Toggle terminal fullscreen
 ---@param term Terminal
-function M.toggle_fullheight(term)
+function M.toggle_fullscreen(term)
     if vim.api.nvim_win_is_valid(term.win) then
-        if term.full_height then
-            vim.api.nvim_win_set_height(term.win, term.height)
-            term.full_height = false
+        if term:is_fullscreen() then
+            -- Restore current layout
+            term:set_layout(term.layout)
         else
-            vim.api.nvim_win_set_height(term.win, vim.o.lines)
-            term.full_height = true
+            -- Fullscreen
+            term:activate_fullscreen()
         end
     else
         print "The terminal window must be open to run this command"

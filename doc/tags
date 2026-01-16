@@ -13,7 +13,7 @@ one-term-cmd-run_previous	one-term.txt	/*one-term-cmd-run_previous*
 one-term-cmd-send_current_line	one-term.txt	/*one-term-cmd-send_current_line*
 one-term-cmd-send_visual_lines	one-term.txt	/*one-term-cmd-send_visual_lines*
 one-term-cmd-send_visual_selection	one-term.txt	/*one-term-cmd-send_visual_selection*
-one-term-cmd-toggle_fullheight	one-term.txt	/*one-term-cmd-toggle_fullheight*
+one-term-cmd-toggle_fullscreen	one-term.txt	/*one-term-cmd-toggle_fullscreen*
 one-term-cmd-toggle_window	one-term.txt	/*one-term-cmd-toggle_window*
 one-term-configuration	one-term.txt	/*one-term-configuration*
 one-term-contents	one-term.txt	/*one-term-contents*
