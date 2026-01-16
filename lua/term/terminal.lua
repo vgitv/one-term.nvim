@@ -7,6 +7,8 @@
 ---@field chan integer Terminal window channel
 ---@field full_height boolean
 ---@field layout integer Layout id
+---@field height integer
+---@field width integer
 local Terminal = {}
 
 local utils = require "term.utils"
@@ -16,6 +18,8 @@ local terminal_instance
 ---Get or create new terminal instance (singleton design)
 function Terminal:get_instance(opt)
     if not terminal_instance then
+        local default_layout = opt.enabled_layouts[1]
+
         local terminal = {
             options = opt, -- plugin options
             buf = -1, -- needs to be invalid at first hence -1
@@ -23,6 +27,9 @@ function Terminal:get_instance(opt)
             chan = nil, -- terminal window channel
             full_height = false, -- is terminal full height?
             layout = 1, -- default is the first enabled layout
+            layout_name = default_layout,
+            height = math.floor(vim.o.lines * (opt[default_layout].relative_height or 0)),
+            width = math.floor(vim.o.lines * (opt[default_layout].relative_width or 0)),
         }
 
         self.__index = self
@@ -34,20 +41,12 @@ end
 ---Create a new terminal instance or open the buffer in a new window if it already exists
 ---@param enter boolean Enter the window after it's creation
 function Terminal:create_or_open(enter)
-    if self.options.enabled_layouts[self.layout] == "vertical" then
-        local height = math.floor(vim.o.lines * self.options.relative_height)
-        self.buf, self.win = utils.create_window_below { height = height, buf = self.buf, enter = enter }
-    elseif self.options.enabled_layouts[self.layout] == "horizontal" then
-        local width = math.floor(vim.o.columns * self.options.relative_width)
-        self.buf, self.win = utils.create_window_right { width = width, buf = self.buf, enter = enter }
-    elseif self.options.enabled_layouts[self.layout] == "floating" then
-        local height = math.floor(vim.o.lines * self.options.floating_relative_height)
-        local width = math.floor(vim.o.columns * self.options.floating_relative_width)
-        self.buf, self.win =
-            utils.create_window_floating { height = height, width = width, buf = self.buf, enter = enter }
-    else
-        print("ERROR, unknown layout " .. self.layout)
-    end
+    self.buf, self.win = utils.create_window[self.layout_name] {
+        height = self.height,
+        width = self.width,
+        buf = self.buf,
+        enter = enter,
+    }
 
     if vim.bo[self.buf].buftype ~= "terminal" then
         -- The options should be set first because the presence of 'number' may change the way
@@ -96,6 +95,9 @@ function Terminal:set_layout(layout)
 
     self:hide()
     self.layout = layout
+    self.layout_name = self.options.enabled_layouts[layout]
+    self.height = math.floor(vim.o.lines * (self.options[self.layout_name].relative_height or 0))
+    self.width = math.floor(vim.o.columns * (self.options[self.layout_name].relative_width or 0))
     self:ensure_open()
 end
 

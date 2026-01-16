@@ -155,19 +155,35 @@ nvim configuration. Here are the default options:
 
 ```lua
 require('one-term').setup {
-    bg_color_factor = 0.75,  -- factor to compute terminal bg color
-    startinsert = false,  -- start insert mode at term opening
-    relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+    bg_color_factor = 0.75,
+    startinsert = false,
     local_options = {
-        number = false,  -- no number in main terminal window
-        relativenumber = false,  -- no relative number in main terminal window
-        cursorline = false,  -- cursor line in main terminal window
-        colorcolumn = '',  -- color column
+        number = false,
+        relativenumber = false,
+        cursorline = false,
+        colorcolumn = "",
+        scrolloff = 0,
     },
+    -- regex patterns used to jump to the error location
     errorformat = {
-        '([^ :]*):([0-9]):',  -- lua / cpp
-        '^ *File "(.*)", line ([0-9]+)',  -- python
-        '^(.*): line ([0-9]+)',  -- bash
+        "([^ :]*):([0-9]):", -- lua / cpp
+        '^ *File "(.*)", line ([0-9]+)', -- python
+        "^(.*): line ([0-9]+)", -- bash
+    },
+    enabled_layouts = {
+        "vertical",
+        "horizontal",
+        "floating",
+    },
+    vertical = {
+        relative_height = 0.35,
+    },
+    horizontal = {
+        relative_width = 0.5,
+    },
+    floating = {
+        relative_height = 0.7,
+        relative_width = 0.7,
     },
 }
 ```
@@ -199,19 +215,35 @@ add lazy loading options and keymaps.
 {
     'vgitv/one-term.nvim',
     opts = {
-        bg_color_factor = 0.75,  -- factor to compute terminal bg color
-        startinsert = false,  -- start insert mode at term opening
-        relative_height = 0.35,  -- relative height of the terminal window (beetween 0-1)
+        bg_color_factor = 0.75,
+        startinsert = false,
         local_options = {
-            number = false,  -- no number in main terminal window
-            relativenumber = false,  -- no relative number in main terminal window
-            cursorline = false,  -- cursor line in main terminal window
-            colorcolumn = '',  -- color column
+            number = false,
+            relativenumber = false,
+            cursorline = false,
+            colorcolumn = "",
+            scrolloff = 0,
         },
+        -- regex patterns used to jump to the error location
         errorformat = {
-            '([^ :]*):([0-9]):', -- lua
-            '^ *File "(.*)", line ([0-9]+)',  -- python
-            '^(.*): line ([0-9]+)',  -- bash
+            "([^ :]*):([0-9]):", -- lua / cpp
+            '^ *File "(.*)", line ([0-9]+)', -- python
+            "^(.*): line ([0-9]+)", -- bash
+        },
+        enabled_layouts = {
+            "vertical",
+            "horizontal",
+            "floating",
+        },
+        vertical = {
+            relative_height = 0.35,
+        },
+        horizontal = {
+            relative_width = 0.5,
+        },
+        floating = {
+            relative_height = 0.7,
+            relative_width = 0.7,
         },
     },
 }

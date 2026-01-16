@@ -3,10 +3,6 @@ local M = {}
 M.options = {
     bg_color_factor = 0.75,
     startinsert = false,
-    relative_height = 0.35,
-    relative_width = 0.5,
-    floating_relative_height = 0.8,
-    floating_relative_width = 0.8,
     local_options = {
         number = false,
         relativenumber = false,
@@ -24,6 +20,16 @@ M.options = {
         "vertical",
         "horizontal",
         "floating",
+    },
+    vertical = {
+        relative_height = 0.35,
+    },
+    horizontal = {
+        relative_width = 0.5,
+    },
+    floating = {
+        relative_height = 0.7,
+        relative_width = 0.7,
     },
 }
 

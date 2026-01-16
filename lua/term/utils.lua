@@ -1,6 +1,7 @@
 -- Utils functions
 
 local M = {}
+M.create_window = {}
 
 ---Set window local options given a window id
 ---@param win integer Window id
@@ -11,6 +12,7 @@ function M.set_local_options(win, opts)
     end
 end
 
+---Get or create new buffer
 local function get_buf(buf)
     if vim.api.nvim_buf_is_valid(buf) then
         return buf
@@ -21,12 +23,10 @@ end
 
 ---Create a split window below
 ---@param opts table Options for the window creation
-function M.create_window_below(opts)
+function M.create_window.vertical(opts)
     opts = opts or {}
 
     local enter = opts.enter or false
-
-    -- Get or create new buffer
     local buf = get_buf(opts.buf)
 
     -- Define window configuration
@@ -44,12 +44,10 @@ end
 
 ---Create a split window to the right
 ---@param opts table Options for the window creation
-function M.create_window_right(opts)
+function M.create_window.horizontal(opts)
     opts = opts or {}
 
     local enter = opts.enter or false
-
-    -- Get or create new buffer
     local buf = get_buf(opts.buf)
 
     -- Define window configuration
@@ -67,17 +65,15 @@ end
 
 ---Create a floating window
 ---@param opts table Options for the window creation
-function M.create_window_floating(opts)
+function M.create_window.floating(opts)
     opts = opts or {}
 
     local enter = opts.enter or false
+    local buf = get_buf(opts.buf)
 
     -- Calculate the position to center the window
     local col = math.floor((vim.o.columns - opts.width) / 2)
     local row = math.floor((vim.o.lines - opts.height) / 2)
-
-    -- Get or create new buffer
-    local buf = get_buf(opts.buf)
 
     -- Define window configuration
     local win_config = {
