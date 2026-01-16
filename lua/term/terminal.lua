@@ -77,7 +77,6 @@ function Terminal:ensure_open()
 end
 
 -- TODO: make the return optional and use this method in the clear / kill commands
--- TODO: ensure open inside the exec
 ---Execute script inside the terminal
 ---@param script string The script (could be multiline)
 function Terminal:exec(script)
