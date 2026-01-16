@@ -34,23 +34,23 @@ end
 ---Send line under cursor into the terminal
 ---@param term Terminal
 function M.send_current_line(term)
-    term:ensure_open()
     local current_line = vim.api.nvim_get_current_line()
     -- trim line
     local exec_line = current_line:gsub("^%s+", ""):gsub("%s+$", "")
     if exec_line == "" then
         return
     end
+    term:ensure_open()
     term:exec(exec_line)
 end
 
 ---Send visually selected lines to the terminal
 ---@param term Terminal
 function M.send_visual_lines(term)
-    term:ensure_open()
     local start_line = vim.fn.getpos("'<")[2]
     local end_line = vim.fn.getpos("'>")[2]
     local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+    term:ensure_open()
     for _, line in ipairs(lines) do
         local exec_line = line:gsub("^%s+", ""):gsub("%s+$", "")
         -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
@@ -62,7 +62,6 @@ end
 ---Send visual selection
 ---@param term Terminal
 function M.send_visual_selection(term)
-    term:ensure_open()
     local start_pos = vim.fn.getpos "'<"
     local end_pos = vim.fn.getpos "'>"
     local start_row, start_col = unpack(start_pos, 2, 3)
@@ -70,6 +69,7 @@ function M.send_visual_selection(term)
     -- Why -1? Because the doc says:
     -- Indexing is zero-based. Row indices are end-inclusive, and column indices are end-exclusive.
     local text = vim.api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col, {})
+    term:ensure_open()
     for _, line in ipairs(text) do
         local exec_line = line:gsub("^%s+", ""):gsub("%s+$", "")
         -- It is important here to dont skip blank lines for languages that use indentation to spot end of function
