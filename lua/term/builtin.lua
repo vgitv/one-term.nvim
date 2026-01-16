@@ -156,6 +156,7 @@ function M.exit(term)
     end
 end
 
+-- FIXME: should work in all layouts
 ---Resize terminal window
 ---@param term Terminal
 ---@param mouvement string Mouvement for window resizing like +5 or -2 for instance

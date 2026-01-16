@@ -5,6 +5,8 @@ M.options = {
     startinsert = false,
     relative_height = 0.35,
     relative_width = 0.5,
+    floating_relative_height = 0.8,
+    floating_relative_width = 0.8,
     local_options = {
         number = false,
         relativenumber = false,
@@ -21,6 +23,7 @@ M.options = {
     enabled_layouts = {
         "vertical",
         "horizontal",
+        "floating",
     },
 }
 

@@ -50,6 +50,14 @@ function Terminal:create_or_open(enter)
         self.buf = win_prop.buf
         self.win = win_prop.win
         self.width = win_prop.width
+    elseif self.options.enabled_layouts[self.layout] == "floating" then
+        local height = math.floor(vim.o.lines * self.options.floating_relative_height)
+        local width = math.floor(vim.o.columns * self.options.floating_relative_width)
+        local win_prop = utils.create_window_floating { height = height, width = width, buf = self.buf, enter = enter }
+        self.buf = win_prop.buf
+        self.win = win_prop.win
+        self.height = win_prop.height
+        self.width = win_prop.width
     else
         print("ERROR, unknown layout " .. self.layout)
     end

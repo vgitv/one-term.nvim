@@ -65,6 +65,37 @@ function M.create_window_right(opts)
     return { buf = buf, win = win, width = width }
 end
 
+function M.create_window_floating(opts)
+    opts = opts or {}
+
+    local enter = opts.enter or false
+    local height = opts.height or math.floor(vim.o.lines * 0.5)
+    local width = opts.width or math.floor(vim.o.columns * 0.5)
+
+    -- Calculate the position to center the window
+    local col = math.floor((vim.o.columns - width) / 2)
+    local row = math.floor((vim.o.lines - height) / 2)
+
+    -- Get or create new buffer
+    local buf = get_buf(opts.buf)
+
+    -- Define window configuration
+    local win_config = {
+        relative = "editor",
+        height = height,
+        width = width,
+        col = col,
+        row = row,
+        style = "minimal",
+        border = "rounded",
+    }
+
+    -- Open window
+    local win = vim.api.nvim_open_win(buf, enter, win_config)
+
+    return { buf = buf, win = win, width = width, height = height }
+end
+
 ---Scroll to the bottom of the buffer
 ---@param win integer Window id
 function M.scroll_down(win)
