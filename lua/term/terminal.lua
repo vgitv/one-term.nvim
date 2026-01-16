@@ -63,10 +63,17 @@ function Terminal:create_or_open(enter)
     self.full_height = false
 end
 
----When it's needed to have a terminal window opened but without entering the terminal window
+---When it's needed to have a terminal window opened
 function Terminal:ensure_open()
+    local enter
+    -- Enter term window only for floating layout because it makes no sense to keep the cursor in the background window
+    if self.layout_name == "floating" then
+        enter = true
+    else
+        enter = false
+    end
     if not vim.api.nvim_win_is_valid(self.win) then
-        self:create_or_open(false)
+        self:create_or_open(enter)
     end
 end
 
@@ -101,7 +108,6 @@ function Terminal:set_layout(layout)
     self.height = math.floor(vim.o.lines * (self.options[self.layout_name].relative_height or 0))
     self.width = math.floor(vim.o.columns * (self.options[self.layout_name].relative_width or 0))
 
-    -- FIXME: enter terminal only for floating layout
     self:ensure_open()
 end
 
