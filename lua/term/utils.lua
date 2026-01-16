@@ -19,13 +19,12 @@ local function get_buf(buf)
     end
 end
 
----Create a split window below the current one
+---Create a split window below
 ---@param opts table Options for the window creation
 function M.create_window_below(opts)
     opts = opts or {}
 
     local enter = opts.enter or false
-    local height = opts.height or math.floor(vim.o.lines * 0.5)
 
     -- Get or create new buffer
     local buf = get_buf(opts.buf)
@@ -34,20 +33,21 @@ function M.create_window_below(opts)
     local win_config = {
         split = "below",
         win = -1,
-        height = height,
+        height = opts.height,
     }
 
     -- Open window
     local win = vim.api.nvim_open_win(buf, enter, win_config)
 
-    return { buf = buf, win = win, height = height }
+    return buf, win
 end
 
+---Create a split window to the right
+---@param opts table Options for the window creation
 function M.create_window_right(opts)
     opts = opts or {}
 
     local enter = opts.enter or false
-    local width = opts.width or math.floor(vim.o.columns * 0.5)
 
     -- Get or create new buffer
     local buf = get_buf(opts.buf)
@@ -56,25 +56,25 @@ function M.create_window_right(opts)
     local win_config = {
         split = "right",
         win = -1,
-        width = width,
+        width = opts.width,
     }
 
     -- Open window
     local win = vim.api.nvim_open_win(buf, enter, win_config)
 
-    return { buf = buf, win = win, width = width }
+    return buf, win
 end
 
+---Create a floating window
+---@param opts table Options for the window creation
 function M.create_window_floating(opts)
     opts = opts or {}
 
     local enter = opts.enter or false
-    local height = opts.height or math.floor(vim.o.lines * 0.5)
-    local width = opts.width or math.floor(vim.o.columns * 0.5)
 
     -- Calculate the position to center the window
-    local col = math.floor((vim.o.columns - width) / 2)
-    local row = math.floor((vim.o.lines - height) / 2)
+    local col = math.floor((vim.o.columns - opts.width) / 2)
+    local row = math.floor((vim.o.lines - opts.height) / 2)
 
     -- Get or create new buffer
     local buf = get_buf(opts.buf)
@@ -82,8 +82,8 @@ function M.create_window_floating(opts)
     -- Define window configuration
     local win_config = {
         relative = "editor",
-        height = height,
-        width = width,
+        height = opts.height,
+        width = opts.width,
         col = col,
         row = row,
         style = "minimal",
@@ -93,7 +93,7 @@ function M.create_window_floating(opts)
     -- Open window
     local win = vim.api.nvim_open_win(buf, enter, win_config)
 
-    return { buf = buf, win = win, width = width, height = height }
+    return buf, win
 end
 
 ---Scroll to the bottom of the buffer

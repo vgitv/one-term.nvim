@@ -4,8 +4,6 @@
 ---@field options table Plugin options
 ---@field buf integer Terminal buffer id
 ---@field win integer Terminal window id
----@field height integer Terminal height in lines
----@field width integer Terminal width in columns
 ---@field chan integer Terminal window channel
 ---@field full_height boolean
 ---@field layout integer Layout id
@@ -22,8 +20,6 @@ function Terminal:get_instance(opt)
             options = opt, -- plugin options
             buf = -1, -- needs to be invalid at first hence -1
             win = -1, -- needs to be invalid at first hence -1
-            height = nil, -- terminal window initial height
-            width = nil,
             chan = nil, -- terminal window channel
             full_height = false, -- is terminal full height?
             layout = 1, -- default is the first enabled layout
@@ -40,24 +36,15 @@ end
 function Terminal:create_or_open(enter)
     if self.options.enabled_layouts[self.layout] == "vertical" then
         local height = math.floor(vim.o.lines * self.options.relative_height)
-        local win_prop = utils.create_window_below { height = height, buf = self.buf, enter = enter }
-        self.buf = win_prop.buf
-        self.win = win_prop.win
-        self.height = win_prop.height
+        self.buf, self.win = utils.create_window_below { height = height, buf = self.buf, enter = enter }
     elseif self.options.enabled_layouts[self.layout] == "horizontal" then
         local width = math.floor(vim.o.columns * self.options.relative_width)
-        local win_prop = utils.create_window_right { width = width, buf = self.buf, enter = enter }
-        self.buf = win_prop.buf
-        self.win = win_prop.win
-        self.width = win_prop.width
+        self.buf, self.win = utils.create_window_right { width = width, buf = self.buf, enter = enter }
     elseif self.options.enabled_layouts[self.layout] == "floating" then
         local height = math.floor(vim.o.lines * self.options.floating_relative_height)
         local width = math.floor(vim.o.columns * self.options.floating_relative_width)
-        local win_prop = utils.create_window_floating { height = height, width = width, buf = self.buf, enter = enter }
-        self.buf = win_prop.buf
-        self.win = win_prop.win
-        self.height = win_prop.height
-        self.width = win_prop.width
+        self.buf, self.win =
+            utils.create_window_floating { height = height, width = width, buf = self.buf, enter = enter }
     else
         print("ERROR, unknown layout " .. self.layout)
     end
