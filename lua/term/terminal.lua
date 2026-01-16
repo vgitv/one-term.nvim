@@ -96,8 +96,12 @@ function Terminal:set_layout(layout)
     self:hide()
     self.layout = layout
     self.layout_name = self.options.enabled_layouts[layout]
+
+    -- When switching layout, size from the previous layout will not be remembered
     self.height = math.floor(vim.o.lines * (self.options[self.layout_name].relative_height or 0))
     self.width = math.floor(vim.o.columns * (self.options[self.layout_name].relative_width or 0))
+
+    -- FIXME: enter terminal only for floating layout
     self:ensure_open()
 end
 
