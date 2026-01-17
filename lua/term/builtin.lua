@@ -24,7 +24,7 @@ function M.toggle_fullscreen(term)
             term:set_layout(term.layout)
         else
             -- Fullscreen
-            term:activate_fullscreen()
+            term:fullscreen_mode()
         end
     else
         print "The terminal window must be open to run this command"

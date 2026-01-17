@@ -112,17 +112,20 @@ end
 ---Is the terminal fullscreen?
 ---@return boolean
 function Terminal:is_fullscreen()
+    -- Because window ids are uniq accross nvim session, this is a way to know if fullscreen mode is on or off, whether
+    -- the floating window was closed using the toggle_fullscreen function or with a quit command.
     return vim.api.nvim_win_is_valid(self.fullscreen_win)
 end
 
 ---Activate fullscreen mode
-function Terminal:activate_fullscreen()
+function Terminal:fullscreen_mode()
     self:hide()
     self.buf, self.win = utils.create_window["floating"] {
-        height = vim.o.lines - 3, -- for window border
+        height = vim.o.lines,
         width = vim.o.columns,
         buf = self.buf,
         enter = true,
+        border = "none",
     }
     -- HACK: if the floating window is closed using :q instead of calling the toggle_fullscreen
     self.fullscreen_win = self.win

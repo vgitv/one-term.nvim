@@ -69,6 +69,7 @@ function M.create_window.floating(opts)
     opts = opts or {}
 
     local enter = opts.enter or false
+    local border = opts.border or "rounded"
     local buf = get_buf(opts.buf)
 
     -- Calculate the position to center the window
@@ -83,7 +84,7 @@ function M.create_window.floating(opts)
         col = col,
         row = row,
         style = "minimal",
-        border = "rounded",
+        border = border,
     }
 
     -- Open window
