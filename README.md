@@ -71,11 +71,14 @@ informations.
 | `send_current_line`     | Send current line to the terminal                  |
 | `send_visual_lines`     | Send visual lines to the terminal                  |
 | `send_visual_selection` | Send visual selection to the terminal              |
-| `toggle_fullheight`     | Toggle terminal full height                        |
+| `toggle_fullscreen`     | Toggle terminal full screen                        |
 | `toggle_window`         | Toggle terminal window                             |
 
 
 ## Learn by examples
+
+> [!IMPORTANT]
+> This is not a full set of examples, but just a few commands to get started.
 
 Obviously you should define key mappings for all or part of the following
 commands. Remember that this plugin allows only one main terminal buffer, so
@@ -91,26 +94,20 @@ up.
 " Close the window (the terminal will still run in the background)
 :Oneterm toggle_window
 
-" Open the terminal again, this time occupying 80% of the current window
-:Oneterm toggle_window 0.8
-
-" Close the terminal window again
-:Oneterm toggle_window
-
 " Terminal buffer is unlisted
 :ls
 
 " You can see the terminal buffer this way
 :ls!
 
-" Open a terminal window occupying 30% of the current height
-:Oneterm toggle_window 0.3
+" Open the terminal window again
+:Oneterm toggle_window
 
-" 30% is not enough to see well... Let's increase the terminal height to the maximum
-:Oneterm toggle_fullheight
+" Full screen terminal
+:Oneterm toggle_fullscreen
 
-" Back to 30%
-:Oneterm toggle_fullheight
+" Back to initial size
+:Oneterm toggle_fullscreen
 
 " When on an error message, jump to the corresponding problematic code
 :Oneterm jump
@@ -158,19 +155,35 @@ nvim configuration. Here are the default options:
 
 ```lua
 require('one-term').setup {
-    bg_color_factor = 0.75,  -- factor to compute terminal bg color
-    startinsert = false,  -- start insert mode at term opening
-    relative_height = 0.35,  -- relative height of the terminal window (beetween 0 and 1)
+    bg_color_factor = 0.75,
+    startinsert = false,
     local_options = {
-        number = false,  -- no number in main terminal window
-        relativenumber = false,  -- no relative number in main terminal window
-        cursorline = false,  -- cursor line in main terminal window
-        colorcolumn = '',  -- color column
+        number = false,
+        relativenumber = false,
+        cursorline = false,
+        colorcolumn = "",
+        scrolloff = 0,
     },
+    -- regex patterns used to jump to the error location
     errorformat = {
-        '([^ :]*):([0-9]):',  -- lua / cpp
-        '^ *File "(.*)", line ([0-9]+)',  -- python
-        '^(.*): line ([0-9]+)',  -- bash
+        "([^ :]*):([0-9]):", -- lua / cpp
+        '^ *File "(.*)", line ([0-9]+)', -- python
+        "^(.*): line ([0-9]+)", -- bash
+    },
+    enabled_layouts = {
+        "vertical",
+        "horizontal",
+        "floating",
+    },
+    vertical = {
+        relative_height = 0.35,
+    },
+    horizontal = {
+        relative_width = 0.5,
+    },
+    floating = {
+        relative_height = 0.7,
+        relative_width = 0.7,
     },
 }
 ```
@@ -202,19 +215,35 @@ add lazy loading options and keymaps.
 {
     'vgitv/one-term.nvim',
     opts = {
-        bg_color_factor = 0.75,  -- factor to compute terminal bg color
-        startinsert = false,  -- start insert mode at term opening
-        relative_height = 0.35,  -- relative height of the terminal window (beetween 0-1)
+        bg_color_factor = 0.75,
+        startinsert = false,
         local_options = {
-            number = false,  -- no number in main terminal window
-            relativenumber = false,  -- no relative number in main terminal window
-            cursorline = false,  -- cursor line in main terminal window
-            colorcolumn = '',  -- color column
+            number = false,
+            relativenumber = false,
+            cursorline = false,
+            colorcolumn = "",
+            scrolloff = 0,
         },
+        -- regex patterns used to jump to the error location
         errorformat = {
-            '([^ :]*):([0-9]):', -- lua
-            '^ *File "(.*)", line ([0-9]+)',  -- python
-            '^(.*): line ([0-9]+)',  -- bash
+            "([^ :]*):([0-9]):", -- lua / cpp
+            '^ *File "(.*)", line ([0-9]+)', -- python
+            "^(.*): line ([0-9]+)", -- bash
+        },
+        enabled_layouts = {
+            "vertical",
+            "horizontal",
+            "floating",
+        },
+        vertical = {
+            relative_height = 0.35,
+        },
+        horizontal = {
+            relative_width = 0.5,
+        },
+        floating = {
+            relative_height = 0.7,
+            relative_width = 0.7,
         },
     },
 }

@@ -15,7 +15,7 @@ Commands ........................ |one-term-cmd|
   send_current_line ............. |one-term-cmd-send_current_line|
   send_visual_lines ............. |one-term-cmd-send_visual_lines|
   send_visual_selection ......... |one-term-cmd-send_visual_selection|
-  toggle_fullheight ............. |one-term-cmd-toggle_fullheight|
+  toggle_fullscreen ............. |one-term-cmd-toggle_fullscreen|
   toggle_window ................. |one-term-cmd-toggle_window|
 Examples ........................ |one-term-cmd-examples|
 Configuration ................... |one-term-configuration|
@@ -183,13 +183,10 @@ does not exist yet. If the terminal buffer exists but it's window is closed,
 open it.
 
 
-SUBCOMMAND TOGGLE_FULLHEIGHT                    *one-term-cmd-toggle_fullheight*
+SUBCOMMAND TOGGLE_FULLSCREEN                    *one-term-cmd-toggle_fullscreen*
 
-Allow the user to toggle the terminal height when it's window is displayed. It
-will resize the terminal window in such a way that it will occupy the maximum
-height (leaving only one line for the top window). Note that the height is
-relative to the whole neovim height (vim.o.lines) and not the height of the
-current window.
+Allow the user to temporarily switch to a full screen terminal when it's window
+is displayed.
 
 
 SUBCOMMAND TOGGLE_WINDOW                            *one-term-cmd-toggle_window*
@@ -201,30 +198,15 @@ The subcommand `toggle_window` does two things:
    split window below the current one
 2. Every other times: toggle a split window displaying the main terminal
 
-This command takes optionally one argument: the relative height of the
-terminal window.
-
-NB: the cursor can be on any window to close the terminal window with
-`:Oneterm`
-
 
 EXAMPLES                                                 *one-term-cmd-examples*
 
 Here are some usage examples.
 >vim
-    " Create a split window and open a new terminal.
-    " When no argument is given to the toggle_window subcommand, it will use
-    " the default `relative_height` that can be set through the setup function
-    " (See CONFIGURATION below).
+    " Create a split window and open a new terminal
     :Oneterm toggle_window
 
     " Close the window (the terminal will still run in the background)
-    :Oneterm toggle_window
-
-    " Open the terminal again, this time occupying 80% of the current window
-    :Oneterm toggle_window 0.8
-
-    " Close the terminal window again
     :Oneterm toggle_window
 
     " Terminal buffer is unlisted
@@ -233,15 +215,14 @@ Here are some usage examples.
     " You can see the terminal buffer this way
     :ls!
 
-    " Open a terminal window occupying 30% of the current height
-    :Oneterm toggle_window 0.3
+    " Open the terminal window again
+    :Oneterm toggle_window
 
-    " 30% is not enough to see well... Let's increase the terminal height to
-    " the maximum
-    :Oneterm toggle_fullheight
+    " Full screen terminal
+    :Oneterm toggle_fullscreen
 
-    " Back to 30%
-    :Oneterm toggle_fullheight
+    " Back to initial size
+    :Oneterm toggle_fullscreen
 
     " When on an error message, jump to the corresponding problematic code
     :Oneterm jump
@@ -280,7 +261,6 @@ Advanced configuration:
     require('one-term').setup {
         bg_color_factor = 0.75,  -- factor to compute term bg color
         startinsert = false,  -- start insert mode at term opening
-        relative_height = 0.35,  -- relative height of the terminal window
         local_options = {
             number = false,  -- no number in main terminal window
             relativenumber = false,  -- no relative number in main terminal window
@@ -288,10 +268,26 @@ Advanced configuration:
             colorcolumn = '',  -- color column
             scrolloff = 0,  -- scrolloff can be disturbing in terminal window
         },
+        -- regex patterns used to jump to the error location
         errorformat = {
-            '([^ :]*):([0-9]):', -- lua
-            '^ *File "(.*)", line ([0-9]+)',  -- python
-            '^(.*): line ([0-9]+)',  -- bash
+            "([^ :]*):([0-9]):", -- lua / cpp
+            '^ *File "(.*)", line ([0-9]+)', -- python
+            "^(.*): line ([0-9]+)", -- bash
+        },
+        enabled_layouts = {
+            "vertical",
+            "horizontal",
+            "floating",
+        },
+        vertical = {
+            relative_height = 0.35,
+        },
+        horizontal = {
+            relative_width = 0.5,
+        },
+        floating = {
+            relative_height = 0.7,
+            relative_width = 0.7,
         },
     }
 <

@@ -18,7 +18,8 @@ end
 ---@param opts table Main setup options
 function M.setup(opts)
     opts = opts or {}
-    config.setup(opts)
+    -- Override default options by user options
+    config.setup_options(opts)
     -- Init should be inside the setup function because it should run last (if the user calls the setup function)
     require "term.init"
 end
