@@ -1,9 +1,12 @@
 ---
 name: Stylua
 run-name: "Stylua (${{ github.actor }})"
-on:
+
+"on":
   - push
+
 permissions: {}
+
 jobs:
   stylua:
     runs-on: ubuntu-latest
