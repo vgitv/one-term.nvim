@@ -20,7 +20,7 @@ function Terminal:get_instance(opt)
     if not terminal_instance then
         local default_layout = opt.enabled_layouts[1]
 
-        local terminal = {
+        terminal_instance = {
             options = opt, -- plugin options
             buf = -1, -- needs to be invalid at first hence -1
             win = -1, -- needs to be invalid at first hence -1
@@ -32,8 +32,8 @@ function Terminal:get_instance(opt)
             width = math.floor(vim.o.lines * (opt[default_layout].relative_width or 0)),
         }
 
+        setmetatable(terminal_instance, self)
         self.__index = self
-        terminal_instance = setmetatable(terminal, self)
     end
     return terminal_instance
 end

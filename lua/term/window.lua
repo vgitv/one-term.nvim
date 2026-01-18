@@ -8,8 +8,9 @@ function Window:new()
     local window = {
         id = nil,
     }
+    setmetatable(window, self)
     self.__index = self
-    return setmetatable(window, self)
+    return window
 end
 
 return Window
