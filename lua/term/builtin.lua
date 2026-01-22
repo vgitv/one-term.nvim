@@ -161,17 +161,27 @@ end
 ---@param mouvement string Mouvement for window resizing like +5 or -2 for instance
 function M.resize(term, mouvement)
     if vim.api.nvim_win_is_valid(term.win) then
-        local current_height = vim.api.nvim_win_get_height(term.win)
-        local height
-        if string.match(mouvement, "^+[0-9]+$") then
-            height = current_height + tonumber(string.sub(mouvement, 2))
-        elseif string.match(mouvement, "^-[0-9]+$") then
-            height = current_height - tonumber(string.sub(mouvement, 2))
-        else
+        local win_config = vim.api.nvim_win_get_config(term.win)
+        if not string.match(mouvement, "^.[0-9]+$") then
             print "ERROR - Invalid argument"
             return
         end
-        vim.api.nvim_win_set_height(term.win, height)
+
+        print(tonumber(mouvement))
+        if win_config.height then
+            win_config.height = math.min(win_config.height + tonumber(mouvement), vim.o.lines)
+        end
+
+        if win_config.width then
+            win_config.width = math.min(win_config.width + tonumber(mouvement), vim.o.columns)
+        end
+
+        if win_config.col and win_config.row then
+            win_config.col = math.floor((vim.o.columns - win_config.width) / 2)
+            win_config.row = math.floor((vim.o.lines - win_config.height) / 2)
+        end
+
+        vim.api.nvim_win_set_config(term.win, win_config)
     else
         print "The terminal window must be open to run this command"
     end
