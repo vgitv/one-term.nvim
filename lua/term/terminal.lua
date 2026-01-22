@@ -137,14 +137,14 @@ function Terminal:resize(n)
     local win_config = vim.api.nvim_win_get_config(self.win)
 
     if self.layout_name == "vertical" then
-        self.height = math.min(win_config.height + n, vim.o.lines)
+        self.height = math.max(math.min(win_config.height + n, vim.o.lines), 1)
         win_config.height = self.height
-    elseif self.layout_name == "horizontal"then
-        self.width = math.min(win_config.width + n, vim.o.columns)
+    elseif self.layout_name == "horizontal" then
+        self.width = math.max(math.min(win_config.width + n, vim.o.columns), 1)
         win_config.width = self.width
     elseif self.layout_name == "floating" then
-        self.height = math.min(win_config.height + n, vim.o.lines)
-        self.width = math.min(win_config.width + n, vim.o.columns)
+        self.height = math.max(math.min(win_config.height + n, vim.o.lines - 3), 1)
+        self.width = math.max(math.min(win_config.width + n, vim.o.columns), 1)
         win_config.height = self.height
         win_config.width = self.width
         win_config.col = math.floor((vim.o.columns - win_config.width) / 2)
