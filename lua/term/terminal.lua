@@ -7,6 +7,7 @@
 ---@field chan integer Terminal window channel
 ---@field fullscreen_win integer
 ---@field layout integer Layout id
+---@field layout_name string Layout name
 ---@field height integer Terminal height
 ---@field width integer Terminal width
 local Terminal = {}
