@@ -1,6 +1,6 @@
 -- Window class-like table
 
-local utils = require "utils"
+local utils = require "term.utils"
 
 ---@class Window
 ---@field buf integer Buffer id

@@ -12,6 +12,7 @@
 local Terminal = {}
 
 local utils = require "term.utils"
+local Window = require "term.window"
 
 local terminal_instance
 
@@ -30,7 +31,41 @@ function Terminal:get_instance(opt)
             layout_name = default_layout,
             height = math.floor(vim.o.lines * (opt[default_layout].relative_height or 0)),
             width = math.floor(vim.o.lines * (opt[default_layout].relative_width or 0)),
+            windows = {},
+            current_window = nil,
         }
+
+        for i, l in ipairs(opt.enabled_layouts) do
+            if l == "vertical" then
+                terminal_instance[i] = Window:new {
+                    split = "below",
+                    win = -1,
+                    height = math.floor(vim.o.lines * (opt.vertical.relative_height or 0)),
+                }
+            elseif l == "horizontal" then
+                terminal_instance[i] = Window:new {
+                    split = "right",
+                    win = -1,
+                    width = math.floor(vim.o.lines * (opt.horizontal.relative_width or 0)),
+                }
+            elseif l == "floating" then
+                local height = math.floor(vim.o.lines * (opt.floating.relative_height or 0))
+                local width = math.floor(vim.o.lines * (opt.floating.relative_width or 0))
+                terminal_instance[i] = Window:new {
+                    relative = "editor",
+                    height = height,
+                    width = width,
+                    col = math.floor((vim.o.columns - width) / 2),
+                    row = math.floor((vim.o.lines - height) / 2),
+                    style = "minimal",
+                    border = "none",
+                }
+            else
+                print("Error - unknown layout " .. l)
+            end
+        end
+
+        terminal_instance.current_window = terminal_instance.windows[1]
 
         setmetatable(terminal_instance, self)
         self.__index = self
