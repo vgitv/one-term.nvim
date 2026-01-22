@@ -9,12 +9,10 @@ local utils = require "utils"
 local Window = {}
 
 ---Window constructor
----@param buf integer Buffer id
-function Window:new(buf)
+function Window:new(config)
     local window = {
-        buf = utils.get_buf(buf),
+        config = config,
         id = nil,
-        config = nil,
     }
     setmetatable(window, self)
     self.__index = self
@@ -22,10 +20,16 @@ function Window:new(buf)
 end
 
 ---Open the window
----@param enter boolean Enter the window or not
-function Window:open(enter)
-    enter = enter or false
-    self.id = vim.api.nvim_open_win(self.buf, enter, self.config)
+---@param opts table Enter the window or not
+function Window:open(opts)
+    opts = opts or {}
+
+    local enter = opts.enter or false
+    local buf = utils.get_buf(opts.buf)
+
+    self.id = vim.api.nvim_open_win(buf, enter, self.config)
+
+    return buf
 end
 
 return Window
