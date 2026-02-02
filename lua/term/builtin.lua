@@ -155,23 +155,16 @@ function M.exit(term)
     end
 end
 
--- FIXME: should work in all layouts
 ---Resize terminal window
 ---@param term Terminal
 ---@param mouvement string Mouvement for window resizing like +5 or -2 for instance
 function M.resize(term, mouvement)
     if vim.api.nvim_win_is_valid(term.win) then
-        local current_height = vim.api.nvim_win_get_height(term.win)
-        local height
-        if string.match(mouvement, "^+[0-9]+$") then
-            height = current_height + tonumber(string.sub(mouvement, 2))
-        elseif string.match(mouvement, "^-[0-9]+$") then
-            height = current_height - tonumber(string.sub(mouvement, 2))
-        else
+        if not string.match(mouvement, "^.[0-9]+$") then
             print "ERROR - Invalid argument"
             return
         end
-        vim.api.nvim_win_set_height(term.win, height)
+        term:resize(tonumber(mouvement) or 0)
     else
         print "The terminal window must be open to run this command"
     end

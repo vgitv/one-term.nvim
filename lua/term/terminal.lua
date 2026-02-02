@@ -7,6 +7,7 @@
 ---@field chan integer Terminal window channel
 ---@field fullscreen_win integer
 ---@field layout integer Layout id
+---@field layout_name string Layout name
 ---@field height integer Terminal height
 ---@field width integer Terminal width
 local Terminal = {}
@@ -129,6 +130,29 @@ function Terminal:fullscreen_mode()
     }
     -- HACK: if the floating window is closed using :q instead of calling the toggle_fullscreen
     self.fullscreen_win = self.win
+end
+
+---Resize terminal window
+---@param n number Number of lines / columns to add to the terminal window (could be negative)
+function Terminal:resize(n)
+    local win_config = vim.api.nvim_win_get_config(self.win)
+
+    if self.layout_name == "vertical" then
+        self.height = math.max(math.min(win_config.height + n, vim.o.lines), 1)
+        win_config.height = self.height
+    elseif self.layout_name == "horizontal" then
+        self.width = math.max(math.min(win_config.width + n, vim.o.columns), 1)
+        win_config.width = self.width
+    elseif self.layout_name == "floating" then
+        self.height = math.max(math.min(win_config.height + n, vim.o.lines - 3), 1)
+        self.width = math.max(math.min(win_config.width + n, vim.o.columns), 1)
+        win_config.height = self.height
+        win_config.width = self.width
+        win_config.col = math.floor((vim.o.columns - win_config.width) / 2)
+        win_config.row = math.floor((vim.o.lines - win_config.height) / 2)
+    end
+
+    vim.api.nvim_win_set_config(self.win, win_config)
 end
 
 return Terminal
