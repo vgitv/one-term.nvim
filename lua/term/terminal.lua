@@ -122,7 +122,7 @@ end
 function Terminal:fullscreen_mode()
     self:hide()
     self.buf, self.win = utils.create_window["floating"] {
-        height = vim.o.lines,
+        height = vim.o.lines - 1,
         width = vim.o.columns,
         buf = self.buf,
         enter = true,
