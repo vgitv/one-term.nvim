@@ -22,6 +22,7 @@ function M.toggle_fullscreen(term)
         if term:is_fullscreen() then
             -- Restore current layout
             term:set_layout(term.layout)
+            vim.api.nvim_set_current_win(term.win)
         else
             -- Fullscreen
             term:fullscreen_mode()
