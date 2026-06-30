@@ -49,16 +49,18 @@ function Terminal:create_or_open(enter)
         enter = enter,
     }
 
+    -- The options should be set first because the presence of 'number' may change the way
+    -- the prompt is display (because it changes the terminal width)
+    utils.set_local_options(self.win, self.options.local_options)
+    vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
+
     if vim.bo[self.buf].buftype ~= "terminal" then
-        -- The options should be set first because the presence of 'number' may change the way
-        -- the prompt is display (because it changes the terminal width)
-        utils.set_local_options(self.win, self.options.local_options)
-        vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
         -- Create terminal instance after setting local options
         vim.api.nvim_buf_call(self.buf, vim.cmd.terminal)
-        -- setting the buflisted option needs to be after calling terminal command
-        vim.api.nvim_set_option_value("buflisted", false, { buf = self.buf })
     end
+
+    -- setting the buflisted option needs to be after calling terminal command
+    vim.api.nvim_set_option_value("buflisted", false, { buf = self.buf })
 
     self.chan = vim.bo[self.buf].channel
 end
