@@ -23,6 +23,12 @@ function M.toggle_fullscreen(term)
             -- Restore current layout
             term:set_layout(term.layout)
             vim.api.nvim_set_current_win(term.win)
+
+            -- HACK: if number is off when toggling off fullscreen, lines wrap to let place for non existent numbers
+            -- To reproduce: first disable the Hack, then
+            -- open nvim / open terminal vertically / print something large on the screen /
+            -- toggle on & off fullscreen mode => show a blank space on the right of long lines
+            vim.cmd "edit"
         else
             -- Fullscreen
             term:fullscreen_mode()
