@@ -7,6 +7,7 @@
 ---@field chan integer Terminal window channel
 ---@field fullscreen_win integer
 ---@field layout integer Layout id
+---@field layout_name string Layout name
 ---@field height integer Terminal height
 ---@field width integer Terminal width
 local Terminal = {}
@@ -22,10 +23,10 @@ function Terminal:get_instance(opt)
 
         local terminal = {
             options = opt, -- plugin options
-            buf = -1, -- needs to be invalid at first hence -1
-            win = -1, -- needs to be invalid at first hence -1
+            buf = -1, -- terminal buffer id needs to be invalid at first hence -1
+            win = -1, -- terminal window id needs to be invalid at first hence -1
             chan = nil, -- terminal window channel
-            fullscreen_win = -1,
+            fullscreen_win = -1, -- terminal full screen floating window id (invalid at first)
             layout = 1, -- default is the first enabled layout
             layout_name = default_layout,
             height = math.floor(vim.o.lines * (opt[default_layout].relative_height or 0)),
@@ -49,15 +50,14 @@ function Terminal:create_or_open(enter)
     }
 
     if vim.bo[self.buf].buftype ~= "terminal" then
-        -- The options should be set first because the presence of 'number' may change the way
-        -- the prompt is display (because it changes the terminal width)
-        utils.set_local_options(self.win, self.options.local_options)
-        vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
         -- Create terminal instance after setting local options
         vim.api.nvim_buf_call(self.buf, vim.cmd.terminal)
-        -- setting the buflisted option needs to be after calling terminal command
-        vim.api.nvim_set_option_value("buflisted", false, { buf = self.buf })
     end
+
+    -- Terminal local options
+    utils.set_local_options(self.win, self.options.local_options)
+    vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
+    vim.api.nvim_set_option_value("buflisted", false, { buf = self.buf })
 
     self.chan = vim.bo[self.buf].channel
 end
@@ -120,8 +120,9 @@ end
 ---Activate fullscreen mode
 function Terminal:fullscreen_mode()
     self:hide()
+    -- A full screen terminal is a floating window occupying all space available
     self.buf, self.win = utils.create_window["floating"] {
-        height = vim.o.lines,
+        height = vim.o.lines - 1,
         width = vim.o.columns,
         buf = self.buf,
         enter = true,
@@ -129,6 +130,29 @@ function Terminal:fullscreen_mode()
     }
     -- HACK: if the floating window is closed using :q instead of calling the toggle_fullscreen
     self.fullscreen_win = self.win
+end
+
+---Resize terminal window
+---@param n number Number of lines / columns to add to the terminal window (could be negative)
+function Terminal:resize(n)
+    local win_config = vim.api.nvim_win_get_config(self.win)
+
+    if self.layout_name == "vertical" then
+        self.height = math.max(math.min(win_config.height + n, vim.o.lines), 1)
+        win_config.height = self.height
+    elseif self.layout_name == "horizontal" then
+        self.width = math.max(math.min(win_config.width + n, vim.o.columns), 1)
+        win_config.width = self.width
+    elseif self.layout_name == "floating" then
+        self.height = math.max(math.min(win_config.height + n, vim.o.lines - 3), 1)
+        self.width = math.max(math.min(win_config.width + n, vim.o.columns), 1)
+        win_config.height = self.height
+        win_config.width = self.width
+        win_config.col = math.floor((vim.o.columns - win_config.width) / 2)
+        win_config.row = math.floor((vim.o.lines - win_config.height) / 2)
+    end
+
+    vim.api.nvim_win_set_config(self.win, win_config)
 end
 
 return Terminal
