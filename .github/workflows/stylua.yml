@@ -1,6 +1,6 @@
 ---
 name: Stylua
-run-name: "Stylua (${{ github.actor }})"
+run-name: "Stylua"
 
 "on":
   - push
@@ -11,10 +11,12 @@ jobs:
   stylua:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@main
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
       - name: Stylua check
-        uses: JohnnyMorganz/stylua-action@main
+        uses: JohnnyMorganz/stylua-action@76fd70c03e6340ceaf673366712db9b20560b402  # v5.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: latest
