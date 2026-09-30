@@ -1,4 +1,4 @@
-# One-term - One single terminal [![Stylua](https://github.com/vgitv/one-term.nvim/actions/workflows/stylua.yml/badge.svg)](https://github.com/vgitv/one-term.nvim/actions/workflows/stylua.yml)
+# One-term - One single terminal [![Stylua](https://github.com/vgitv/one-term.nvim/actions/workflows/stylua.yml/badge.svg)](https://github.com/vgitv/one-term.nvim/actions/workflows/stylua.yml) [![Plumber](https://github.com/vgitv/one-term.nvim/actions/workflows/plumber.yml/badge.svg)](https://github.com/vgitv/one-term.nvim/actions/workflows/plumber.yml)
 
 > Neovim Lua plugin to toggle a terminal window and more.
 

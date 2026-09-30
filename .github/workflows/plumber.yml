@@ -1,0 +1,26 @@
+---
+name: Plumber
+run-name: Plumber
+
+"on":
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write   # Send findings into Security > Code scanning
+
+jobs:
+  plumber:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Plumber analyze
+        uses: getplumber/plumber@d85d3b54f9be5b2a5de072e203209de865e6139c  # v0.5.15
+        with:
+          min-score: "A"
