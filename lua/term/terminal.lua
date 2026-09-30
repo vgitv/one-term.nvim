@@ -55,11 +55,15 @@ function Terminal:create_or_open(enter)
     vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
 
     if vim.bo[self.buf].buftype ~= "terminal" then
+        -- Create terminal instance after setting local options
         vim.api.nvim_buf_call(self.buf, vim.cmd.terminal)
     end
 
     -- Setting the buflisted option needs to be after calling terminal command
     vim.api.nvim_set_option_value("buflisted", false, { buf = self.buf })
+
+    -- HACK: fix long line wrapping behavior when switching layout / full screen
+    vim.api.nvim_buf_call(self.buf, vim.cmd.edit)
 
     self.chan = vim.bo[self.buf].channel
 end
