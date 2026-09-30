@@ -49,14 +49,16 @@ function Terminal:create_or_open(enter)
         enter = enter,
     }
 
+    -- Local options should be set first because the presence of 'number' may change the way
+    -- the prompt is display (because it changes the terminal width)
+    utils.set_local_options(self.win, self.options.local_options)
+    vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
+
     if vim.bo[self.buf].buftype ~= "terminal" then
-        -- Create terminal instance after setting local options
         vim.api.nvim_buf_call(self.buf, vim.cmd.terminal)
     end
 
-    -- Terminal local options
-    utils.set_local_options(self.win, self.options.local_options)
-    vim.api.nvim_set_option_value("winhighlight", "Normal:MainTerminalNormal", { win = self.win })
+    -- Setting the buflisted option needs to be after calling terminal command
     vim.api.nvim_set_option_value("buflisted", false, { buf = self.buf })
 
     self.chan = vim.bo[self.buf].channel
@@ -145,7 +147,8 @@ function Terminal:resize(n)
         win_config.width = self.width
     elseif self.layout_name == "floating" then
         self.height = math.max(math.min(win_config.height + n, vim.o.lines - 3), 1)
-        self.width = math.max(math.min(win_config.width + n, vim.o.columns), 1)
+        -- A cell is more tall than wide so increase width twice as fast than height
+        self.width = math.max(math.min(win_config.width + 2 * n, vim.o.columns), 1)
         win_config.height = self.height
         win_config.width = self.width
         win_config.col = math.floor((vim.o.columns - win_config.width) / 2)
